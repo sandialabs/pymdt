@@ -1,0 +1,13 @@
+[project]
+name = "sandia-pymdt"
+version = "1.4.2518"
+description = "Python Scripting Front-End for the Microgrid Design Toolkit"
+readme = "README.rst"
+dependencies = ["pythonnet>=3.0.3"]
+requires-python = ">=3.9.0"
+
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+#[tool.setuptools]
