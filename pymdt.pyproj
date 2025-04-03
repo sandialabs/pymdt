@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{78765f76-1d31-4445-b142-2b33f095af8b}</ProjectGuid>
     <ProjectHome />
-    <StartupFile>main.py</StartupFile>
+    <StartupFile>minimal.py</StartupFile>
     <SearchPath />
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>

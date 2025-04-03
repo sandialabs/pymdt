@@ -4,3 +4,4 @@
 
 /dist
 /sandia_pymdt.egg-info
+/pymdt/__pycache__

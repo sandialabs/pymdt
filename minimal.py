@@ -7,7 +7,7 @@ import random
 # If providing this, it has to happen before importing anything from pymdt.
 # If not provided, then the default value contained in the pymdt/__init__.py
 # file will be used.
-sys.argv.append("MDT_VERSION=1.4.2410.0")
+#sys.argv.append("MDT_VERSION=1.4.2518.0")
 
 # This line is only necessary if you want to reference MDT in a non-standard location.
 #sys.argv.append("MDT_BIN_DIR=C:/Users/jpeddy/Documents/dev/MDT/trunk/MDT-GUI/bin/x64/Debug")
