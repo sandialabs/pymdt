@@ -528,10 +528,7 @@ def main():
     # The following will open the MDT graphical user interface with the
     # file "pytonrun.mbf" opened, assuming it exists (see a few lines up).
     #===========================================================================
-    # subprocess.run(
-    #     [os.path.join(pymdt.MDT_BIN_DIR, "MDT-GUI.exe"),
-    #     " C:/temp/pythonrun.mbf"]
-    #     )
+    # pymdt.core.RunMDTGUI("C:/temp/pythonrun.mbf")
     #===========================================================================
     
 
@@ -580,13 +577,12 @@ def main():
 
 
 
-    pymdt.io.WriteOutputFile("C:/temp/pythonrun.mof", results[0])
+    wlog = pymdt.io.WriteOutputFile("C:/temp/pythonrun.mof", results[0])
+    pymdt.utils.PrintLog(wlog, True)
     
     # The following will open the MDT graphical user interface with the
     # file "pythonrun.mof" opened, assuming it exists (see a few lines up).
-    #subprocess.run(
-    #    [os.path.join(pymdt.MDT_BIN_DIR, "MDT-GUI.exe"), " C:/temp/pythonrun.mof"]
-    #    )
+    pymdt.core.RunMDTGUI("C:/temp/pythonrun.mof")
 
 
 if __name__ == "__main__":

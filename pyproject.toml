@@ -1,6 +1,6 @@
 [project]
 name = "sandia-pymdt"
-version = "1.4.2518"
+version = "1.4.2520"
 description = "Python Scripting Front-End for the Microgrid Design Toolkit"
 readme = "README.rst"
 dependencies = ["pythonnet>=3.0.3"]
