@@ -36,6 +36,7 @@
     <Compile Include="__init__.py" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include=".github\workflows\documentation.yml" />
     <Content Include=".github\workflows\publish.yml" />
     <Content Include="buildwheel.bat" />
     <Content Include="LICENSE" />
