@@ -42,7 +42,7 @@ class details:
         
 def MakeMission(s: MDT.Site, name: str, **kwargs) -> MDT.Mission:
     """ This helper function creates a new mission, extracts any provided
-        properties, loads it into its owner, and returns it.
+    properties, loads it into its owner, and returns it.
         
     Parameters
     ----------
@@ -55,8 +55,6 @@ def MakeMission(s: MDT.Site, name: str, **kwargs) -> MDT.Mission:
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         owner:
             An optional parameter to serve as the owner of the new mission.
             This is typically used if one does not want the mission added to the
@@ -70,7 +68,7 @@ def MakeMission(s: MDT.Site, name: str, **kwargs) -> MDT.Mission:
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting mission.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -94,7 +92,7 @@ def MakeMission(s: MDT.Site, name: str, **kwargs) -> MDT.Mission:
 
 def MakeMissionFunction(s: MDT.Site, name: str, **kwargs) -> MDT.MissionFunction:
     """ This helper function creates a new mission function, extracts any
-        provided properties, loads it into its owner, and returns it.
+    provided properties, loads it into its owner, and returns it.
         
     Parameters
     ----------
@@ -107,8 +105,6 @@ def MakeMissionFunction(s: MDT.Site, name: str, **kwargs) -> MDT.MissionFunction
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         owner:
             An optional parameter to serve as the owner of the new mission
             function. This is typically used if one does not want the mission
@@ -123,7 +119,7 @@ def MakeMissionFunction(s: MDT.Site, name: str, **kwargs) -> MDT.MissionFunction
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting mission function.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -148,7 +144,7 @@ def MakeMissionFunction(s: MDT.Site, name: str, **kwargs) -> MDT.MissionFunction
 
 def MakeOrNode(parent, children, **kwargs) -> TMO.OrNode:
     """ This helper function creates a new or node, extracts any provided
-        properties, loads it into its parent, and returns it.
+    properties, loads it into its parent, and returns it.
         
     Parameters
     ----------
@@ -174,7 +170,7 @@ def MakeOrNode(parent, children, **kwargs) -> TMO.OrNode:
 
 def MakeAndNode(parent, children, **kwargs) -> TMO.AndNode:
     """ This helper function creates a new and node, extracts any provided
-        properties, loads it into its parent, and returns it.
+    properties, loads it into its parent, and returns it.
         
     Parameters
     ----------
@@ -200,7 +196,7 @@ def MakeAndNode(parent, children, **kwargs) -> TMO.AndNode:
 
 def MakeMofNNode(parent, children, m: int, **kwargs) -> TMO.MofNNode:
     """ This helper function creates a new M of N node, extracts any provided
-        properties, loads it into its parent, and returns it.
+    properties, loads it into its parent, and returns it.
         
     Parameters
     ----------
@@ -230,7 +226,7 @@ def MakeMofNNode(parent, children, m: int, **kwargs) -> TMO.MofNNode:
 
 def MakeNotNode(parent, child, **kwargs) -> TMO.NotNode:
     """ This helper function creates a new not node, extracts any
-        provided properties, loads it into its parent, and returns it.
+    provided properties, loads it into its parent, and returns it.
         
     Parameters
     ----------

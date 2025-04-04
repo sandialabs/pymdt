@@ -75,11 +75,3 @@ pymdt.utils module
    :members:
    :undoc-members:
    :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: pymdt
-   :members:
-   :undoc-members:
-   :show-inheritance:

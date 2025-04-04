@@ -4,7 +4,7 @@ import Common.Distributions as CD
 
 def MakeExponential(mean: float, location: float=0.0) -> CD.Exponential:
     """ Creates, configures, and returns a new instance of an Exponential
-        distribution using the supplied parameters.
+    distribution using the supplied parameters.
         
     Parameters
     ----------
@@ -23,7 +23,7 @@ def MakeExponential(mean: float, location: float=0.0) -> CD.Exponential:
 
 def MakeNormal(mean: float=0.0, std_dev: float=1.0) -> CD.Normal:
     """ Creates, configures, and returns a new instance of a Normal distribution
-        using the supplied parameters.
+    using the supplied parameters.
         
     Parameters
     ----------
@@ -41,7 +41,7 @@ def MakeNormal(mean: float=0.0, std_dev: float=1.0) -> CD.Normal:
 
 def MakeUniform(lower: float=0.0, upper: float=1.0) -> CD.Uniform:
     """ Creates, configures, and returns a new instance of a Uniform
-        distribution using the supplied parameters.
+    distribution using the supplied parameters.
         
     Parameters
     ----------
@@ -59,7 +59,7 @@ def MakeUniform(lower: float=0.0, upper: float=1.0) -> CD.Uniform:
 
 def MakeFixed(value: float=0.0) -> CD.Fixed:
     """ Creates, configures, and returns a new instance of a Fixed
-        distribution using the supplied parameters.
+    distribution using the supplied parameters.
         
     Parameters
     ----------
@@ -75,7 +75,7 @@ def MakeFixed(value: float=0.0) -> CD.Fixed:
 
 def MakeLogNormal(location: float=0.0, scale: float=1.0) -> CD.LogNormal:
     """ Creates, configures, and returns a new instance of a LogNormal
-        distribution using the supplied parameters.
+    distribution using the supplied parameters.
         
     Parameters
     ----------
@@ -95,7 +95,7 @@ def MakeLogNormal(location: float=0.0, scale: float=1.0) -> CD.LogNormal:
 
 def MakeCauchy(location: float=0.0, scale: float=1.0) -> CD.Cauchy:
     """ Creates, configures, and returns a new instance of a Cauchy
-        distribution using the supplied parameters.
+    distribution using the supplied parameters.
         
     Parameters
     ----------
@@ -113,7 +113,7 @@ def MakeCauchy(location: float=0.0, scale: float=1.0) -> CD.Cauchy:
 
 def MakeBinomial(trials: float=1.0, success_fraction: float=0.5) -> CD.Binomial:
     """ Creates, configures, and returns a new instance of a Binomial
-        distribution using the supplied parameters.
+    distribution using the supplied parameters.
         
     Parameters
     ----------
@@ -131,7 +131,7 @@ def MakeBinomial(trials: float=1.0, success_fraction: float=0.5) -> CD.Binomial:
 
 def MakeBernoulli(success_fraction: float=0.5) -> CD.Bernoulli:
     """ Creates, configures, and returns a new instance of a Bernoulli
-        distribution using the supplied parameters.
+    distribution using the supplied parameters.
         
     Parameters
     ----------
@@ -147,7 +147,7 @@ def MakeBernoulli(success_fraction: float=0.5) -> CD.Bernoulli:
 
 def MakeGamma(shape: float, scale: float=1.0) -> CD.Gamma:
     """ Creates, configures, and returns a new instance of a Gamma
-        distribution using the supplied parameters.
+    distribution using the supplied parameters.
         
     Parameters
     ----------
@@ -165,7 +165,7 @@ def MakeGamma(shape: float, scale: float=1.0) -> CD.Gamma:
 
 def MakePoisson(mean: float=1.0) -> CD.Poisson:
     """ Creates, configures, and returns a new instance of a Poisson
-        distribution using the supplied parameters.
+    distribution using the supplied parameters.
         
     Parameters
     ----------
@@ -181,7 +181,7 @@ def MakePoisson(mean: float=1.0) -> CD.Poisson:
 
 def MakeTriangular(lower: float=-1.0, mode: float=0.0, upper: float=1.0) -> CD.Triangular:
     """ Creates, configures, and returns a new instance of a Triangular
-        distribution using the supplied parameters.
+    distribution using the supplied parameters.
         
     Parameters
     ----------
@@ -201,7 +201,7 @@ def MakeTriangular(lower: float=-1.0, mode: float=0.0, upper: float=1.0) -> CD.T
 
 def MakeDiscrete(entries) -> MDT.Discrete:
     """ Creates, configures, and returns a new instance of a Discrete
-        distribution using the supplied parameters.
+    distribution using the supplied parameters.
         
     Parameters
     ----------
@@ -227,7 +227,7 @@ def MakeDiscrete(entries) -> MDT.Discrete:
          
 def MakePlacement(init_dist: CD.IDistribution, subseq_dist: CD.IDistribution) -> MDT.PlacementDistribution:
     """ Creates, configures, and returns a new instance of a Placement
-        distribution using the supplied parameters.
+    distribution using the supplied parameters.
         
     Parameters
     ----------
@@ -245,7 +245,7 @@ def MakePlacement(init_dist: CD.IDistribution, subseq_dist: CD.IDistribution) ->
 
 def MakeTimeOfYearBiased(basis_dist: CD.IDistribution, time_of_year_dist: CD.IDistribution) -> MDT.TimeOfYearBiasDistribution:
     """ Creates, configures, and returns a new instance of a Time-of-Year Biased
-        distribution using the supplied parameters.
+    distribution using the supplied parameters.
         
     Parameters
     ----------

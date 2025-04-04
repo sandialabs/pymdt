@@ -11,7 +11,7 @@ sys.path.insert(0, os.path.abspath(".."))
 
 project = 'sandia-pymdt'
 copyright = '2025, John Eddy'
-author = 'John Eddy'
+author = 'Sandia National Laboratories'
 release = '1.4.2520'
 
 
@@ -24,10 +24,18 @@ todo_include_todos = True
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
-
+def skip(app, what, name, obj, skip, options):
+    if what == "module" and "details" in name:
+        return True
+    return None
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = 'alabaster'
+html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
+
+
+def setup(app):
+    print("connecting to skipmember")
+    app.connect("autodoc-skip-member", skip)

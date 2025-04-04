@@ -21,10 +21,11 @@ for px in sys.argv:
         MDT_DATA_DIR = value
         
 if MDT_BIN_DIR is None:
-    MDT_BIN_DIR = os.path.join(
-        "C:\\", "Program Files", "Sandia National Laboratories",
-        "Microgrid Design Toolkit v" + MDT_VERSION.ToString()
-        )
+    MDT_BIN_DIR="C:/Users/jpeddy/Documents/dev/MDT/trunk/MDT-GUI/bin/x64/Debug"
+    # MDT_BIN_DIR = os.path.join(
+    #     "C:\\", "Program Files", "Sandia National Laboratories",
+    #     "Microgrid Design Toolkit v" + MDT_VERSION.ToString()
+    #     )
     
 if MDT_DATA_DIR is None:
     MDT_DATA_DIR = os.path.join(

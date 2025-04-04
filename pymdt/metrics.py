@@ -32,14 +32,14 @@ class limit_stiffnesses(Enum):
 
     maximize = TMO.ResponseFunction.StiffnessLevel.Medium
     """ The limit is such that violation is bad and causes a significant
-        detriment to fitness.
+    detriment to fitness.
     """
     
     seek_value = TMO.ResponseFunction.StiffnessLevel.Hard
     """ The limit is such that violation is very bad and causes a major
-        detriment to fitness.  In addition, this limit is treated as a hard
-        constraint by the optimizer such that its satisfaction is paramount when
-        comparing solution quality amongst candidate solutions.        
+    detriment to fitness.  In addition, this limit is treated as a hard
+    constraint by the optimizer such that its satisfaction is paramount when
+    comparing solution quality amongst candidate solutions.        
     """
     
 class value_beyond_objective(Enum):
@@ -48,17 +48,17 @@ class value_beyond_objective(Enum):
     
     low = TMO.ResponseFunction.ValueBeyondObjective.Low
     """ Indicates that the rate if diminishing returns is high and therefore
-        the value of exceeding the objective is low.
+    the value of exceeding the objective is low.
     """
 
     medium = TMO.ResponseFunction.ValueBeyondObjective.Medium
     """ Indicates that the rate if diminishing returns is moderate and therefore
-        the value of exceeding the objective is moderate.
+    the value of exceeding the objective is moderate.
     """
     
     high = TMO.ResponseFunction.ValueBeyondObjective.High
     """ Indicates that the rate if diminishing returns is low and therefore
-        the value of exceeding the objective is high.
+    the value of exceeding the objective is high.
     """
 
 class sim_phases(Enum):
@@ -405,7 +405,7 @@ class details:
     
 def MakeEnergyAvailabilityMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM.EnergyAvailabilityConstraint:
     """ Builds an instance of the MDT.EnergyAvailabilityConstraint class, loads
-        its properties, adds it to the microgrid (if provided), and returns it.
+    its properties, adds it to the microgrid (if provided), and returns it.
         
     Parameters
     ----------
@@ -417,8 +417,6 @@ def MakeEnergyAvailabilityMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         tier:
             The tier for this newly created metric.  This can be an
             MDT.LoadTier or the name of a tier in which case the actual load
@@ -469,7 +467,7 @@ def MakeEnergyAvailabilityMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting metric. Not required.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -488,8 +486,8 @@ def MakeEnergyAvailabilityMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.
 
 def MakeAverageEnergySuppliedByRenewablesMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM.AverageEnergySuppliedByRenewables:
     """ Builds an instance of the MDT.AverageEnergySuppliedByRenewables class,
-        loads its properties, adds it to the microgrid (if provided), and
-        returns it.
+    loads its properties, adds it to the microgrid (if provided), and
+    returns it.
         
     Parameters
     ----------
@@ -501,8 +499,6 @@ def MakeAverageEnergySuppliedByRenewablesMetric(mg: MDT.Microgrid, name: str, **
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         improvement_type: pymdt.metrics.improvement_types
             A member of the pymdt.metrics.improvement_types enumeration
             indicating the desired improvement direction of the new metric.  The
@@ -536,12 +532,6 @@ def MakeAverageEnergySuppliedByRenewablesMetric(mg: MDT.Microgrid, name: str, **
             is typically used if one does not want the metric added to the
             microgrid as part of this call in which case None is specified as
             the owner.  If no owner is provided, then the supplied microgrid
-        owner:
-            An optional parameter to serve as the owner of the new metric.  This
-            is typically used if one does not want the metric added to the
-            microgrid as part of this call in which case None is specified as
-            the owner.  If no owner is provided, then the supplied microgrid
-            (mg) is used.
             (mg) is used.
         err_log: Common.Logging.Log
             The log into which to record any errors encountered during the
@@ -551,7 +541,7 @@ def MakeAverageEnergySuppliedByRenewablesMetric(mg: MDT.Microgrid, name: str, **
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting metric. Not required.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -570,8 +560,8 @@ def MakeAverageEnergySuppliedByRenewablesMetric(mg: MDT.Microgrid, name: str, **
 
 def MakeAverageRenewableEnergySpilledMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM.AverageRenewableEnergySpilledConstraint:
     """ Builds an instance of the MDT.AverageRenewableEnergySpilledConstraint
-        class, loads its properties, adds it to the microgrid (if provided), and
-        returns it.
+    class, loads its properties, adds it to the microgrid (if provided), and
+    returns it.
         
     Parameters
     ----------
@@ -583,8 +573,6 @@ def MakeAverageRenewableEnergySpilledMetric(mg: MDT.Microgrid, name: str, **kwar
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         improvement_type: pymdt.metrics.improvement_types
             A member of the pymdt.metrics.improvement_types enumeration
             indicating the desired improvement direction of the new metric.  The
@@ -627,7 +615,7 @@ def MakeAverageRenewableEnergySpilledMetric(mg: MDT.Microgrid, name: str, **kwar
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting metric. Not required.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -646,8 +634,8 @@ def MakeAverageRenewableEnergySpilledMetric(mg: MDT.Microgrid, name: str, **kwar
 
 def MakeAverageRenewablePenetrationMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM.AverageRenewablePenetrationConstraint:
     """ Builds an instance of the MDT.AverageRenewablePenetrationConstraint
-        class, loads its properties, adds it to the microgrid (if provided), and
-        returns it.
+    class, loads its properties, adds it to the microgrid (if provided), and
+    returns it.
         
     Parameters
     ----------
@@ -659,8 +647,6 @@ def MakeAverageRenewablePenetrationMetric(mg: MDT.Microgrid, name: str, **kwargs
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         improvement_type: pymdt.metrics.improvement_types
             A member of the pymdt.metrics.improvement_types enumeration
             indicating the desired improvement direction of the new metric.  The
@@ -703,7 +689,7 @@ def MakeAverageRenewablePenetrationMetric(mg: MDT.Microgrid, name: str, **kwargs
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting metric. Not required.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -722,8 +708,8 @@ def MakeAverageRenewablePenetrationMetric(mg: MDT.Microgrid, name: str, **kwargs
 
 def MakeAverageSpinningReserveMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM.AverageSpinningReserveConstraint:
     """ Builds an instance of the MDT.AverageSpinningReserveConstraint class,
-        loads its properties, adds it to the microgrid (if provided), and
-        returns it.
+    loads its properties, adds it to the microgrid (if provided), and
+    returns it.
         
     Parameters
     ----------
@@ -735,8 +721,6 @@ def MakeAverageSpinningReserveMetric(mg: MDT.Microgrid, name: str, **kwargs) -> 
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         improvement_type: pymdt.metrics.improvement_types
             A member of the pymdt.metrics.improvement_types enumeration
             indicating the desired improvement direction of the new metric.  The
@@ -779,7 +763,7 @@ def MakeAverageSpinningReserveMetric(mg: MDT.Microgrid, name: str, **kwargs) -> 
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting metric. Not required.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -798,7 +782,7 @@ def MakeAverageSpinningReserveMetric(mg: MDT.Microgrid, name: str, **kwargs) -> 
 
 def MakeDieselEfficiencyMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM.DieselEfficiencyConstraint:
     """ Builds an instance of the MDT.DieselEfficiencyConstraint class, loads
-        its properties, adds it to the microgrid (if provided), and returns it.
+    its properties, adds it to the microgrid (if provided), and returns it.
         
     Parameters
     ----------
@@ -810,8 +794,6 @@ def MakeDieselEfficiencyMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PR
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         improvement_type: pymdt.metrics.improvement_types
             A member of the pymdt.metrics.improvement_types enumeration
             indicating the desired improvement direction of the new metric.  The
@@ -854,7 +836,7 @@ def MakeDieselEfficiencyMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PR
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting metric. Not required.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -873,7 +855,7 @@ def MakeDieselEfficiencyMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PR
 
 def MakeDieselFuelMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM.DieselFuelConstraint:
     """ Builds an instance of the MDT.DieselFuelConstraint class, loads its
-        properties, adds it to the microgrid (if provided), and returns it.
+    properties, adds it to the microgrid (if provided), and returns it.
         
     Parameters
     ----------
@@ -885,8 +867,6 @@ def MakeDieselFuelMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM.Dies
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         improvement_type: pymdt.metrics.improvement_types
             A member of the pymdt.metrics.improvement_types enumeration
             indicating the desired improvement direction of the new metric.  The
@@ -929,7 +909,7 @@ def MakeDieselFuelMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM.Dies
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting metric. Not required.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -948,7 +928,7 @@ def MakeDieselFuelMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM.Dies
 
 def MakeDieselFuelCostMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM.DieselFuelCostConstraint:
     """ Builds an instance of the MDT.DieselFuelCostConstraint class, loads its
-        properties, adds it to the microgrid (if provided), and returns it.
+    properties, adds it to the microgrid (if provided), and returns it.
         
     Parameters
     ----------
@@ -960,8 +940,6 @@ def MakeDieselFuelCostMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM.
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         improvement_type: pymdt.metrics.improvement_types
             A member of the pymdt.metrics.improvement_types enumeration
             indicating the desired improvement direction of the new metric.  The
@@ -1004,7 +982,7 @@ def MakeDieselFuelCostMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM.
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting metric. Not required.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -1023,7 +1001,7 @@ def MakeDieselFuelCostMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM.
 
 def MakeDieselUtilizationRateMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM.DieselUtilizationConstraint:
     """ Builds an instance of the MDT.DieselUtilizationConstraint class, loads
-        its properties, adds it to the microgrid (if provided), and returns it.
+    its properties, adds it to the microgrid (if provided), and returns it.
         
     Parameters
     ----------
@@ -1035,8 +1013,6 @@ def MakeDieselUtilizationRateMetric(mg: MDT.Microgrid, name: str, **kwargs) -> M
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         improvement_type: pymdt.metrics.improvement_types
             A member of the pymdt.metrics.improvement_types enumeration
             indicating the desired improvement direction of the new metric.  The
@@ -1079,7 +1055,7 @@ def MakeDieselUtilizationRateMetric(mg: MDT.Microgrid, name: str, **kwargs) -> M
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting metric. Not required.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -1098,8 +1074,8 @@ def MakeDieselUtilizationRateMetric(mg: MDT.Microgrid, name: str, **kwargs) -> M
 
 def MakeFossilOffTimePercentageMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM.FossilOffTimePercentageConstraint:
     """ Builds an instance of the MDT.FossilOffTimePercentageConstraint class,
-        loads its properties, adds it to the microgrid (if provided), and
-        returns it.
+    loads its properties, adds it to the microgrid (if provided), and
+    returns it.
         
     Parameters
     ----------
@@ -1111,8 +1087,6 @@ def MakeFossilOffTimePercentageMetric(mg: MDT.Microgrid, name: str, **kwargs) ->
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         improvement_type: pymdt.metrics.improvement_types
             A member of the pymdt.metrics.improvement_types enumeration
             indicating the desired improvement direction of the new metric.  The
@@ -1155,7 +1129,7 @@ def MakeFossilOffTimePercentageMetric(mg: MDT.Microgrid, name: str, **kwargs) ->
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting metric. Not required.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -1174,7 +1148,7 @@ def MakeFossilOffTimePercentageMetric(mg: MDT.Microgrid, name: str, **kwargs) ->
 
 def MakeFrequencyOfLoadNotServedMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM.FreqOfLNSConstraint:
     """ Builds an instance of the MDT.FreqOfLNSConstraint class, loads its
-        properties, adds it to the microgrid (if provided), and returns it.
+    properties, adds it to the microgrid (if provided), and returns it.
         
     Parameters
     ----------
@@ -1186,8 +1160,6 @@ def MakeFrequencyOfLoadNotServedMetric(mg: MDT.Microgrid, name: str, **kwargs) -
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         tier:
             The tier for this newly created metric.  This can be an
             MDT.LoadTier or the name of a tier in which case the actual load
@@ -1238,7 +1210,7 @@ def MakeFrequencyOfLoadNotServedMetric(mg: MDT.Microgrid, name: str, **kwargs) -
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting metric. Not required.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -1257,7 +1229,7 @@ def MakeFrequencyOfLoadNotServedMetric(mg: MDT.Microgrid, name: str, **kwargs) -
 
 def MakeMagnitudeOfLoadNotServedMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM.MagOfLNSConstraint:
     """ Builds an instance of the MDT.MagOfLNSConstraint class, loads its
-        properties, adds it to the microgrid (if provided), and returns it.
+    properties, adds it to the microgrid (if provided), and returns it.
         
     Parameters
     ----------
@@ -1269,8 +1241,6 @@ def MakeMagnitudeOfLoadNotServedMetric(mg: MDT.Microgrid, name: str, **kwargs) -
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         tier:
             The tier for this newly created metric.  This can be an
             MDT.LoadTier or the name of a tier in which case the actual load
@@ -1321,7 +1291,7 @@ def MakeMagnitudeOfLoadNotServedMetric(mg: MDT.Microgrid, name: str, **kwargs) -
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting metric. Not required.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -1340,7 +1310,7 @@ def MakeMagnitudeOfLoadNotServedMetric(mg: MDT.Microgrid, name: str, **kwargs) -
 
 def MakeHeatRecoveryMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM.HeatRecoveryConstraint:
     """ Builds an instance of the MDT.HeatRecoveryConstraint class, loads its
-        properties, adds it to the microgrid (if provided), and returns it.
+    properties, adds it to the microgrid (if provided), and returns it.
         
     Parameters
     ----------
@@ -1352,8 +1322,6 @@ def MakeHeatRecoveryMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM.He
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         improvement_type: pymdt.metrics.improvement_types
             A member of the pymdt.metrics.improvement_types enumeration
             indicating the desired improvement direction of the new metric.  The
@@ -1396,7 +1364,7 @@ def MakeHeatRecoveryMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM.He
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting metric. Not required.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -1415,8 +1383,8 @@ def MakeHeatRecoveryMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM.He
 
 def MakeMaximumMissionOutageDurationMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM.MaximumMissionOutageDurationConstraint:
     """ Builds an instance of the MDT.MaximumMissionOutageDurationConstraint
-        class, loads its properties, adds it to the microgrid (if provided), and
-        returns it.
+    class, loads its properties, adds it to the microgrid (if provided), and
+    returns it.
         
     Parameters
     ----------
@@ -1428,8 +1396,6 @@ def MakeMaximumMissionOutageDurationMetric(mg: MDT.Microgrid, name: str, **kwarg
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         improvement_type: pymdt.metrics.improvement_types
             A member of the pymdt.metrics.improvement_types enumeration
             indicating the desired improvement direction of the new metric.  The
@@ -1474,7 +1440,7 @@ def MakeMaximumMissionOutageDurationMetric(mg: MDT.Microgrid, name: str, **kwarg
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting metric. Not required.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -1493,8 +1459,8 @@ def MakeMaximumMissionOutageDurationMetric(mg: MDT.Microgrid, name: str, **kwarg
 
 def MakeNaturalGasEfficiencyMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM.NaturalGasEfficiencyConstraint:
     """ Builds an instance of the MDT.NaturalGasEfficiencyConstraint class,
-        loads its properties, adds it to the microgrid (if provided), and
-        returns it.
+    loads its properties, adds it to the microgrid (if provided), and
+    returns it.
         
     Parameters
     ----------
@@ -1506,8 +1472,6 @@ def MakeNaturalGasEfficiencyMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MD
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         improvement_type: pymdt.metrics.improvement_types
             A member of the pymdt.metrics.improvement_types enumeration
             indicating the desired improvement direction of the new metric.  The
@@ -1550,7 +1514,7 @@ def MakeNaturalGasEfficiencyMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MD
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting metric. Not required.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -1569,7 +1533,7 @@ def MakeNaturalGasEfficiencyMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MD
 
 def MakeNaturalGasFuelMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM.NaturalGasFuelConstraint:
     """ Builds an instance of the MDT.NaturalGasFuelConstraint class, loads its
-        properties, adds it to the microgrid (if provided), and returns it.
+    properties, adds it to the microgrid (if provided), and returns it.
         
     Parameters
     ----------
@@ -1581,8 +1545,6 @@ def MakeNaturalGasFuelMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM.
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         improvement_type: pymdt.metrics.improvement_types
             A member of the pymdt.metrics.improvement_types enumeration
             indicating the desired improvement direction of the new metric.  The
@@ -1625,7 +1587,7 @@ def MakeNaturalGasFuelMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM.
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting metric. Not required.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -1644,7 +1606,7 @@ def MakeNaturalGasFuelMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM.
 
 def MakeNaturalGasFuelCostMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM.NaturalGasFuelCostConstraint:
     """ Builds an instance of the MDT.NaturalGasFuelCostConstraint class, loads
-        its properties, adds it to the microgrid (if provided), and returns it.
+    its properties, adds it to the microgrid (if provided), and returns it.
         
     Parameters
     ----------
@@ -1656,8 +1618,6 @@ def MakeNaturalGasFuelCostMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         improvement_type: pymdt.metrics.improvement_types
             A member of the pymdt.metrics.improvement_types enumeration
             indicating the desired improvement direction of the new metric.  The
@@ -1700,7 +1660,7 @@ def MakeNaturalGasFuelCostMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting metric. Not required.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -1719,8 +1679,8 @@ def MakeNaturalGasFuelCostMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.
 
 def MakeNaturalGasUtilizationRateMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM.NaturalGasUtilizationConstraint:
     """ Builds an instance of the MDT.NaturalGasUtilizationConstraint class,
-        loads its properties, adds it to the microgrid (if provided), and
-        returns it.
+    loads its properties, adds it to the microgrid (if provided), and
+    returns it.
         
     Parameters
     ----------
@@ -1732,8 +1692,6 @@ def MakeNaturalGasUtilizationRateMetric(mg: MDT.Microgrid, name: str, **kwargs) 
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         improvement_type: pymdt.metrics.improvement_types
             A member of the pymdt.metrics.improvement_types enumeration
             indicating the desired improvement direction of the new metric.  The
@@ -1776,7 +1734,7 @@ def MakeNaturalGasUtilizationRateMetric(mg: MDT.Microgrid, name: str, **kwargs) 
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting metric. Not required.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -1795,7 +1753,7 @@ def MakeNaturalGasUtilizationRateMetric(mg: MDT.Microgrid, name: str, **kwargs) 
 
 def MakePropaneEfficiencyMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM.PropaneEfficiencyConstraint:
     """ Builds an instance of the MDT.PropaneEfficiencyConstraint class, loads
-        its properties, adds it to the microgrid (if provided), and returns it.
+    its properties, adds it to the microgrid (if provided), and returns it.
         
     Parameters
     ----------
@@ -1807,8 +1765,6 @@ def MakePropaneEfficiencyMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.P
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         improvement_type: pymdt.metrics.improvement_types
             A member of the pymdt.metrics.improvement_types enumeration
             indicating the desired improvement direction of the new metric.  The
@@ -1851,7 +1807,7 @@ def MakePropaneEfficiencyMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.P
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting metric. Not required.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -1870,7 +1826,7 @@ def MakePropaneEfficiencyMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.P
 
 def MakePropaneFuelMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM.PropaneFuelConstraint:
     """ Builds an instance of the MDT.PropaneFuelConstraint class, loads its
-        properties, adds it to the microgrid (if provided), and returns it.
+    properties, adds it to the microgrid (if provided), and returns it.
         
     Parameters
     ----------
@@ -1882,8 +1838,6 @@ def MakePropaneFuelMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM.Pro
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         improvement_type: pymdt.metrics.improvement_types
             A member of the pymdt.metrics.improvement_types enumeration
             indicating the desired improvement direction of the new metric.  The
@@ -1926,7 +1880,7 @@ def MakePropaneFuelMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM.Pro
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting metric. Not required.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -1945,7 +1899,7 @@ def MakePropaneFuelMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM.Pro
 
 def MakePropaneFuelCostMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM.PropaneFuelCostConstraint:
     """ Builds an instance of the MDT.PropaneFuelCostConstraint class, loads
-        its properties, adds it to the microgrid (if provided), and returns it.
+    its properties, adds it to the microgrid (if provided), and returns it.
         
     Parameters
     ----------
@@ -1957,8 +1911,6 @@ def MakePropaneFuelCostMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         improvement_type: pymdt.metrics.improvement_types
             A member of the pymdt.metrics.improvement_types enumeration
             indicating the desired improvement direction of the new metric.  The
@@ -2001,7 +1953,7 @@ def MakePropaneFuelCostMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting metric. Not required.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -2020,7 +1972,7 @@ def MakePropaneFuelCostMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM
 
 def MakePropaneUtilizationRateMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM.PropaneUtilizationConstraint:
     """ Builds an instance of the MDT.PropaneUtilizationConstraint class, loads
-        its properties, adds it to the microgrid (if provided), and returns it.
+    its properties, adds it to the microgrid (if provided), and returns it.
         
     Parameters
     ----------
@@ -2032,8 +1984,6 @@ def MakePropaneUtilizationRateMetric(mg: MDT.Microgrid, name: str, **kwargs) -> 
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         improvement_type: pymdt.metrics.improvement_types
             A member of the pymdt.metrics.improvement_types enumeration
             indicating the desired improvement direction of the new metric.  The
@@ -2076,7 +2026,7 @@ def MakePropaneUtilizationRateMetric(mg: MDT.Microgrid, name: str, **kwargs) -> 
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting metric. Not required.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -2095,7 +2045,7 @@ def MakePropaneUtilizationRateMetric(mg: MDT.Microgrid, name: str, **kwargs) -> 
 
 def MakeTotalFuelCostMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM.TotalFuelCostConstraint:
     """ Builds an instance of the MDT.TotalFuelCostConstraint class, loads its
-        properties, adds it to the microgrid (if provided), and returns it.
+    properties, adds it to the microgrid (if provided), and returns it.
         
     Parameters
     ----------
@@ -2107,8 +2057,6 @@ def MakeTotalFuelCostMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM.T
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         improvement_type: pymdt.metrics.improvement_types
             A member of the pymdt.metrics.improvement_types enumeration
             indicating the desired improvement direction of the new metric.  The
@@ -2151,7 +2099,7 @@ def MakeTotalFuelCostMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM.T
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting metric. Not required.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -2170,7 +2118,7 @@ def MakeTotalFuelCostMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM.T
 
 def MakeResponseFunctionGroup(s: TMO.SolverInterface, name: str, metrics, **kwargs) -> TMO.ResponseFunctionGroup:
     """ Builds an instance of a TMO.ResponseFunctionGroup class, loads its
-        properties, adds it to the solver (if provided), and returns it.
+    properties, adds it to the solver (if provided), and returns it.
         
     Parameters
     ----------
@@ -2188,8 +2136,6 @@ def MakeResponseFunctionGroup(s: TMO.SolverInterface, name: str, metrics, **kwar
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         owner:
             An optional parameter to serve as the owner of the new group.  This
             is typically used if one does not want the group added to the
@@ -2204,7 +2150,7 @@ def MakeResponseFunctionGroup(s: TMO.SolverInterface, name: str, metrics, **kwar
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting metric. Not required.
         guid:
             The unique identifier to use for this new asset.  This can be

@@ -168,7 +168,7 @@ def MakeResultManager(sri) -> MDT.ResultViewManager:
 
 def GetMicrogridRealization(mg: MDT.Microgrid, config: MDT.SiteUpgradeConfiguration) -> MDT.MicrogridRealization:
     """ Extracts and returns the MDT.MicrogridRealization for the specified
-        Microgrid (mg) from the specified upgrade configuration.
+    Microgrid (mg) from the specified upgrade configuration.
         
     The supplied microgrid must be one extracted from a result set as opposed 
     to one created as part of an input set.  See the

@@ -352,8 +352,6 @@ def FindEntityByName(all_ents, name: str, **kwargs):
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         find_context:
             A descriptor of the find operation that is happening, typically a
             description of the list being searched.  This is used if no matching
@@ -392,7 +390,7 @@ def FindEntityByName(all_ents, name: str, **kwargs):
 
 def MakeUsableName(all_ents, name: str, **kwargs) -> str:
     """ Creates a usable name from the supplied name that does not duplicate any
-        names in the collection all_ents by adding digits to the end.
+    names in the collection all_ents by adding digits to the end.
     
     In the case of the MDT interface, the name is indicated by the value of
     the StringID property of an entry in all_ents.
@@ -409,8 +407,6 @@ def MakeUsableName(all_ents, name: str, **kwargs) -> str:
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         start: int
             The lowest usable digit to append in the case of the need to append
             them to get a unique name.
@@ -436,7 +432,7 @@ def MakeUsableName(all_ents, name: str, **kwargs) -> str:
 
 def MakeFailureMode(u: MDT.IUnreliable, name: str, **kwargs) -> MDT.FailureMode:
     """ This helper function creates a new failure mode, extracts any
-        provided properties, loads it into its owner (u), and returns it.
+    provided properties, loads it into its owner (u), and returns it.
         
     Parameters
     ----------
@@ -452,8 +448,6 @@ def MakeFailureMode(u: MDT.IUnreliable, name: str, **kwargs) -> MDT.FailureMode:
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         mtbf: Common.Distributions.IDistribution
             The probability distribution describing the mean time between
             failures for this failure mode.  This could also be a float in which
@@ -476,7 +470,7 @@ def MakeFailureMode(u: MDT.IUnreliable, name: str, **kwargs) -> MDT.FailureMode:
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting failure mode.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -502,8 +496,8 @@ def MakeFragilityCurve(
     f: MDT.IFragile, name: str, haz: MDT.Hazard, **kwargs
     ) -> MDT.FragilityCurve:
     """ This helper function creates a new fragility curve, extracts any
-        provided properties, loads it into its owner (f) mapped to the supplied
-        hazard, and returns it.
+    provided properties, loads it into its owner (f) mapped to the supplied
+    hazard, and returns it.
         
     Parameters
     ----------
@@ -524,8 +518,6 @@ def MakeFragilityCurve(
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         mttr: Common.Distributions.IDistribution
             The probability distribution describing the mean time to repair for
             this fragility curve.  This could also be a float in which case a
@@ -547,7 +539,7 @@ def MakeFragilityCurve(
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting fragility curve.
         guid:
             The unique identifier to use for this new asset.  This can be

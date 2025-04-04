@@ -15,22 +15,22 @@ import Common
 
 class controller_types(Enum):
     """ An enumeration of the types of microgrid controller available for
-        selection.
+    selection.
     """
     
     Standard = MDT.MicrogridControllerSettings.ControllerTypeEnum.Standard    
     """ The Standard controller uses batteries as an energy source of last
-        resort.
+    resort.
     """
     
     CycleCharging = MDT.MicrogridControllerSettings.ControllerTypeEnum.BatteryUser
     """ The CycleCharging controller uses batteries aggressively in an attempt
-        to shave peaks and minimize diesel fuel usage.
+    to shave peaks and minimize diesel fuel usage.
     """
     
 class powerflow_types(Enum):
     """ An enumeration of the possible powerflow calculations supported by
-        the MDT.
+    the MDT.
     """
 
     NONE = getattr(MDT.PRMSettings.PowerflowTypeEnum, "None")
@@ -211,75 +211,6 @@ class details:
         
     @staticmethod
     def build_line(mg: MDT.Microgrid, name: str, fn, sn, **kwargs) -> MDT.Line:
-        """ This helper function creates a new line, extracts any provided
-            properties, and returns it.
-        
-        Parameters
-        ----------
-        mg: MDT.Microgrid
-            The microgrid for which this line is being built.  This method does
-            not add the line into the microgrids line set.
-        name: str
-            The name to be given to this line.  Names of lines within a
-            microgrid must be unique.  If the name is None, then a default name
-            is generated using the first and second nodes.
-        fn
-            The node to which to attach the first end of this line. This
-            parameter can be None if you wish to assign the first node at a
-            later time.
-        sn
-            The node to which to attach the second end of this line. This
-            parameter can be None if you wish to assign the second node at a
-            later time.
-        kwargs: dict
-            A dictionary of all the variable arguments provided to this
-            function. The arguments used by this method include:
-        
-            Properties
-            ----------
-            base_spec:
-                The baseline specification for the new line.  If not provided,
-                the baseline specification is No Line.  This can  either be
-                provided as an MDT.LineSpec object or as the name of the
-                specification in which case a search will be conducted to find
-                and assign the correct spec in the master list.
-            specs:
-                The list of all allowable specifications for the new line. This
-                can be provided as a single entity or a list of entities. Each
-                entity can either be provided as an MDT.LineSpec object or as
-                the name of the specification to use in which case a search of
-                the master list will be conducted to find and assign the correct
-                spec.
-            length: float
-                A value that is greater than or equal to 0 to be the length of
-                the new line (ft).
-            retrofit_cost: float
-                The cost, if any, to keep the baseline specification in a
-                solution. If not supplied, the value defaults to $0.
-            failure_modes:
-                A list of all defined failure modes for the resulting component,
-                if any. The elements of the list are of type MDT.FailureMode.
-            fragilities:
-                A dictionary in which the keys are hazards and the values are
-                fragility curves for those hazards.  Each entry in the
-                dictionary results in a fragility for the new component.
-            err_log: Common.Logging.Log
-                The log into which to record any errors encountered during the
-                building, loading, or saving of the new item.  If this argument
-                is not provided, messages will be recorded into the
-                pymdt.GlobalErrorLog instance.
-            undos: Common.Undoing.IUndoPack
-                An optional undo pack into which to load the undoable objects
-                generated during this operation (if any).
-            notes:
-                Any notes to assign to the resulting line.
-            guid:
-                The unique identifier to use for this new asset.  This can be
-                a string formatted as described in:
-                https://learn.microsoft.com/en-us/dotnet/api/system.guid.-ctor?view=net-8.0#system-guid-ctor(system-string)
-                or a System.Guid instance.  If not provided, a newly created,
-                random Guid is used.
-        """
         if name is None: name = MDT.Line.MakeDefaultName(fn, sn)
         l = MDT.Line(mg, name)
         pymdt.utils.details._extract_guid(l, **kwargs)
@@ -805,8 +736,7 @@ details._load_all_stored_configs(
     
 def FindStoredSolarConfiguration(name: str) -> MDT.StoredTierLoadConfiguration:
     """ This function searches through all previously defined stored solar
-        resource data sets and returns the one found with the supplied name or
-        None.
+    resource data sets and returns the one found with the supplied name or None.
     
     Parameters
     ----------
@@ -827,8 +757,7 @@ def FindStoredSolarConfiguration(name: str) -> MDT.StoredTierLoadConfiguration:
 
 def FindStoredLoadConfiguration(name: str) -> MDT.StoredTierLoadConfiguration:
     """ This function searches through all previously defined stored load
-        profile data sets and returns the one found with the supplied name or
-        None.
+    profile data sets and returns the one found with the supplied name or None.
     
     Parameters
     ----------
@@ -849,8 +778,7 @@ def FindStoredLoadConfiguration(name: str) -> MDT.StoredTierLoadConfiguration:
 
 def FindStoredWindConfiguration(name: str) -> MDT.StoredTierLoadConfiguration:
     """ This function searches through all previously defined stored wind
-        resource data sets and returns the one found with the supplied name or
-        None.
+    resource data sets and returns the one found with the supplied name or None.
     
     Parameters
     ----------
@@ -871,8 +799,7 @@ def FindStoredWindConfiguration(name: str) -> MDT.StoredTierLoadConfiguration:
 
 def FindStoredHydroConfiguration(name: str) -> MDT.StoredTierLoadConfiguration:
     """ This function searches through all previously defined stored hydro
-        resource data sets and returns the one found with the supplied name or
-        None.
+    resource data sets and returns the one found with the supplied name or None.
     
     Parameters
     ----------
@@ -889,7 +816,7 @@ def FindStoredHydroConfiguration(name: str) -> MDT.StoredTierLoadConfiguration:
 
 def FindStoredThermalConfiguration(name: str) -> MDT.StoredTierLoadConfiguration:
     """ This function searches through all previously defined stored thermal
-        load data sets and returns the one found with the supplied name or None.
+    load data sets and returns the one found with the supplied name or None.
     
     Parameters
     ----------
@@ -910,7 +837,7 @@ def FindStoredThermalConfiguration(name: str) -> MDT.StoredTierLoadConfiguration
 
 def MakeStoredLoadConfiguration(name: str, **kwargs) -> MDT.StoredTierLoadConfiguration:
     """ This helper function creates a new file containing load data information
-        and makes it available for use in any models.
+    and makes it available for use in any models.
         
     Parameters
     ----------
@@ -920,8 +847,6 @@ def MakeStoredLoadConfiguration(name: str, **kwargs) -> MDT.StoredTierLoadConfig
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         tier:
             The tier for this newly created data set.  This can be an
             MDT.LoadTier or the name of a tier in which case the actual load
@@ -940,7 +865,7 @@ def MakeStoredLoadConfiguration(name: str, **kwargs) -> MDT.StoredTierLoadConfig
         interval_units: Common.Time.TimeAccumulation.Units
             The units of the interval for the data of this new file.  The
             interval is the total time duration of the data set.
-        notes:
+        notes: str
             Any notes to assign to the resulting data set.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -960,7 +885,7 @@ def MakeStoredLoadConfiguration(name: str, **kwargs) -> MDT.StoredTierLoadConfig
 
 def MakeStoredSolarDataConfiguration(name: str, **kwargs) -> MDT.StoredTierLoadConfiguration:
     """ This helper function creates a new file containing solar data information
-        and makes it available for use in any models.
+    and makes it available for use in any models.
         
     Parameters
     ----------
@@ -970,8 +895,6 @@ def MakeStoredSolarDataConfiguration(name: str, **kwargs) -> MDT.StoredTierLoadC
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         tier:
             The tier for this newly created data set.  This can be an
             MDT.LoadTier or the name of a tier in which case the actual load
@@ -990,7 +913,7 @@ def MakeStoredSolarDataConfiguration(name: str, **kwargs) -> MDT.StoredTierLoadC
         interval_units: Common.Time.TimeAccumulation.Units
             The units of the interval for the data of this new file.  The
             interval is the total time duration of the data set.
-        notes:
+        notes: str
             Any notes to assign to the resulting data set.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -1010,7 +933,7 @@ def MakeStoredSolarDataConfiguration(name: str, **kwargs) -> MDT.StoredTierLoadC
 
 def MakeStoredWindDataConfiguration(name: str, **kwargs) -> MDT.StoredTierLoadConfiguration:
     """ This helper function creates a new file containing wind data information
-        and makes it available for use in any models.
+    and makes it available for use in any models.
         
     Parameters
     ----------
@@ -1020,8 +943,6 @@ def MakeStoredWindDataConfiguration(name: str, **kwargs) -> MDT.StoredTierLoadCo
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         tier:
             The tier for this newly created data set.  This can be an
             MDT.LoadTier or the name of a tier in which case the actual load
@@ -1040,7 +961,7 @@ def MakeStoredWindDataConfiguration(name: str, **kwargs) -> MDT.StoredTierLoadCo
         interval_units: Common.Time.TimeAccumulation.Units
             The units of the interval for the data of this new file.  The
             interval is the total time duration of the data set.
-        notes:
+        notes: str
             Any notes to assign to the resulting data set.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -1059,8 +980,8 @@ def MakeStoredWindDataConfiguration(name: str, **kwargs) -> MDT.StoredTierLoadCo
         )
 
 def MakeStoredHydroDataConfiguration(name: str, **kwargs) -> MDT.StoredTierLoadConfiguration:
-    """ This helper function creates a new file containing hydro data information
-        and makes it available for use in any models.
+    """ This helper function creates a new file containing hydro data
+    information and makes it available for use in any models.
         
     Parameters
     ----------
@@ -1070,8 +991,6 @@ def MakeStoredHydroDataConfiguration(name: str, **kwargs) -> MDT.StoredTierLoadC
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         tier:
             The tier for this newly created data set.  This can be an
             MDT.LoadTier or the name of a tier in which case the actual load
@@ -1090,7 +1009,7 @@ def MakeStoredHydroDataConfiguration(name: str, **kwargs) -> MDT.StoredTierLoadC
         interval_units: Common.Time.TimeAccumulation.Units
             The units of the interval for the data of this new file.  The
             interval is the total time duration of the data set.
-        notes:
+        notes: str
             Any notes to assign to the resulting data set.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -1109,8 +1028,8 @@ def MakeStoredHydroDataConfiguration(name: str, **kwargs) -> MDT.StoredTierLoadC
         )
 
 def MakeStoredThermalDataConfiguration(name: str, **kwargs) -> MDT.StoredTierLoadConfiguration:
-    """ This helper function creates a new file containing thermal data information
-        and makes it available for use in any models.
+    """ This helper function creates a new file containing thermal data
+    information and makes it available for use in any models.
         
     Parameters
     ----------
@@ -1119,9 +1038,7 @@ def MakeStoredThermalDataConfiguration(name: str, **kwargs) -> MDT.StoredTierLoa
     kwargs: dict
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
-        
-        Properties
-        ----------
+                
         tier:
             The tier for this newly created data set.  This can be an
             MDT.LoadTier or the name of a tier in which case the actual load
@@ -1140,7 +1057,7 @@ def MakeStoredThermalDataConfiguration(name: str, **kwargs) -> MDT.StoredTierLoa
         interval_units: Common.Time.TimeAccumulation.Units
             The units of the interval for the data of this new file.  The
             interval is the total time duration of the data set.
-        notes:
+        notes: str
             Any notes to assign to the resulting data set.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -1160,7 +1077,7 @@ def MakeStoredThermalDataConfiguration(name: str, **kwargs) -> MDT.StoredTierLoa
 
 def MakeLine(mg: MDT.Microgrid, name: str, fn, sn, **kwargs) -> MDT.Line:
     """ This helper function creates a new line, extracts any provided
-        properties, loads it into its owner, and returns it.
+    properties, loads it into its owner, and returns it.
         
     Parameters
     ----------
@@ -1182,8 +1099,6 @@ def MakeLine(mg: MDT.Microgrid, name: str, fn, sn, **kwargs) -> MDT.Line:
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         base_spec:
             The baseline specification for the new line.  If not provided, the
             baseline specification is No Line.  This can  either be provided as
@@ -1223,7 +1138,7 @@ def MakeLine(mg: MDT.Microgrid, name: str, fn, sn, **kwargs) -> MDT.Line:
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting line.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -1247,7 +1162,7 @@ def MakeLine(mg: MDT.Microgrid, name: str, fn, sn, **kwargs) -> MDT.Line:
 
 def MakeTransformer(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.Transformer:
     """ This helper function creates a new transformer, extracts any provided
-        properties, loads it into its owner, and returns it.
+    properties, loads it into its owner, and returns it.
         
     Parameters
     ----------
@@ -1262,8 +1177,6 @@ def MakeTransformer(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.Transformer:
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         base_spec:
             The baseline specification for the new transformer.  If not
             provided, the baseline specification is No Transformer.  This can
@@ -1305,7 +1218,7 @@ def MakeTransformer(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.Transformer:
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting transformer.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -1329,7 +1242,7 @@ def MakeTransformer(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.Transformer:
 
 def MakeSwitch(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.Switch:
     """ This helper function creates a new switch, extracts any provided
-        properties, loads it into its owner, and returns it.
+    properties, loads it into its owner, and returns it.
         
     Parameters
     ----------
@@ -1344,8 +1257,6 @@ def MakeSwitch(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.Switch:
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         base_spec:
             The baseline specification for the new switch.  If not provided, the
             baseline specification is No Switch.  This can either be provided as
@@ -1387,7 +1298,7 @@ def MakeSwitch(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.Switch:
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting switch.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -1411,7 +1322,7 @@ def MakeSwitch(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.Switch:
 
 def MakeBus(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.Bus:
     """ This helper function creates a new bus, extracts any provided
-        properties, loads it into its owner, and returns it.
+    properties, loads it into its owner, and returns it.
         
     Parameters
     ----------
@@ -1424,8 +1335,6 @@ def MakeBus(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.Bus:
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         loc: tuple[float,float]
             An optional parameter to set the x,y diagram location for the
             resulting bus. This is only useful if you intend to save and open a
@@ -1453,7 +1362,7 @@ def MakeBus(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.Bus:
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting node.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -1477,7 +1386,7 @@ def MakeBus(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.Bus:
 
 def MakeMicrogrid(s: MDT.Site, name: str, **kwargs) -> MDT.Microgrid:
     """ This helper function creates a new microgrid, extracts any provided
-        properties, loads it into its owner, and returns it.
+    properties, loads it into its owner, and returns it.
         
     Parameters
     ----------
@@ -1490,8 +1399,6 @@ def MakeMicrogrid(s: MDT.Site, name: str, **kwargs) -> MDT.Microgrid:
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         owner:
             An optional parameter to serve as the owner of the new microgrid.
             This is typically used if one does not want the microgrid added to
@@ -1506,7 +1413,7 @@ def MakeMicrogrid(s: MDT.Site, name: str, **kwargs) -> MDT.Microgrid:
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting microgrid.
         guid:
             The unique identifier to use for this new microgrid.  This can be a
@@ -1530,7 +1437,7 @@ def MakeMicrogrid(s: MDT.Site, name: str, **kwargs) -> MDT.Microgrid:
 
 def MakeNode(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.Node:
     """ This helper function creates a new node, extracts any provided
-        properties, loads it into its owner, and returns it.
+    properties, loads it into its owner, and returns it.
         
     Parameters
     ----------
@@ -1545,8 +1452,6 @@ def MakeNode(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.Node:
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         owner:
             An optional parameter to serve as the owner of the new node. This is
             typically used when the new node is being created for a microgrid
@@ -1565,7 +1470,7 @@ def MakeNode(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.Node:
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting node.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -1589,7 +1494,7 @@ def MakeNode(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.Node:
 
 def MakeDieselTank(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.DieselTank:
     """ This helper function creates a new diesel tank, extracts any provided
-        properties, loads it into its owner, and returns it.
+    properties, loads it into its owner, and returns it.
         
     Parameters
     ----------
@@ -1604,8 +1509,6 @@ def MakeDieselTank(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.DieselTank:
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         base_spec:
             The baseline specification for the new tank.  If not provided, the
             baseline specification is No Tank.  This can either be provided as
@@ -1643,7 +1546,7 @@ def MakeDieselTank(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.DieselTank:
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting tank.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -1667,7 +1570,7 @@ def MakeDieselTank(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.DieselTank:
 
 def MakePropaneTank(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PropaneTank:
     """ This helper function creates a new propane tank, extracts any provided
-        properties, loads it into its owner, and returns it.
+    properties, loads it into its owner, and returns it.
         
     Parameters
     ----------
@@ -1682,8 +1585,6 @@ def MakePropaneTank(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PropaneTank:
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         base_spec:
             The baseline specification for the new tank.  If not  provided, the
             baseline specification is No Tank.  This can either be provided as
@@ -1721,7 +1622,7 @@ def MakePropaneTank(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PropaneTank:
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting propane tank.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -1745,7 +1646,7 @@ def MakePropaneTank(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PropaneTank:
 
 def MakeDieselGenerator(b: MDT.Bus, name: str, **kwargs) -> MDT.DieselGenerator:
     """ This helper function creates a new diesel generator, extracts any
-        provided properties, loads it into its owner, and returns it.
+    provided properties, loads it into its owner, and returns it.
         
     Parameters
     ----------
@@ -1759,8 +1660,6 @@ def MakeDieselGenerator(b: MDT.Bus, name: str, **kwargs) -> MDT.DieselGenerator:
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         base_spec:
             The baseline specification for the new diesel generator.  If not
             provided, the baseline specification is No Generator.  This can
@@ -1809,7 +1708,7 @@ def MakeDieselGenerator(b: MDT.Bus, name: str, **kwargs) -> MDT.DieselGenerator:
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting diesel generator.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -1834,7 +1733,7 @@ def MakeDieselGenerator(b: MDT.Bus, name: str, **kwargs) -> MDT.DieselGenerator:
 
 def MakeBattery(b: MDT.Bus, name: str, **kwargs) -> MDT.Battery:
     """ This helper function creates a new battery, extracts any
-        provided properties, loads it into its owner, and returns it.
+    provided properties, loads it into its owner, and returns it.
         
     Parameters
     ----------
@@ -1848,8 +1747,6 @@ def MakeBattery(b: MDT.Bus, name: str, **kwargs) -> MDT.Battery:
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         base_spec:
             The baseline specification for the new battery.  If not
             provided, the baseline specification is No Generator.  This can
@@ -1891,7 +1788,7 @@ def MakeBattery(b: MDT.Bus, name: str, **kwargs) -> MDT.Battery:
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting battery.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -1915,7 +1812,7 @@ def MakeBattery(b: MDT.Bus, name: str, **kwargs) -> MDT.Battery:
 
 def MakeInverter(b: MDT.Bus, name: str, **kwargs) -> MDT.Inverter:
     """ This helper function creates a new inverter, extracts any
-        provided properties, loads it into its owner, and returns it.
+    provided properties, loads it into its owner, and returns it.
         
     Parameters
     ----------
@@ -1929,8 +1826,6 @@ def MakeInverter(b: MDT.Bus, name: str, **kwargs) -> MDT.Inverter:
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         base_spec
             The baseline specification for the new inverter.  If not provided,
             the baseline specification is No Generator.  This can either be
@@ -1990,7 +1885,7 @@ def MakeInverter(b: MDT.Bus, name: str, **kwargs) -> MDT.Inverter:
 
 def MakeUPS(b: MDT.Bus, name: str, **kwargs) -> MDT.UninterruptiblePowerSupply:
     """ This helper function creates a new UPS, extracts any
-        provided properties, loads it into its owner, and returns it.
+    provided properties, loads it into its owner, and returns it.
         
     Parameters
     ----------
@@ -2004,8 +1899,6 @@ def MakeUPS(b: MDT.Bus, name: str, **kwargs) -> MDT.UninterruptiblePowerSupply:
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         base_spec:
             The baseline specification for the new UPS.  If not
             provided, the baseline specification is No Generator.  This can
@@ -2050,7 +1943,7 @@ def MakeUPS(b: MDT.Bus, name: str, **kwargs) -> MDT.UninterruptiblePowerSupply:
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting UPS.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -2075,7 +1968,7 @@ def MakeUPS(b: MDT.Bus, name: str, **kwargs) -> MDT.UninterruptiblePowerSupply:
 
 def MakePropaneGenerator(b: MDT.Bus, name: str, **kwargs) -> MDT.PropaneGenerator:
     """ This helper function creates a new propane generator, extracts any
-        provided properties, loads it into its owner, and returns it.
+    provided properties, loads it into its owner, and returns it.
         
     Parameters
     ----------
@@ -2089,8 +1982,6 @@ def MakePropaneGenerator(b: MDT.Bus, name: str, **kwargs) -> MDT.PropaneGenerato
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         base_spec:
             The baseline specification for the new propane generator.  If not
             provided, the baseline specification is No Generator.  This can
@@ -2139,7 +2030,7 @@ def MakePropaneGenerator(b: MDT.Bus, name: str, **kwargs) -> MDT.PropaneGenerato
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting propane generator.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -2164,7 +2055,7 @@ def MakePropaneGenerator(b: MDT.Bus, name: str, **kwargs) -> MDT.PropaneGenerato
 
 def MakeNaturalGasGenerator(b: MDT.Bus, name: str, **kwargs) -> MDT.NaturalGasGenerator:
     """ This helper function creates a new natural gas generator, extracts any
-        provided properties, loads it into its owner, and returns it.
+    provided properties, loads it into its owner, and returns it.
         
     Parameters
     ----------
@@ -2179,8 +2070,6 @@ def MakeNaturalGasGenerator(b: MDT.Bus, name: str, **kwargs) -> MDT.NaturalGasGe
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         base_spec:
             The baseline specification for the new natural gas generator.  If
             not provided, the baseline specification is No Generator.  This can
@@ -2223,7 +2112,7 @@ def MakeNaturalGasGenerator(b: MDT.Bus, name: str, **kwargs) -> MDT.NaturalGasGe
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting natural gas generator.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -2248,7 +2137,7 @@ def MakeNaturalGasGenerator(b: MDT.Bus, name: str, **kwargs) -> MDT.NaturalGasGe
 
 def MakeSolarGenerator(b: MDT.Bus, name: str, **kwargs) -> MDT.SolarGenerator:
     """ This helper function creates a new solar generator, extracts any
-        provided properties, loads it into its owner, and returns it.
+    provided properties, loads it into its owner, and returns it.
         
     Parameters
     ----------
@@ -2262,8 +2151,6 @@ def MakeSolarGenerator(b: MDT.Bus, name: str, **kwargs) -> MDT.SolarGenerator:
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         base_spec:
             The baseline specification for the new solar generator.  If not
             provided, the baseline specification is No Generator.  This can
@@ -2309,7 +2196,7 @@ def MakeSolarGenerator(b: MDT.Bus, name: str, **kwargs) -> MDT.SolarGenerator:
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting solar generator.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -2334,7 +2221,7 @@ def MakeSolarGenerator(b: MDT.Bus, name: str, **kwargs) -> MDT.SolarGenerator:
 
 def MakeWindGenerator(b: MDT.Bus, name: str, **kwargs) -> MDT.WindGenerator:
     """ This helper function creates a new wind generator, extracts any
-        provided properties, loads it into its owner, and returns it.
+    provided properties, loads it into its owner, and returns it.
         
     Parameters
     ----------
@@ -2348,8 +2235,6 @@ def MakeWindGenerator(b: MDT.Bus, name: str, **kwargs) -> MDT.WindGenerator:
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         base_spec:
             The baseline specification for the new wind generator.  If not
             provided, the baseline specification is No Generator.  This can
@@ -2395,7 +2280,7 @@ def MakeWindGenerator(b: MDT.Bus, name: str, **kwargs) -> MDT.WindGenerator:
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting wind generator.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -2420,7 +2305,7 @@ def MakeWindGenerator(b: MDT.Bus, name: str, **kwargs) -> MDT.WindGenerator:
 
 def MakeHydroGenerator(b: MDT.Bus, name: str, **kwargs) -> MDT.HydroGenerator:
     """ This helper function creates a new hydro generator, extracts any
-        provided properties, loads it into its owner, and returns it.
+    provided properties, loads it into its owner, and returns it.
         
     Parameters
     ----------
@@ -2434,8 +2319,6 @@ def MakeHydroGenerator(b: MDT.Bus, name: str, **kwargs) -> MDT.HydroGenerator:
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         base_spec:
             The baseline specification for the new hydro generator.  If not
             provided, the baseline specification is No Generator.  This can
@@ -2481,7 +2364,7 @@ def MakeHydroGenerator(b: MDT.Bus, name: str, **kwargs) -> MDT.HydroGenerator:
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting hydro generator.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -2505,7 +2388,7 @@ def MakeHydroGenerator(b: MDT.Bus, name: str, **kwargs) -> MDT.HydroGenerator:
 
 def MakeSolarResource(s: MDT.Site, name: str, **kwargs) -> MDT.SolarResource:
     """ This helper function creates a new solar resource, extracts any
-        provided properties, loads it into its owner, and returns it.
+    provided properties, loads it into its owner, and returns it.
         
     Parameters
     ----------
@@ -2518,8 +2401,6 @@ def MakeSolarResource(s: MDT.Site, name: str, **kwargs) -> MDT.SolarResource:
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         data: iterable of float
             The data to assign to this newly created resource.  This is only
             used of a stored_configuration is not provided.
@@ -2556,7 +2437,7 @@ def MakeSolarResource(s: MDT.Site, name: str, **kwargs) -> MDT.SolarResource:
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting solar resource.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -2580,7 +2461,7 @@ def MakeSolarResource(s: MDT.Site, name: str, **kwargs) -> MDT.SolarResource:
 
 def MakeWindResource(s: MDT.Site, name: str, **kwargs) -> MDT.WindResource:
     """ This helper function creates a new wind resource, extracts any
-        provided properties, loads it into its owner, and returns it.
+    provided properties, loads it into its owner, and returns it.
         
     Parameters
     ----------
@@ -2593,8 +2474,6 @@ def MakeWindResource(s: MDT.Site, name: str, **kwargs) -> MDT.WindResource:
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         data: iterable of float
             The data to assign to this newly created resource.  This is only
             used of a stored_configuration is not provided.
@@ -2631,7 +2510,7 @@ def MakeWindResource(s: MDT.Site, name: str, **kwargs) -> MDT.WindResource:
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting wind resource.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -2655,7 +2534,7 @@ def MakeWindResource(s: MDT.Site, name: str, **kwargs) -> MDT.WindResource:
 
 def MakeHydroResource(s: MDT.Site, name: str, **kwargs) -> MDT.HydroResource:
     """ This helper function creates a new hydro resource, extracts any
-        provided properties, loads it into its owner, and returns it.
+    provided properties, loads it into its owner, and returns it.
         
     Parameters
     ----------
@@ -2668,8 +2547,6 @@ def MakeHydroResource(s: MDT.Site, name: str, **kwargs) -> MDT.HydroResource:
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         data: iterable of float
             The data to assign to this newly created resource.  The number of
             elements that should be in the list, if any, is determined by the
@@ -2709,7 +2586,7 @@ def MakeHydroResource(s: MDT.Site, name: str, **kwargs) -> MDT.HydroResource:
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting hydro resource.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -2733,7 +2610,7 @@ def MakeHydroResource(s: MDT.Site, name: str, **kwargs) -> MDT.HydroResource:
 
 def MakeLoadSection(b: MDT.Bus, name: str, **kwargs) -> MDT.LoadSection:
     """ This helper function creates a new load section, extracts any
-        provided properties, loads it into its owner, and returns it.
+    provided properties, loads it into its owner, and returns it.
         
     Parameters
     ----------
@@ -2747,8 +2624,6 @@ def MakeLoadSection(b: MDT.Bus, name: str, **kwargs) -> MDT.LoadSection:
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         owner:
             An optional parameter to serve as the owner of the new load section.
             This is typically used when the new load section is being created
@@ -2780,7 +2655,7 @@ def MakeLoadSection(b: MDT.Bus, name: str, **kwargs) -> MDT.LoadSection:
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting load section.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -2804,7 +2679,7 @@ def MakeLoadSection(b: MDT.Bus, name: str, **kwargs) -> MDT.LoadSection:
 
 def MakeLoadDataTier(lc: MDT.ILoadContainer, name: str, **kwargs) -> MDT.LoadDataWithTier:
     """ This helper function creates a new load section, extracts any
-        provided properties, loads it into its owner, and returns it.
+    provided properties, loads it into its owner, and returns it.
         
     Parameters
     ----------
@@ -2817,8 +2692,6 @@ def MakeLoadDataTier(lc: MDT.ILoadContainer, name: str, **kwargs) -> MDT.LoadDat
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         tier:
             The tier for this newly created data set.  This can be an
             MDT.LoadTier or the name of a tier in which case the actual load
@@ -2850,7 +2723,7 @@ def MakeLoadDataTier(lc: MDT.ILoadContainer, name: str, **kwargs) -> MDT.LoadDat
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting load data set.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -2889,7 +2762,7 @@ def MakeLoadDataTier(lc: MDT.ILoadContainer, name: str, **kwargs) -> MDT.LoadDat
 
 def MakeDesignBasisThreat(pu: MDT.PowerUtility, name: str, **kwargs) -> MDT.DesignBasisThreat:
     """ This helper function creates a new design basis threat, extracts any
-        provided properties, loads it into its owner (pu), and returns it.
+    provided properties, loads it into its owner (pu), and returns it.
         
     Parameters
     ----------
@@ -2902,8 +2775,6 @@ def MakeDesignBasisThreat(pu: MDT.PowerUtility, name: str, **kwargs) -> MDT.Desi
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         mtbf: Common.Distributions.IDistribution
             The probability distribution describing the mean time between
             failures for this design basis threat.
@@ -2924,7 +2795,7 @@ def MakeDesignBasisThreat(pu: MDT.PowerUtility, name: str, **kwargs) -> MDT.Desi
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting design basis threat.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -2948,7 +2819,7 @@ def MakeDesignBasisThreat(pu: MDT.PowerUtility, name: str, **kwargs) -> MDT.Desi
 
 def MakeHazard(dbt: MDT.DesignBasisThreat, name: str, **kwargs) -> MDT.Hazard:
     """ This helper function creates a new hazard, extracts any provided
-        properties, loads it into the provided DBT, and returns it.
+    properties, loads it into the provided DBT, and returns it.
         
     Parameters
     ----------
@@ -2961,8 +2832,6 @@ def MakeHazard(dbt: MDT.DesignBasisThreat, name: str, **kwargs) -> MDT.Hazard:
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         intensity_generator: MDT.IDistribution
             The distribution from which intensity values are drawn at the onset
             of each DBT.
@@ -2982,7 +2851,7 @@ def MakeHazard(dbt: MDT.DesignBasisThreat, name: str, **kwargs) -> MDT.Hazard:
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting hazard.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -3006,7 +2875,7 @@ def MakeHazard(dbt: MDT.DesignBasisThreat, name: str, **kwargs) -> MDT.Hazard:
     
 def MakeMicrogridDesignOption(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.MicrogridDesignOption:
     """ This helper function creates a new microgrid design option, extracts any
-        provided properties, loads it into its owner (mg), and returns it.
+    provided properties, loads it into its owner (mg), and returns it.
         
     Parameters
     ----------
@@ -3019,8 +2888,6 @@ def MakeMicrogridDesignOption(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.Mic
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         owner:
             An optional parameter to serve as the owner of the new design
             option.  This is typically used if one does not want the design
@@ -3035,7 +2902,7 @@ def MakeMicrogridDesignOption(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.Mic
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting design option.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -3059,7 +2926,7 @@ def MakeMicrogridDesignOption(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.Mic
 
 def MakeBusDesignOption(mdo: MDT.MicrogridDesignOption, b: MDT.Bus, name: str, **kwargs) -> MDT.BusDesignOption:
     """ This helper function creates a new bus design option, extracts any
-        provided properties, loads it into its owner (mdo), and returns it.
+    provided properties, loads it into its owner (mdo), and returns it.
         
     Parameters
     ----------
@@ -3078,8 +2945,6 @@ def MakeBusDesignOption(mdo: MDT.MicrogridDesignOption, b: MDT.Bus, name: str, *
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         owner:
             An optional parameter to serve as the owner of the new bus design
             option.  This is typically used if one does not want the bus design
@@ -3094,7 +2959,7 @@ def MakeBusDesignOption(mdo: MDT.MicrogridDesignOption, b: MDT.Bus, name: str, *
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting bus design option.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -3118,7 +2983,7 @@ def MakeBusDesignOption(mdo: MDT.MicrogridDesignOption, b: MDT.Bus, name: str, *
 
 def MakeLoadTier(name: str, priority: int, **kwargs) -> MDT.LoadTier:
     """ This helper function creates a new load tier, extracts any
-        provided properties, loads it into the master list, and returns it.
+    provided properties, loads it into the master list, and returns it.
         
     Parameters
     ----------
@@ -3132,8 +2997,6 @@ def MakeLoadTier(name: str, priority: int, **kwargs) -> MDT.LoadTier:
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         owner:
             An optional parameter to serve as the owner of the new load tier.
             This is typically used if one does not want the load tier added to
@@ -3147,7 +3010,7 @@ def MakeLoadTier(name: str, priority: int, **kwargs) -> MDT.LoadTier:
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting load tier.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -3171,7 +3034,7 @@ def MakeLoadTier(name: str, priority: int, **kwargs) -> MDT.LoadTier:
 
 def MakeMicrogridNodeGroup(mg: MDT.Microgrid, name: str, x, y, width, height, **kwargs) -> MDT.MicrogridNodeGroup:
     """ This helper function creates a new microgrid node group, extracts any
-        provided properties, loads it into its owner, and returns it.
+    provided properties, loads it into its owner, and returns it.
         
     Parameters
     ----------
@@ -3184,8 +3047,6 @@ def MakeMicrogridNodeGroup(mg: MDT.Microgrid, name: str, x, y, width, height, **
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         owner:
             An optional parameter to serve as the owner of the new group.  This
             is typically used if one does not want the group added to the
@@ -3200,7 +3061,7 @@ def MakeMicrogridNodeGroup(mg: MDT.Microgrid, name: str, x, y, width, height, **
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting node group.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -3224,7 +3085,7 @@ def MakeMicrogridNodeGroup(mg: MDT.Microgrid, name: str, x, y, width, height, **
         
 def MakeSiteNodeGroup(s: MDT.Site, name: str, x, y, width, height, **kwargs) -> MDT.SiteNodeGroup:
     """ This helper function creates a new site node group, extracts any
-        provided properties, loads it into its owner, and returns it.
+    provided properties, loads it into its owner, and returns it.
         
     Parameters
     ----------
@@ -3237,8 +3098,6 @@ def MakeSiteNodeGroup(s: MDT.Site, name: str, x, y, width, height, **kwargs) -> 
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         owner:
             An optional parameter to serve as the owner of the new group. This
             is typically used if one does not want the group added to the site
@@ -3252,7 +3111,7 @@ def MakeSiteNodeGroup(s: MDT.Site, name: str, x, y, width, height, **kwargs) -> 
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting node group.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -3276,7 +3135,7 @@ def MakeSiteNodeGroup(s: MDT.Site, name: str, x, y, width, height, **kwargs) -> 
         
 def SetDieselInfiniteFuel(tank: MDT.DieselTank, infinite: bool = True, **kwargs):
     """ Assigns infinite fuel to the supplied tank or not depending on the value
-        of the infinite parameter.
+    of the infinite parameter.
         
     Parameters
     ----------
@@ -3292,7 +3151,7 @@ def SetDieselInfiniteFuel(tank: MDT.DieselTank, infinite: bool = True, **kwargs)
     
 def SetPropaneInfiniteFuel(tank: MDT.PropaneTank, infinite: bool = True, **kwargs):
     """ Assigns infinite fuel to the supplied tank or not depending on the value
-        of the infinite parameter.
+    of the infinite parameter.
         
     Parameters
     ----------
@@ -3308,7 +3167,7 @@ def SetPropaneInfiniteFuel(tank: MDT.PropaneTank, infinite: bool = True, **kwarg
 
 def ResetRegularPeriodData(rpd: MDT.IRegularPeriodData, dataset, **kwargs):
     """ Assigns the data in the supplied data set (data) to the supplied regular
-        period data instance.
+    period data instance.
         
     Parameters
     ----------
@@ -3339,8 +3198,6 @@ def ConfigureMicrogridController(mg: MDT.Microgrid, **kwargs):
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         controller_type:
             An optional parameter that indicates what type of controller to
             use.  This is one of the controller_types enumeration members.
@@ -3412,8 +3269,6 @@ def ConfigureStartupController(mg: MDT.Microgrid, **kwargs):
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         gen_restart_delay: float
             The number of seconds of delay if a generator fails to start and
             further attempts should be made.  This is the time between attempts.
@@ -3479,17 +3334,19 @@ def ConfigureStartupController(mg: MDT.Microgrid, **kwargs):
     
 def ConfigureGridTiedController(mg: MDT.Microgrid, **kwargs):
     """ This helper function sets the properties of the controller that manages
-        activities in the periods between DBT occurrences.
+    activities in the periods between DBT occurrences.
         
     The parameters all have to do with the tracking of failures and repairs
     during the grid-tied operation phase of the simulation.  A couple things to
     note are:
-        1 - Even if tracking, statistics for failures and repairs are not kept
-            during this phase.  The only real effect of doing so is that it is
-            possible (or more possible) for an asset to be broken at the start
-            of the next DBT.
-        2 - Even if not tracking, a repair for an asset that failed during the
-            DBT still may occur during the 
+
+    1 - Even if tracking, statistics for failures and repairs are not kept
+        during this phase.  The only real effect of doing so is that it is
+        possible (or more possible) for an asset to be broken at the start
+        of the next DBT.
+    2 - Even if not tracking, a repair for an asset that failed during the
+        DBT still may occur during the grid tied period and the full time
+        of the repair will be tallied in statistics.
         
     Parameters
     ----------
@@ -3500,33 +3357,31 @@ def ConfigureGridTiedController(mg: MDT.Microgrid, **kwargs):
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
-        track_line_failures:
+        track_line_failures: bool
             Whether or not to execute failures and repairs of lines during the
             grid-tied operations.
-        track_transformer_failures:
+        track_transformer_failures: bool
             Whether or not to execute failures and repairs of transformers
             during the grid-tied operations.
-        track_switch_failures:
+        track_switch_failures: bool
             Whether or not to execute failures and repairs of switches
             during the grid-tied operations.
-        track_ups_failures:
+        track_ups_failures: bool
             Whether or not to execute failures and repairs of UPSs
             during the grid-tied operations.
-        track_battery_failures:
+        track_battery_failures: bool
             Whether or not to execute failures and repairs of Batteries
             during the grid-tied operations.
-        track_wind_failures:
+        track_wind_failures: bool
             Whether or not to execute failures and repairs of Wind generators
             during the grid-tied operations.
-        track_hydro_failures:
+        track_hydro_failures: bool
             Whether or not to execute failures and repairs of Hydro generators
             during the grid-tied operations.
-        track_solar_failures:
+        track_solar_failures: bool
             Whether or not to execute failures and repairs of Solar generators
             during the grid-tied operations.
-        track_inverter_failures:
+        track_inverter_failures: bool
             Whether or not to execute failures and repairs of inverters during
             the grid-tied operations.
     """
@@ -3573,7 +3428,7 @@ def ConfigureGridTiedController(mg: MDT.Microgrid, **kwargs):
 
 def ConfigureDieselRefueller(mg: MDT.Microgrid, **kwargs):
     """ This helper function sets the properties of the diesel refueling
-        schedule.
+    schedule.
         
     Parameters
     ----------
@@ -3584,13 +3439,12 @@ def ConfigureDieselRefueller(mg: MDT.Microgrid, **kwargs):
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
-        time_of_day:
-            The hour of day at which the first refuel action takes place.
-        period:
-            The amount of time between refuellings.
-        quantity:
+        time_of_day: float
+            The hour of day at which the first refuel action takes place.  A
+            real valued number of hours from midnight [0-24].
+        period: float
+            The amount of time in hours between refuellings.
+        quantity: float
             The maximum amount of fuel that can be delivered in any refuelling
             action.  A value of -1 allows for the delivery of any amount of fuel
             (infinite).
@@ -3601,7 +3455,7 @@ def ConfigureDieselRefueller(mg: MDT.Microgrid, **kwargs):
     
 def ConfigurePropaneRefueller(mg: MDT.Microgrid, **kwargs):
     """ This helper function sets the properties of the propane refueling
-        schedule.
+    schedule.
         
     Parameters
     ----------
@@ -3612,13 +3466,12 @@ def ConfigurePropaneRefueller(mg: MDT.Microgrid, **kwargs):
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
-        time_of_day:
-            The hour of day at which the first refuel action takes place.
-        period:
-            The amount of time between refuellings.
-        quantity:
+        time_of_day: float
+            The hour of day at which the first refuel action takes place.  A
+            real valued number of hours from midnight [0-24].
+        period: float
+            The amount of time in hours between refuellings.
+        quantity: float
             The maximum amount of fuel that can be delivered in any refuelling
             action.  A value of -1 allows for the delivery of any amount of fuel
             (infinite).
@@ -3629,7 +3482,7 @@ def ConfigurePropaneRefueller(mg: MDT.Microgrid, **kwargs):
     
 def ExtractPRMSettings() -> MDT.PRMSettings:
     """ A helper method to extract and return the MDT.PRMSettings object.
-        
+    
     Returns
     -------
     MDT.PRMSettings:
@@ -3652,10 +3505,8 @@ def ConfigurePRM(**kwargs):
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
-        simulation_years:
-            The total number of hours of simulation to run for every
+        simulation_years: float
+            The total number of years of simulation to run for every
             configuration.  This includes both DBT or "black sky" time and
             normal operations (or "blue sky) time.  The default is 1000 years.
         powerflow_type:
@@ -3663,12 +3514,12 @@ def ConfigurePRM(**kwargs):
             powerflow calculations and no (NONE) calculations.  These should be
             provided as members of the pymdt.core.powerflow_types enumeration.
             The default is NONE.
-        use_reliability:
+        use_reliability: bool
             Whether or not to include reliability calculations in the
             simulation.  This serves as a means of telling the simulation to
             ignore reliability inputs which can be useful for comparison trials.
             The default is True.
-        use_fragility:
+        use_fragility: bool
             Whether or not to include fragility calculations in the simulation.
             This serves as a means of telling the simulation to ignore fragility
             inputs which can be useful for comparison trials. The default is

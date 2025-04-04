@@ -364,8 +364,8 @@ def MakeLineSpecification(
     weight: float=0.0, volume: float=0.0, **kwargs
     ) -> MDT.LineSpec:
     """ This helper function creates a new LineSpec, extracts any
-        provided properties, loads it into the master list of specifications,
-        and returns it.
+    provided properties, loads it into the master list of specifications,
+    and returns it.
         
     Parameters
     ----------
@@ -386,8 +386,6 @@ def MakeLineSpecification(
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         failure_modes:
             A list of all defined failure modes for the resulting specification,
             if any. The elements of the list are of type MDT.FailureMode.
@@ -413,7 +411,7 @@ def MakeLineSpecification(
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting specification.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -439,8 +437,8 @@ def MakeSwitchSpecification(
     volume: float=0.0, **kwargs
     ) -> MDT.SwitchSpec:
     """ This helper function creates a new SwitchSpec, extracts any
-        provided properties, loads it into the master list of specifications,
-        and returns it.
+    provided properties, loads it into the master list of specifications,
+    and returns it.
         
     Parameters
     ----------
@@ -459,8 +457,6 @@ def MakeSwitchSpecification(
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         failure_modes:
             A list of all defined failure modes for the resulting specification,
             if any. The elements of the list are of type MDT.FailureMode.
@@ -486,7 +482,7 @@ def MakeSwitchSpecification(
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting specification.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -512,8 +508,8 @@ def MakeTransformerSpecification(
     weight: float=0.0, volume: float=0.0, **kwargs
     ) -> MDT.TransformerSpec:
     """ This helper function creates a new TransformerSpec, extracts any
-        provided properties, loads it into the master list of specifications,
-        and returns it.
+    provided properties, loads it into the master list of specifications,
+    and returns it.
         
     Parameters
     ----------
@@ -534,8 +530,6 @@ def MakeTransformerSpecification(
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         failure_modes:
             A list of all defined failure modes for the resulting specification,
             if any. The elements of the list are of type MDT.FailureMode.
@@ -561,7 +555,7 @@ def MakeTransformerSpecification(
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting specification.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -587,8 +581,8 @@ def MakeDieselTankSpecification(
     weight: float=0.0, volume: float=0.0, **kwargs
     ) -> MDT.DieselTankSpec:
     """ This helper function creates a new DieselTankSpec, extracts any
-        provided properties, loads it into the master list of specifications,
-        and returns it.
+    provided properties, loads it into the master list of specifications,
+    and returns it.
         
     Parameters
     ----------
@@ -609,8 +603,6 @@ def MakeDieselTankSpecification(
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         sync: bool
             Whether or not to save the newly created spec to the specification
             database.  This can be done later using the
@@ -624,7 +616,7 @@ def MakeDieselTankSpecification(
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting specification.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -650,8 +642,8 @@ def MakePropaneTankSpecification(
     weight: float=0.0, volume: float=0.0, **kwargs
     ) -> MDT.PropaneTankSpec:
     """ This helper function creates a new PropaneTankSpec, extracts any
-        provided properties, loads it into the master list of specifications,
-        and returns it.
+    provided properties, loads it into the master list of specifications,
+    and returns it.
         
     Parameters
     ----------
@@ -672,8 +664,6 @@ def MakePropaneTankSpecification(
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         sync: bool
             Whether or not to save the newly created spec to the specification
             database.  This can be done later using the
@@ -687,7 +677,7 @@ def MakePropaneTankSpecification(
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting specification.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -713,8 +703,8 @@ def MakeDieselGeneratorSpecification(
     weight: float=0.0, volume: float=0.0, **kwargs
     ) -> MDT.DieselGeneratorSpec:
     """ This helper function creates a new DieselGeneratorSpec, extracts any
-        provided properties, loads it into the master list of specifications,
-        and returns it.
+    provided properties, loads it into the master list of specifications,
+    and returns it.
         
     Parameters
     ----------
@@ -735,8 +725,6 @@ def MakeDieselGeneratorSpecification(
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         efficiencies: [float]
             A list of 5 efficiency values, 1 each for this generator running at
             0% (idle), 25%, 50%, 75%, and 100% running rate.  The units of
@@ -789,7 +777,7 @@ def MakeDieselGeneratorSpecification(
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting specification.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -815,8 +803,8 @@ def MakePropaneGeneratorSpecification(
     weight: float=0.0, volume: float=0.0, **kwargs
     ) -> MDT.PropaneGeneratorSpec:
     """ This helper function creates a new PropaneGeneratorSpec, extracts any
-        provided properties, loads it into the master list of specifications,
-        and returns it.
+    provided properties, loads it into the master list of specifications,
+    and returns it.
         
     Parameters
     ----------
@@ -837,8 +825,6 @@ def MakePropaneGeneratorSpecification(
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         efficiencies: [float]
             A list of 5 efficiency values, 1 each for this generator running at
             0% (idle), 25%, 50%, 75%, and 100% running rate.  The units of
@@ -891,7 +877,7 @@ def MakePropaneGeneratorSpecification(
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting specification.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -917,8 +903,8 @@ def MakeNaturalGasGeneratorSpecification(
     weight: float=0.0, volume: float=0.0, **kwargs
     ) -> MDT.NaturalGasGeneratorSpec:
     """ This helper function creates a new NaturalGasGeneratorSpec, extracts any
-        provided properties, loads it into the master list of specifications,
-        and returns it.
+    provided properties, loads it into the master list of specifications,
+    and returns it.
         
     Parameters
     ----------
@@ -939,8 +925,6 @@ def MakeNaturalGasGeneratorSpecification(
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         efficiencies: [float]
             A list of 5 efficiency values, 1 each for this generator running at
             0% (idle), 25%, 50%, 75%, and 100% running rate.  The units of
@@ -993,7 +977,7 @@ def MakeNaturalGasGeneratorSpecification(
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting specification.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -1019,8 +1003,8 @@ def MakeSolarGeneratorSpecification(
     weight: float=0.0, volume: float=0.0, **kwargs
     ) -> MDT.SolarGeneratorSpec:
     """ This helper function creates a new SolarGeneratorSpec, extracts any
-        provided properties, loads it into the master list of specifications,
-        and returns it.
+    provided properties, loads it into the master list of specifications,
+    and returns it.
         
     Parameters
     ----------
@@ -1041,8 +1025,6 @@ def MakeSolarGeneratorSpecification(
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         failure_modes:
             A list of all defined failure modes for the resulting specification,
             if any. The elements of the list are of type MDT.FailureMode.
@@ -1068,7 +1050,7 @@ def MakeSolarGeneratorSpecification(
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting specification.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -1094,8 +1076,8 @@ def MakeWindGeneratorSpecification(
     weight: float=0.0, volume: float=0.0, **kwargs
     ) -> MDT.WindGeneratorSpec:
     """ This helper function creates a new WindGeneratorSpec, extracts any
-        provided properties, loads it into the master list of specifications,
-        and returns it.
+    provided properties, loads it into the master list of specifications,
+    and returns it.
         
     Parameters
     ----------
@@ -1116,8 +1098,6 @@ def MakeWindGeneratorSpecification(
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         failure_modes:
             A list of all defined failure modes for the resulting specification,
             if any. The elements of the list are of type MDT.FailureMode.
@@ -1143,7 +1123,7 @@ def MakeWindGeneratorSpecification(
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting specification.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -1169,8 +1149,8 @@ def MakeHydroGeneratorSpecification(
     weight: float=0.0, volume: float=0.0, **kwargs
     ) -> MDT.HydroGeneratorSpec:
     """ This helper function creates a new HydroGeneratorSpec, extracts any
-        provided properties, loads it into the master list of specifications,
-        and returns it.
+    provided properties, loads it into the master list of specifications,
+    and returns it.
         
     Parameters
     ----------
@@ -1191,8 +1171,6 @@ def MakeHydroGeneratorSpecification(
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         failure_modes:
             A list of all defined failure modes for the resulting specification,
             if any. The elements of the list are of type MDT.FailureMode.
@@ -1218,7 +1196,7 @@ def MakeHydroGeneratorSpecification(
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting specification.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -1244,8 +1222,8 @@ def MakeInverterSpecification(
     volume: float=0.0, **kwargs
     ) -> MDT.InverterSpec:
     """ This helper function creates a new InverterSpec, extracts any
-        provided properties, loads it into the master list of specifications,
-        and returns it.
+    provided properties, loads it into the master list of specifications,
+    and returns it.
         
     Parameters
     ----------
@@ -1264,8 +1242,6 @@ def MakeInverterSpecification(
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         failure_modes:
             A list of all defined failure modes for the resulting specification,
             if any. The elements of the list are of type MDT.FailureMode.
@@ -1282,7 +1258,7 @@ def MakeInverterSpecification(
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting specification.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -1308,8 +1284,8 @@ def MakeBatterySpecification(
     volume: float=0.0, **kwargs
     ) -> MDT.BatterySpec:
     """ This helper function creates a new BatterySpec, extracts any
-        provided properties, loads it into the master list of specifications,
-        and returns it.
+    provided properties, loads it into the master list of specifications,
+    and returns it.
         
     Parameters
     ----------
@@ -1328,8 +1304,6 @@ def MakeBatterySpecification(
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         charge_efficiencies: [float]
             A list of 5 charging efficiency values, 1 each for this battery at
             0%, 25%, 50%, 75%, and 100% state of charge.  The units of
@@ -1378,7 +1352,7 @@ def MakeBatterySpecification(
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting specification.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -1404,8 +1378,8 @@ def MakeUPSSpecification(
     volume: float=0.0, **kwargs
     ) -> MDT.UPSSpec:
     """ This helper function creates a new UPSSpec, extracts any
-        provided properties, loads it into the master list of specifications,
-        and returns it.
+    provided properties, loads it into the master list of specifications,
+    and returns it.
         
     Parameters
     ----------
@@ -1424,8 +1398,6 @@ def MakeUPSSpecification(
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         charge_efficiencies: [float]
             A list of 5 charging efficiency values, 1 each for this UPS at
             0%, 25%, 50%, 75%, and 100% state of charge.  The units of
@@ -1471,7 +1443,7 @@ def MakeUPSSpecification(
         undos: Common.Undoing.IUndoPack
             An optional undo pack into which to load the undoable objects
             generated during this operation (if any).
-        notes:
+        notes: str
             Any notes to assign to the resulting specification.
         guid:
             The unique identifier to use for this new asset.  This can be
@@ -1494,10 +1466,10 @@ def MakeUPSSpecification(
 
 def SaveSpecificationDatabase(errLog: Common.Logging.Log=None) -> Common.Logging.Log:
     """ A helper function to store any new, deleted, or changed specifications
-        to the underlying database.
+    to the underlying database.
         
-        Without calling this function, any changes made will not be saved for
-        use in the future. 
+    Without calling this function, any changes made will not be saved for
+    use in the future. 
         
     Parameters
     ----------

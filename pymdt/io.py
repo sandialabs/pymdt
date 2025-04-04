@@ -29,7 +29,7 @@ class ImportFormats:
     
     MDTProject = MDT.MDTProjectImporterExporter.PROJ_FORMAT
     """ The project files created by the MDT that include any external data
-        packaged in. (.mpf)
+    packaged in. (*.mpf)
     """
     
 class details:
@@ -148,8 +148,6 @@ def ReadInputFile(file_name, errLog: Common.Logging.Log=None, **kwargs) -> Commo
         A dictionary of all the variable arguments provided to this function.
         The arguments used by this method include:
         
-        Properties
-        ----------
         make_backup: bool
             Whether or not to write a backup file if the loaded file is from an
             older version of the MDT.  The default is False.
@@ -230,7 +228,7 @@ def WriteInputFile(file_name, errLog: Common.Logging.Log=None) -> Common.Logging
 
 def WriteOutputFile(file_name: str, sri, errLog: Common.Logging.Log=None) -> Common.Logging.Log:
     """ Writes an MDT results file for the provided solver run info object to
-        a file with the supplied name.
+    a file with the supplied name.
         
     Parameters
     ----------
