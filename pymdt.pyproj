@@ -51,6 +51,7 @@
   <ItemGroup>
     <Folder Include=".github\" />
     <Folder Include=".github\workflows\" />
+    <Folder Include="docs\" />
     <Folder Include="pymdt" />
     <Folder Include="sandia_pymdt.egg-info" />
     <Folder Include="tests\" />

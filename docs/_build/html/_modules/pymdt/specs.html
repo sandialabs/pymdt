@@ -1,0 +1,1708 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pymdt.specs &#8212; sandia-pymdt 1.4.2520 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=61cd365c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=12dfc556" />
+    <script src="../../_static/documentation_options.js?v=b081cfe2"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for pymdt.specs</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">System</span>
+
+<span class="kn">import</span> <span class="nn">pymdt.utils</span>
+
+<span class="kn">import</span> <span class="nn">MDT</span>
+<span class="kn">import</span> <span class="nn">Common</span>
+
+<div class="viewcode-block" id="details">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.specs.details">[docs]</a>
+<span class="k">class</span> <span class="nc">details</span><span class="p">:</span>
+    
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_extract_battery_spec_efficiency_values</span><span class="p">(</span><span class="n">bat_spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="c1"># Don&#39;t use kwargs.get to avoid creation of the UndoPack if not needed.</span>
+        <span class="n">undos</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;undos&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;undos&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span> <span class="k">else</span> <span class="n">Common</span><span class="o">.</span><span class="n">Undoing</span><span class="o">.</span><span class="n">UndoPack</span><span class="p">()</span>
+        <span class="n">maxlen</span> <span class="o">=</span> <span class="n">bat_spec</span><span class="o">.</span><span class="n">NumberOfEfficiencyValues</span>
+        <span class="n">ceff_vals</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;charge_efficiencies&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ceff_vals</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ceffs</span> <span class="o">=</span> <span class="n">bat_spec</span><span class="o">.</span><span class="n">get_ChargeEfficiencies</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ceff_vals</span><span class="p">),</span> <span class="n">maxlen</span><span class="p">)):</span>
+                <span class="n">ceffs</span><span class="o">.</span><span class="n">set_Item</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">undos</span><span class="p">,</span> <span class="n">ceff_vals</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        
+        <span class="n">deff_vals</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;discharge_efficiencies&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">deff_vals</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">deffs</span> <span class="o">=</span> <span class="n">bat_spec</span><span class="o">.</span><span class="n">get_DischargeEfficiencies</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">deff_vals</span><span class="p">),</span> <span class="n">maxlen</span><span class="p">)):</span>
+                <span class="n">deffs</span><span class="o">.</span><span class="n">set_Item</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">undos</span><span class="p">,</span> <span class="n">deff_vals</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_extract_gen_spec_perf_values</span><span class="p">(</span><span class="n">gen_spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="c1"># Don&#39;t use kwargs.get to avoid creation of the UndoPack if not needed.</span>
+        <span class="n">undos</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;undos&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;undos&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span> <span class="k">else</span> <span class="n">Common</span><span class="o">.</span><span class="n">Undoing</span><span class="o">.</span><span class="n">UndoPack</span><span class="p">()</span>
+        <span class="n">maxlen</span> <span class="o">=</span> <span class="n">gen_spec</span><span class="o">.</span><span class="n">NumberOfPerformanceValues</span>
+        <span class="n">eff_vals</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;efficiencies&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">eff_vals</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">effs</span> <span class="o">=</span> <span class="n">gen_spec</span><span class="o">.</span><span class="n">get_EfficiencyValues</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">eff_vals</span><span class="p">),</span> <span class="n">maxlen</span><span class="p">)):</span>
+                <span class="n">effs</span><span class="o">.</span><span class="n">set_Item</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">undos</span><span class="p">,</span> <span class="n">eff_vals</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        
+        <span class="n">fuse_vals</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;fuel_usages&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">fuse_vals</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">fuses</span> <span class="o">=</span> <span class="n">gen_spec</span><span class="o">.</span><span class="n">get_EfficiencyValues</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fuse_vals</span><span class="p">),</span> <span class="n">maxlen</span><span class="p">)):</span>
+                <span class="n">fuses</span><span class="o">.</span><span class="n">set_Item</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">undos</span><span class="p">,</span> <span class="n">fuse_vals</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_extract_gen_start_probabilities</span><span class="p">(</span><span class="n">gen_spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="c1"># Don&#39;t use kwargs.get to avoid creation of the UndoPack if not needed.</span>
+        <span class="n">undos</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;undos&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;undos&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span> <span class="k">else</span> <span class="n">Common</span><span class="o">.</span><span class="n">Undoing</span><span class="o">.</span><span class="n">UndoPack</span><span class="p">()</span>
+        <span class="n">st_probs</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;start_probabilities&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">st_probs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">probs</span> <span class="o">=</span> <span class="n">gen_spec</span><span class="o">.</span><span class="n">get_StartProbabilities</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">st_probs</span><span class="p">)):</span>
+                <span class="n">probs</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">st_probs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">undos</span><span class="p">)</span>
+        
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_extract_fossil_gen_spec_props</span><span class="p">(</span><span class="n">gen_spec</span><span class="p">,</span> <span class="n">capacity</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
+            <span class="n">gen_spec</span><span class="p">,</span> <span class="s2">&quot;Capacity&quot;</span><span class="p">,</span> <span class="n">capacity</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_extract_voltage</span><span class="p">(</span><span class="n">gen_spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">details</span><span class="o">.</span><span class="n">_extract_gen_spec_perf_values</span><span class="p">(</span><span class="n">gen_spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">details</span><span class="o">.</span><span class="n">_extract_gen_start_probabilities</span><span class="p">(</span><span class="n">gen_spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
+            <span class="n">gen_spec</span><span class="p">,</span> <span class="s2">&quot;StartFailureMTTR&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;startup_mttr&quot;</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
+            <span class="n">gen_spec</span><span class="p">,</span> <span class="s2">&quot;StartupTime&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;startup_time&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="o">/</span><span class="mf">3600.0</span><span class="p">),</span>
+            <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
+            <span class="n">gen_spec</span><span class="p">,</span> <span class="s2">&quot;RecoverableHeatRate&quot;</span><span class="p">,</span>
+            <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;recoverable_heat_rate&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_set_basic_spec_props</span><span class="p">(</span>
+        <span class="n">spec</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Specification</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">op_cost</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">volume</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">):</span>
+        
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_extract_notes</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_extract_failure_modes</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
+            <span class="n">spec</span><span class="p">,</span> <span class="s2">&quot;Cost&quot;</span><span class="p">,</span> <span class="n">System</span><span class="o">.</span><span class="n">Decimal</span><span class="p">(</span><span class="n">capital_cost</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
+            <span class="n">spec</span><span class="p">,</span> <span class="s2">&quot;OperationalCost&quot;</span><span class="p">,</span> <span class="n">System</span><span class="o">.</span><span class="n">Decimal</span><span class="p">(</span><span class="n">op_cost</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
+            <span class="n">spec</span><span class="p">,</span> <span class="s2">&quot;Weight&quot;</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
+            <span class="n">spec</span><span class="p">,</span> <span class="s2">&quot;Volume&quot;</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+                    
+<div class="viewcode-block" id="details.build_line_spec">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.specs.details.build_line_spec">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">build_line_spec</span><span class="p">(</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">capacity</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">volume</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">LineSpec</span><span class="p">:</span>
+        
+        <span class="n">spec</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">LineSpec</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_extract_guid</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">details</span><span class="o">.</span><span class="n">_set_basic_spec_props</span><span class="p">(</span>
+            <span class="n">spec</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_extract_impedance</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
+            <span class="n">spec</span><span class="p">,</span> <span class="s2">&quot;Capacity&quot;</span><span class="p">,</span> <span class="n">capacity</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">spec</span></div>
+
+    
+<div class="viewcode-block" id="details.build_switch_spec">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.specs.details.build_switch_spec">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">build_switch_spec</span><span class="p">(</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">volume</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">SwitchSpec</span><span class="p">:</span>
+        
+        <span class="n">spec</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">SwitchSpec</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_extract_guid</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">details</span><span class="o">.</span><span class="n">_set_basic_spec_props</span><span class="p">(</span>
+            <span class="n">spec</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_extract_impedance</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">spec</span></div>
+
+    
+<div class="viewcode-block" id="details.build_transformer_spec">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.specs.details.build_transformer_spec">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">build_transformer_spec</span><span class="p">(</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">capacity</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">volume</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">TransformerSpec</span><span class="p">:</span>
+        
+        <span class="n">spec</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">TransformerSpec</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_extract_guid</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">details</span><span class="o">.</span><span class="n">_set_basic_spec_props</span><span class="p">(</span>
+            <span class="n">spec</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_extract_impedance</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
+            <span class="n">spec</span><span class="p">,</span> <span class="s2">&quot;Capacity&quot;</span><span class="p">,</span> <span class="n">capacity</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">spec</span></div>
+
+    
+<div class="viewcode-block" id="details.build_diesel_tank_spec">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.specs.details.build_diesel_tank_spec">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">build_diesel_tank_spec</span><span class="p">(</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">capacity</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">volume</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">DieselTankSpec</span><span class="p">:</span>
+        
+        <span class="n">spec</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">DieselTankSpec</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_extract_guid</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">details</span><span class="o">.</span><span class="n">_set_basic_spec_props</span><span class="p">(</span>
+            <span class="n">spec</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
+            <span class="n">spec</span><span class="p">,</span> <span class="s2">&quot;Capacity&quot;</span><span class="p">,</span> <span class="n">capacity</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">spec</span></div>
+
+    
+<div class="viewcode-block" id="details.build_propane_tank_spec">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.specs.details.build_propane_tank_spec">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">build_propane_tank_spec</span><span class="p">(</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">capacity</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">volume</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">PropaneTankSpec</span><span class="p">:</span>
+        
+        <span class="n">spec</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">PropaneTankSpec</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_extract_guid</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">details</span><span class="o">.</span><span class="n">_set_basic_spec_props</span><span class="p">(</span>
+            <span class="n">spec</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
+            <span class="n">spec</span><span class="p">,</span> <span class="s2">&quot;Capacity&quot;</span><span class="p">,</span> <span class="n">capacity</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">spec</span></div>
+
+    
+<div class="viewcode-block" id="details.build_solar_generator_spec">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.specs.details.build_solar_generator_spec">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">build_solar_generator_spec</span><span class="p">(</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">capacity</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">volume</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">SolarGeneratorSpec</span><span class="p">:</span>
+        
+        <span class="n">spec</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">SolarGeneratorSpec</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_extract_guid</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">details</span><span class="o">.</span><span class="n">_set_basic_spec_props</span><span class="p">(</span>
+            <span class="n">spec</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
+            <span class="n">spec</span><span class="p">,</span> <span class="s2">&quot;Capacity&quot;</span><span class="p">,</span> <span class="n">capacity</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_extract_voltage</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">spec</span></div>
+
+    
+<div class="viewcode-block" id="details.build_wind_generator_spec">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.specs.details.build_wind_generator_spec">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">build_wind_generator_spec</span><span class="p">(</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">capacity</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">volume</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">WindGeneratorSpec</span><span class="p">:</span>
+        
+        <span class="n">spec</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">WindGeneratorSpec</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_extract_guid</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">details</span><span class="o">.</span><span class="n">_set_basic_spec_props</span><span class="p">(</span>
+            <span class="n">spec</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
+            <span class="n">spec</span><span class="p">,</span> <span class="s2">&quot;Capacity&quot;</span><span class="p">,</span> <span class="n">capacity</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_extract_voltage</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">spec</span></div>
+
+    
+<div class="viewcode-block" id="details.build_hydro_generator_spec">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.specs.details.build_hydro_generator_spec">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">build_hydro_generator_spec</span><span class="p">(</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">capacity</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">volume</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">HydroGeneratorSpec</span><span class="p">:</span>
+        
+        <span class="n">spec</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">HydroGeneratorSpec</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_extract_guid</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">details</span><span class="o">.</span><span class="n">_set_basic_spec_props</span><span class="p">(</span>
+            <span class="n">spec</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
+            <span class="n">spec</span><span class="p">,</span> <span class="s2">&quot;Capacity&quot;</span><span class="p">,</span> <span class="n">capacity</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_extract_voltage</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">spec</span></div>
+
+    
+<div class="viewcode-block" id="details.build_inverter_spec">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.specs.details.build_inverter_spec">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">build_inverter_spec</span><span class="p">(</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">volume</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">InverterSpec</span><span class="p">:</span>
+        
+        <span class="n">spec</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">InverterSpec</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_extract_guid</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">details</span><span class="o">.</span><span class="n">_set_basic_spec_props</span><span class="p">(</span>
+            <span class="n">spec</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">spec</span></div>
+
+    
+<div class="viewcode-block" id="details.build_battery_spec">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.specs.details.build_battery_spec">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">build_battery_spec</span><span class="p">(</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">volume</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">BatterySpec</span><span class="p">:</span>
+        
+        <span class="n">spec</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">BatterySpec</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_extract_guid</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">details</span><span class="o">.</span><span class="n">_set_basic_spec_props</span><span class="p">(</span>
+            <span class="n">spec</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_extract_voltage</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">details</span><span class="o">.</span><span class="n">_extract_battery_spec_efficiency_values</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
+            <span class="n">spec</span><span class="p">,</span> <span class="s2">&quot;MaxChargeRate&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;max_charge_rate&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
+            <span class="n">spec</span><span class="p">,</span> <span class="s2">&quot;MaxDischargeRate&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;max_discharge_rate&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+            <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
+            <span class="n">spec</span><span class="p">,</span> <span class="s2">&quot;EnergyCapacity&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;energy_capacity&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
+            <span class="n">spec</span><span class="p">,</span> <span class="s2">&quot;MinStateOfCharge&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;min_state_of_charge&quot;</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">),</span>
+            <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
+            <span class="n">spec</span><span class="p">,</span> <span class="s2">&quot;MaxStateOfCharge&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;max_state_of_charge&quot;</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">),</span>
+            <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
+            <span class="n">spec</span><span class="p">,</span> <span class="s2">&quot;DesiredStateOfCharge&quot;</span><span class="p">,</span>
+            <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;desired_state_of_charge&quot;</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">spec</span></div>
+
+    
+<div class="viewcode-block" id="details.build_ups_spec">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.specs.details.build_ups_spec">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">build_ups_spec</span><span class="p">(</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">volume</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">UPSSpec</span><span class="p">:</span>
+        
+        <span class="n">spec</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">UPSSpec</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_extract_guid</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">details</span><span class="o">.</span><span class="n">_set_basic_spec_props</span><span class="p">(</span>
+            <span class="n">spec</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_extract_voltage</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">details</span><span class="o">.</span><span class="n">_extract_battery_spec_efficiency_values</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
+            <span class="n">spec</span><span class="p">,</span> <span class="s2">&quot;MaxChargeRate&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;max_charge_rate&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
+            <span class="n">spec</span><span class="p">,</span> <span class="s2">&quot;MaxDischargeRate&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;max_discharge_rate&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+            <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
+            <span class="n">spec</span><span class="p">,</span> <span class="s2">&quot;EnergyCapacity&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;energy_capacity&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
+            <span class="n">spec</span><span class="p">,</span> <span class="s2">&quot;MinStateOfCharge&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;min_state_of_charge&quot;</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">),</span>
+            <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
+            <span class="n">spec</span><span class="p">,</span> <span class="s2">&quot;MaxStateOfCharge&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;max_state_of_charge&quot;</span><span class="p">,</span> <span class="mf">90.0</span><span class="p">),</span>
+            <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
+            <span class="n">spec</span><span class="p">,</span> <span class="s2">&quot;DesiredStateOfCharge&quot;</span><span class="p">,</span>
+            <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;desired_state_of_charge&quot;</span><span class="p">,</span> <span class="mf">90.0</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">spec</span></div>
+
+    
+<div class="viewcode-block" id="details.build_diesel_generator_spec">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.specs.details.build_diesel_generator_spec">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">build_diesel_generator_spec</span><span class="p">(</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">capacity</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">volume</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">DieselGeneratorSpec</span><span class="p">:</span>
+        
+        <span class="n">spec</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">DieselGeneratorSpec</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_extract_guid</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">details</span><span class="o">.</span><span class="n">_set_basic_spec_props</span><span class="p">(</span>
+            <span class="n">spec</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="n">details</span><span class="o">.</span><span class="n">_extract_fossil_gen_spec_props</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="n">capacity</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">spec</span></div>
+
+    
+<div class="viewcode-block" id="details.build_propane_generator_spec">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.specs.details.build_propane_generator_spec">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">build_propane_generator_spec</span><span class="p">(</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">capacity</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">volume</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">PropaneGeneratorSpec</span><span class="p">:</span>
+        
+        <span class="n">spec</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">PropaneGeneratorSpec</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_extract_guid</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">details</span><span class="o">.</span><span class="n">_set_basic_spec_props</span><span class="p">(</span>
+            <span class="n">spec</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="n">details</span><span class="o">.</span><span class="n">_extract_fossil_gen_spec_props</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="n">capacity</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">spec</span></div>
+
+    
+<div class="viewcode-block" id="details.build_nat_gas_generator_spec">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.specs.details.build_nat_gas_generator_spec">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">build_nat_gas_generator_spec</span><span class="p">(</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">capacity</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">volume</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">NaturalGasGeneratorSpec</span><span class="p">:</span>
+        
+        <span class="n">spec</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">NaturalGasGeneratorSpec</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_extract_guid</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">details</span><span class="o">.</span><span class="n">_set_basic_spec_props</span><span class="p">(</span>
+            <span class="n">spec</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="n">details</span><span class="o">.</span><span class="n">_extract_fossil_gen_spec_props</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="n">capacity</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">spec</span></div>
+
+    
+    <span class="k">def</span> <span class="nf">_execute_spec_add</span><span class="p">(</span><span class="n">specType</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Common</span><span class="o">.</span><span class="n">Logging</span><span class="o">.</span><span class="n">Log</span><span class="p">:</span>
+        <span class="n">hndlrName</span> <span class="o">=</span> <span class="s2">&quot;Add&quot;</span> <span class="o">+</span> <span class="n">specType</span> <span class="o">+</span> <span class="s2">&quot;SpecificationCanceled&quot;</span>
+        <span class="n">specLstName</span> <span class="o">=</span> <span class="s2">&quot;get_&quot;</span> <span class="o">+</span> <span class="n">specType</span> <span class="o">+</span> <span class="s2">&quot;Specifications&quot;</span>
+        <span class="k">return</span> <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_execute_1_arg_add_with_undo</span><span class="p">(</span>
+            <span class="n">MDT</span><span class="o">.</span><span class="n">Driver</span><span class="o">.</span><span class="n">INSTANCE</span><span class="p">,</span> <span class="n">hndlrName</span><span class="p">,</span> <span class="n">specLstName</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MakeLineSpecification">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.specs.MakeLineSpecification">[docs]</a>
+<span class="k">def</span> <span class="nf">MakeLineSpecification</span><span class="p">(</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">capacity</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">volume</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">LineSpec</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; This helper function creates a new LineSpec, extracts any</span>
+<span class="sd">        provided properties, loads it into the master list of specifications,</span>
+<span class="sd">        and returns it.</span>
+<span class="sd">        </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    name: str</span>
+<span class="sd">        The name to be given to the new specification.  Names of like-type</span>
+<span class="sd">        specifications must be unique.</span>
+<span class="sd">    capacity: float</span>
+<span class="sd">        The capacity of this component type to carry power (in kW).</span>
+<span class="sd">    capital_cost: float</span>
+<span class="sd">        The cost per foot for this component type.</span>
+<span class="sd">    op_cost: float</span>
+<span class="sd">        The cost per hour of operation of this type of component.</span>
+<span class="sd">    weight: float</span>
+<span class="sd">        The weight in lbs/ft of this component type.</span>
+<span class="sd">    volume: float</span>
+<span class="sd">        The physical volume in cubic feet of this component type.</span>
+<span class="sd">    kwargs: dict</span>
+<span class="sd">        A dictionary of all the variable arguments provided to this function.</span>
+<span class="sd">        The arguments used by this method include:</span>
+<span class="sd">        </span>
+<span class="sd">        Properties</span>
+<span class="sd">        ----------</span>
+<span class="sd">        failure_modes:</span>
+<span class="sd">            A list of all defined failure modes for the resulting specification,</span>
+<span class="sd">            if any. The elements of the list are of type MDT.FailureMode.</span>
+<span class="sd">        impedance</span>
+<span class="sd">            A 2 element tuple or a list with 2 items in it where the first is</span>
+<span class="sd">            the resistance part and the second is the reactance.</span>
+<span class="sd">        resistance: float</span>
+<span class="sd">            The resistance component of impedance.  Only used if the &quot;impedance&quot;</span>
+<span class="sd">            keyword argument is not provided.</span>
+<span class="sd">        reactance: float</span>
+<span class="sd">            The reactance component of impedance.  Only used if the &quot;impedance&quot;</span>
+<span class="sd">            keyword argument is not provided.</span>
+<span class="sd">        sync: bool</span>
+<span class="sd">            Whether or not to save the newly created spec to the specification</span>
+<span class="sd">            database.  This can be done later using the</span>
+<span class="sd">            SaveSpecificationDatabase method.  The default is to save the change</span>
+<span class="sd">            (True).</span>
+<span class="sd">        err_log: Common.Logging.Log</span>
+<span class="sd">            The log into which to record any errors encountered during the</span>
+<span class="sd">            building, loading, or saving of the new specification.  If this</span>
+<span class="sd">            argument is not provided, messages will be recorded into the</span>
+<span class="sd">            pymdt.GlobalErrorLog instance.</span>
+<span class="sd">        undos: Common.Undoing.IUndoPack</span>
+<span class="sd">            An optional undo pack into which to load the undoable objects</span>
+<span class="sd">            generated during this operation (if any).</span>
+<span class="sd">        notes:</span>
+<span class="sd">            Any notes to assign to the resulting specification.</span>
+<span class="sd">        guid:</span>
+<span class="sd">            The unique identifier to use for this new asset.  This can be</span>
+<span class="sd">            a string formatted as described in:</span>
+<span class="sd">            https://learn.microsoft.com/en-us/dotnet/api/system.guid.-ctor?view=net-8.0#system-guid-ctor(system-string)</span>
+<span class="sd">            or a System.Guid instance.  If not provided, a newly created,</span>
+<span class="sd">            random Guid is used.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    MDT.LineSpec:</span>
+<span class="sd">        The newly created specification instance.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">spec</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">build_line_spec</span><span class="p">(</span>
+        <span class="n">name</span><span class="p">,</span> <span class="n">capacity</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+    <span class="n">errLog</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">_execute_spec_add</span><span class="p">(</span><span class="s2">&quot;Line&quot;</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sync&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)):</span> <span class="n">SaveSpecificationDatabase</span><span class="p">(</span><span class="n">errLog</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">spec</span></div>
+
+
+<div class="viewcode-block" id="MakeSwitchSpecification">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.specs.MakeSwitchSpecification">[docs]</a>
+<span class="k">def</span> <span class="nf">MakeSwitchSpecification</span><span class="p">(</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">volume</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">SwitchSpec</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; This helper function creates a new SwitchSpec, extracts any</span>
+<span class="sd">        provided properties, loads it into the master list of specifications,</span>
+<span class="sd">        and returns it.</span>
+<span class="sd">        </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    name: str</span>
+<span class="sd">        The name to be given to the new specification.  Names of like-type</span>
+<span class="sd">        specifications must be unique.</span>
+<span class="sd">    capital_cost: float</span>
+<span class="sd">        The cost per foot for this component type.</span>
+<span class="sd">    op_cost: float</span>
+<span class="sd">        The cost per hour of operation of this type of component.</span>
+<span class="sd">    weight: float</span>
+<span class="sd">        The weight in lbs of this component type.</span>
+<span class="sd">    volume: float</span>
+<span class="sd">        The physical volume in cubic feet of this component type.</span>
+<span class="sd">    kwargs: dict</span>
+<span class="sd">        A dictionary of all the variable arguments provided to this function.</span>
+<span class="sd">        The arguments used by this method include:</span>
+<span class="sd">        </span>
+<span class="sd">        Properties</span>
+<span class="sd">        ----------</span>
+<span class="sd">        failure_modes:</span>
+<span class="sd">            A list of all defined failure modes for the resulting specification,</span>
+<span class="sd">            if any. The elements of the list are of type MDT.FailureMode.</span>
+<span class="sd">        impedance</span>
+<span class="sd">            A 2 element tuple or a list with 2 items in it where the first is</span>
+<span class="sd">            the resistance part and the second is the reactance.</span>
+<span class="sd">        resistance: float</span>
+<span class="sd">            The resistance component of impedance.  Only used if the &quot;impedance&quot;</span>
+<span class="sd">            keyword argument is not provided.</span>
+<span class="sd">        reactance: float</span>
+<span class="sd">            The reactance component of impedance.  Only used if the &quot;impedance&quot;</span>
+<span class="sd">            keyword argument is not provided.</span>
+<span class="sd">        sync: bool</span>
+<span class="sd">            Whether or not to save the newly created spec to the specification</span>
+<span class="sd">            database.  This can be done later using the</span>
+<span class="sd">            SaveSpecificationDatabase method.  The default is to save the change</span>
+<span class="sd">            (True).</span>
+<span class="sd">        err_log: Common.Logging.Log</span>
+<span class="sd">            The log into which to record any errors encountered during the</span>
+<span class="sd">            building, loading, or saving of the new specification.  If this</span>
+<span class="sd">            argument is not provided, messages will be recorded into the</span>
+<span class="sd">            pymdt.GlobalErrorLog instance.</span>
+<span class="sd">        undos: Common.Undoing.IUndoPack</span>
+<span class="sd">            An optional undo pack into which to load the undoable objects</span>
+<span class="sd">            generated during this operation (if any).</span>
+<span class="sd">        notes:</span>
+<span class="sd">            Any notes to assign to the resulting specification.</span>
+<span class="sd">        guid:</span>
+<span class="sd">            The unique identifier to use for this new asset.  This can be</span>
+<span class="sd">            a string formatted as described in:</span>
+<span class="sd">            https://learn.microsoft.com/en-us/dotnet/api/system.guid.-ctor?view=net-8.0#system-guid-ctor(system-string)</span>
+<span class="sd">            or a System.Guid instance.  If not provided, a newly created,</span>
+<span class="sd">            random Guid is used.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    MDT.SwitchSpec:</span>
+<span class="sd">        The newly created specification instance.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">spec</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">build_switch_spec</span><span class="p">(</span>
+        <span class="n">name</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+    <span class="n">errLog</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">_execute_spec_add</span><span class="p">(</span><span class="s2">&quot;Switch&quot;</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sync&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)):</span> <span class="n">SaveSpecificationDatabase</span><span class="p">(</span><span class="n">errLog</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">spec</span></div>
+
+
+<div class="viewcode-block" id="MakeTransformerSpecification">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.specs.MakeTransformerSpecification">[docs]</a>
+<span class="k">def</span> <span class="nf">MakeTransformerSpecification</span><span class="p">(</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">capacity</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">volume</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">TransformerSpec</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; This helper function creates a new TransformerSpec, extracts any</span>
+<span class="sd">        provided properties, loads it into the master list of specifications,</span>
+<span class="sd">        and returns it.</span>
+<span class="sd">        </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    name: str</span>
+<span class="sd">        The name to be given to the new specification.  Names of like-type</span>
+<span class="sd">        specifications must be unique.</span>
+<span class="sd">    capacity: float</span>
+<span class="sd">        The capacity of this component type to carry power (in kW).</span>
+<span class="sd">    capital_cost: float</span>
+<span class="sd">        The cost per foot for this component type.</span>
+<span class="sd">    op_cost: float</span>
+<span class="sd">        The cost per hour of operation of this type of component.</span>
+<span class="sd">    weight: float</span>
+<span class="sd">        The weight in lbs of this component type.</span>
+<span class="sd">    volume: float</span>
+<span class="sd">        The physical volume in cubic feet of this component type.</span>
+<span class="sd">    kwargs: dict</span>
+<span class="sd">        A dictionary of all the variable arguments provided to this function.</span>
+<span class="sd">        The arguments used by this method include:</span>
+<span class="sd">        </span>
+<span class="sd">        Properties</span>
+<span class="sd">        ----------</span>
+<span class="sd">        failure_modes:</span>
+<span class="sd">            A list of all defined failure modes for the resulting specification,</span>
+<span class="sd">            if any. The elements of the list are of type MDT.FailureMode.</span>
+<span class="sd">        impedance</span>
+<span class="sd">            A 2 element tuple or a list with 2 items in it where the first is</span>
+<span class="sd">            the resistance part and the second is the reactance.</span>
+<span class="sd">        resistance: float</span>
+<span class="sd">            The resistance component of impedance.  Only used if the &quot;impedance&quot;</span>
+<span class="sd">            keyword argument is not provided.</span>
+<span class="sd">        reactance: float</span>
+<span class="sd">            The reactance component of impedance.  Only used if the &quot;impedance&quot;</span>
+<span class="sd">            keyword argument is not provided.</span>
+<span class="sd">        sync: bool</span>
+<span class="sd">            Whether or not to save the newly created spec to the specification</span>
+<span class="sd">            database.  This can be done later using the</span>
+<span class="sd">            SaveSpecificationDatabase method.  The default is to save the change</span>
+<span class="sd">            (True).</span>
+<span class="sd">        err_log: Common.Logging.Log</span>
+<span class="sd">            The log into which to record any errors encountered during the</span>
+<span class="sd">            building, loading, or saving of the new specification.  If this</span>
+<span class="sd">            argument is not provided, messages will be recorded into the</span>
+<span class="sd">            pymdt.GlobalErrorLog instance.</span>
+<span class="sd">        undos: Common.Undoing.IUndoPack</span>
+<span class="sd">            An optional undo pack into which to load the undoable objects</span>
+<span class="sd">            generated during this operation (if any).</span>
+<span class="sd">        notes:</span>
+<span class="sd">            Any notes to assign to the resulting specification.</span>
+<span class="sd">        guid:</span>
+<span class="sd">            The unique identifier to use for this new asset.  This can be</span>
+<span class="sd">            a string formatted as described in:</span>
+<span class="sd">            https://learn.microsoft.com/en-us/dotnet/api/system.guid.-ctor?view=net-8.0#system-guid-ctor(system-string)</span>
+<span class="sd">            or a System.Guid instance.  If not provided, a newly created,</span>
+<span class="sd">            random Guid is used.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    MDT.TransformerSpec:</span>
+<span class="sd">        The newly created specification instance.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">spec</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">build_transformer_spec</span><span class="p">(</span>
+        <span class="n">name</span><span class="p">,</span> <span class="n">capacity</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+    <span class="n">errLog</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">_execute_spec_add</span><span class="p">(</span><span class="s2">&quot;Transformer&quot;</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sync&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)):</span> <span class="n">SaveSpecificationDatabase</span><span class="p">(</span><span class="n">errLog</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">spec</span></div>
+
+
+<div class="viewcode-block" id="MakeDieselTankSpecification">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.specs.MakeDieselTankSpecification">[docs]</a>
+<span class="k">def</span> <span class="nf">MakeDieselTankSpecification</span><span class="p">(</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">capacity</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">volume</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">DieselTankSpec</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; This helper function creates a new DieselTankSpec, extracts any</span>
+<span class="sd">        provided properties, loads it into the master list of specifications,</span>
+<span class="sd">        and returns it.</span>
+<span class="sd">        </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    name: str</span>
+<span class="sd">        The name to be given to the new specification.  Names of like-type</span>
+<span class="sd">        specifications must be unique.</span>
+<span class="sd">    capacity: float</span>
+<span class="sd">        The capacity of this tank to hold fuel (in gallons).</span>
+<span class="sd">    capital_cost: float</span>
+<span class="sd">        The cost for this component type.</span>
+<span class="sd">    op_cost: float</span>
+<span class="sd">        The cost per hour of operation of this type of component.</span>
+<span class="sd">    weight: float</span>
+<span class="sd">        The weight in lbs of this component type.</span>
+<span class="sd">    volume: float</span>
+<span class="sd">        The physical volume in cubic feet of this component type.</span>
+<span class="sd">    kwargs: dict</span>
+<span class="sd">        A dictionary of all the variable arguments provided to this function.</span>
+<span class="sd">        The arguments used by this method include:</span>
+<span class="sd">        </span>
+<span class="sd">        Properties</span>
+<span class="sd">        ----------</span>
+<span class="sd">        sync: bool</span>
+<span class="sd">            Whether or not to save the newly created spec to the specification</span>
+<span class="sd">            database.  This can be done later using the</span>
+<span class="sd">            SaveSpecificationDatabase method.  The default is to save the change</span>
+<span class="sd">            (True).</span>
+<span class="sd">        err_log: Common.Logging.Log</span>
+<span class="sd">            The log into which to record any errors encountered during the</span>
+<span class="sd">            building, loading, or saving of the new specification.  If this</span>
+<span class="sd">            argument is not provided, messages will be recorded into the</span>
+<span class="sd">            pymdt.GlobalErrorLog instance.</span>
+<span class="sd">        undos: Common.Undoing.IUndoPack</span>
+<span class="sd">            An optional undo pack into which to load the undoable objects</span>
+<span class="sd">            generated during this operation (if any).</span>
+<span class="sd">        notes:</span>
+<span class="sd">            Any notes to assign to the resulting specification.</span>
+<span class="sd">        guid:</span>
+<span class="sd">            The unique identifier to use for this new asset.  This can be</span>
+<span class="sd">            a string formatted as described in:</span>
+<span class="sd">            https://learn.microsoft.com/en-us/dotnet/api/system.guid.-ctor?view=net-8.0#system-guid-ctor(system-string)</span>
+<span class="sd">            or a System.Guid instance.  If not provided, a newly created,</span>
+<span class="sd">            random Guid is used.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    MDT.DieselTankSpec:</span>
+<span class="sd">        The newly created specification instance.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">spec</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">build_diesel_tank_spec</span><span class="p">(</span>
+        <span class="n">name</span><span class="p">,</span> <span class="n">capacity</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+    <span class="n">errLog</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">_execute_spec_add</span><span class="p">(</span><span class="s2">&quot;DieselTank&quot;</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sync&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)):</span> <span class="n">SaveSpecificationDatabase</span><span class="p">(</span><span class="n">errLog</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">spec</span></div>
+
+
+<div class="viewcode-block" id="MakePropaneTankSpecification">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.specs.MakePropaneTankSpecification">[docs]</a>
+<span class="k">def</span> <span class="nf">MakePropaneTankSpecification</span><span class="p">(</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">capacity</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">volume</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">PropaneTankSpec</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; This helper function creates a new PropaneTankSpec, extracts any</span>
+<span class="sd">        provided properties, loads it into the master list of specifications,</span>
+<span class="sd">        and returns it.</span>
+<span class="sd">        </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    name: str</span>
+<span class="sd">        The name to be given to the new specification.  Names of like-type</span>
+<span class="sd">        specifications must be unique.</span>
+<span class="sd">    capacity: float</span>
+<span class="sd">        The capacity of this tank to hold fuel (in gallons).</span>
+<span class="sd">    capital_cost: float</span>
+<span class="sd">        The cost for this component type.</span>
+<span class="sd">    op_cost: float</span>
+<span class="sd">        The cost per hour of operation of this type of component.</span>
+<span class="sd">    weight: float</span>
+<span class="sd">        The weight in lbs of this component type.</span>
+<span class="sd">    volume: float</span>
+<span class="sd">        The physical volume in cubic feet of this component type.</span>
+<span class="sd">    kwargs: dict</span>
+<span class="sd">        A dictionary of all the variable arguments provided to this function.</span>
+<span class="sd">        The arguments used by this method include:</span>
+<span class="sd">        </span>
+<span class="sd">        Properties</span>
+<span class="sd">        ----------</span>
+<span class="sd">        sync: bool</span>
+<span class="sd">            Whether or not to save the newly created spec to the specification</span>
+<span class="sd">            database.  This can be done later using the</span>
+<span class="sd">            SaveSpecificationDatabase method.  The default is to save the change</span>
+<span class="sd">            (True).</span>
+<span class="sd">        err_log: Common.Logging.Log</span>
+<span class="sd">            The log into which to record any errors encountered during the</span>
+<span class="sd">            building, loading, or saving of the new specification.  If this</span>
+<span class="sd">            argument is not provided, messages will be recorded into the</span>
+<span class="sd">            pymdt.GlobalErrorLog instance.</span>
+<span class="sd">        undos: Common.Undoing.IUndoPack</span>
+<span class="sd">            An optional undo pack into which to load the undoable objects</span>
+<span class="sd">            generated during this operation (if any).</span>
+<span class="sd">        notes:</span>
+<span class="sd">            Any notes to assign to the resulting specification.</span>
+<span class="sd">        guid:</span>
+<span class="sd">            The unique identifier to use for this new asset.  This can be</span>
+<span class="sd">            a string formatted as described in:</span>
+<span class="sd">            https://learn.microsoft.com/en-us/dotnet/api/system.guid.-ctor?view=net-8.0#system-guid-ctor(system-string)</span>
+<span class="sd">            or a System.Guid instance.  If not provided, a newly created,</span>
+<span class="sd">            random Guid is used.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    MDT.PropaneTankSpec:</span>
+<span class="sd">        The newly created specification instance.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">spec</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">build_propane_tank_spec</span><span class="p">(</span>
+        <span class="n">name</span><span class="p">,</span> <span class="n">capacity</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+    <span class="n">errLog</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">_execute_spec_add</span><span class="p">(</span><span class="s2">&quot;PropaneTank&quot;</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sync&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)):</span> <span class="n">SaveSpecificationDatabase</span><span class="p">(</span><span class="n">errLog</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">spec</span></div>
+
+
+<div class="viewcode-block" id="MakeDieselGeneratorSpecification">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.specs.MakeDieselGeneratorSpecification">[docs]</a>
+<span class="k">def</span> <span class="nf">MakeDieselGeneratorSpecification</span><span class="p">(</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">capacity</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">volume</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">DieselGeneratorSpec</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; This helper function creates a new DieselGeneratorSpec, extracts any</span>
+<span class="sd">        provided properties, loads it into the master list of specifications,</span>
+<span class="sd">        and returns it.</span>
+<span class="sd">        </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    name: str</span>
+<span class="sd">        The name to be given to the new specification.  Names of like-type</span>
+<span class="sd">        specifications must be unique.</span>
+<span class="sd">    capacity: float</span>
+<span class="sd">        The maximum output power this generator can produce (in kW).</span>
+<span class="sd">    capital_cost: float</span>
+<span class="sd">        The cost for this component type.</span>
+<span class="sd">    op_cost: float</span>
+<span class="sd">        The cost per hour of operation of this type of component.</span>
+<span class="sd">    weight: float</span>
+<span class="sd">        The weight in lbs of this component type.</span>
+<span class="sd">    volume: float</span>
+<span class="sd">        The physical volume in cubic feet of this component type.</span>
+<span class="sd">    kwargs: dict</span>
+<span class="sd">        A dictionary of all the variable arguments provided to this function.</span>
+<span class="sd">        The arguments used by this method include:</span>
+<span class="sd">        </span>
+<span class="sd">        Properties</span>
+<span class="sd">        ----------</span>
+<span class="sd">        efficiencies: [float]</span>
+<span class="sd">            A list of 5 efficiency values, 1 each for this generator running at</span>
+<span class="sd">            0% (idle), 25%, 50%, 75%, and 100% running rate.  The units of</span>
+<span class="sd">            efficiency are fraction (0.0-1.0).</span>
+<span class="sd">        fuel_usages: [float]</span>
+<span class="sd">            A list of 5 fuel use values, 1 each for this generator running at</span>
+<span class="sd">            0% (idle), 25%, 50%, 75%, and 100% running rate.  The units of</span>
+<span class="sd">            efficiency during idling are gallons per hour.  The units of the</span>
+<span class="sd">            other rates is gallon per kW per hour.</span>
+<span class="sd">        voltage</span>
+<span class="sd">            A 2 element tuple or a list with 2 items in it where the first is</span>
+<span class="sd">            the real part and the second is the imaginary.</span>
+<span class="sd">        real: float</span>
+<span class="sd">            The real component of voltage.  Only used if the &quot;voltage&quot; keyword</span>
+<span class="sd">            argument is not provided.</span>
+<span class="sd">        imaginary: float</span>
+<span class="sd">            The imaginary component of voltage.  Only used if the &quot;voltage&quot;</span>
+<span class="sd">            keyword argument is not provided.</span>
+<span class="sd">        start_probabilities: [float]</span>
+<span class="sd">            A list of 1 or more startup probability values as fractions</span>
+<span class="sd">            (0.0-1.0).  The first is the likelihood of a generator starting on</span>
+<span class="sd">            the first attempt.  Each subsequent value corresponds to the</span>
+<span class="sd">            likelihood of the generator starting on subsequent attempts.  The</span>
+<span class="sd">            number of items in the list defines the maximum number of start</span>
+<span class="sd">            attempts allowed before the generator is considered to have suffered</span>
+<span class="sd">            startup failure.</span>
+<span class="sd">        startup_mttr: Common.Distributions.IDistribution</span>
+<span class="sd">            The distribution used to determine the time required to repair a</span>
+<span class="sd">            startup failure for this generator.  If no startup MTTR distribution</span>
+<span class="sd">            is provided, then the generator cannot be repaired during the DBT</span>
+<span class="sd">            occurrence.</span>
+<span class="sd">        startup_time: float</span>
+<span class="sd">            The amount of time required to start this generator and warm it up</span>
+<span class="sd">            to the point that it can begin to carry load in hours.</span>
+<span class="sd">        recoverable_heat_rate: float</span>
+<span class="sd">            An indicator of how much heat energy can be extracted from this</span>
+<span class="sd">            generator as a function of it&#39;s electrical output as a fraction</span>
+<span class="sd">            (0.0-1.0).  The fraction represents the number of kWh of heat per</span>
+<span class="sd">            kWh of electrical energy that can be extracted.</span>
+<span class="sd">        sync: bool</span>
+<span class="sd">            Whether or not to save the newly created spec to the specification</span>
+<span class="sd">            database.  This can be done later using the</span>
+<span class="sd">            SaveSpecificationDatabase method.  The default is to save the change</span>
+<span class="sd">            (True).</span>
+<span class="sd">        err_log: Common.Logging.Log</span>
+<span class="sd">            The log into which to record any errors encountered during the</span>
+<span class="sd">            building, loading, or saving of the new specification.  If this</span>
+<span class="sd">            argument is not provided, messages will be recorded into the</span>
+<span class="sd">            pymdt.GlobalErrorLog instance.</span>
+<span class="sd">        undos: Common.Undoing.IUndoPack</span>
+<span class="sd">            An optional undo pack into which to load the undoable objects</span>
+<span class="sd">            generated during this operation (if any).</span>
+<span class="sd">        notes:</span>
+<span class="sd">            Any notes to assign to the resulting specification.</span>
+<span class="sd">        guid:</span>
+<span class="sd">            The unique identifier to use for this new asset.  This can be</span>
+<span class="sd">            a string formatted as described in:</span>
+<span class="sd">            https://learn.microsoft.com/en-us/dotnet/api/system.guid.-ctor?view=net-8.0#system-guid-ctor(system-string)</span>
+<span class="sd">            or a System.Guid instance.  If not provided, a newly created,</span>
+<span class="sd">            random Guid is used.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    MDT.DieselGeneratorSpec:</span>
+<span class="sd">        The newly created specification instance.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">spec</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">build_diesel_generator_spec</span><span class="p">(</span>
+        <span class="n">name</span><span class="p">,</span> <span class="n">capacity</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+    <span class="n">errLog</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">_execute_spec_add</span><span class="p">(</span><span class="s2">&quot;DieselGenerator&quot;</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sync&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)):</span> <span class="n">SaveSpecificationDatabase</span><span class="p">(</span><span class="n">errLog</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">spec</span></div>
+
+
+<div class="viewcode-block" id="MakePropaneGeneratorSpecification">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.specs.MakePropaneGeneratorSpecification">[docs]</a>
+<span class="k">def</span> <span class="nf">MakePropaneGeneratorSpecification</span><span class="p">(</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">capacity</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">volume</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">PropaneGeneratorSpec</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; This helper function creates a new PropaneGeneratorSpec, extracts any</span>
+<span class="sd">        provided properties, loads it into the master list of specifications,</span>
+<span class="sd">        and returns it.</span>
+<span class="sd">        </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    name: str</span>
+<span class="sd">        The name to be given to the new specification.  Names of like-type</span>
+<span class="sd">        specifications must be unique.</span>
+<span class="sd">    capacity: float</span>
+<span class="sd">        The maximum output power this generator can produce (in kW).</span>
+<span class="sd">    capital_cost: float</span>
+<span class="sd">        The cost for this component type.</span>
+<span class="sd">    op_cost: float</span>
+<span class="sd">        The cost per hour of operation of this type of component.</span>
+<span class="sd">    weight: float</span>
+<span class="sd">        The weight in lbs of this component type.</span>
+<span class="sd">    volume: float</span>
+<span class="sd">        The physical volume in cubic feet of this component type.</span>
+<span class="sd">    kwargs: dict</span>
+<span class="sd">        A dictionary of all the variable arguments provided to this function.</span>
+<span class="sd">        The arguments used by this method include:</span>
+<span class="sd">        </span>
+<span class="sd">        Properties</span>
+<span class="sd">        ----------</span>
+<span class="sd">        efficiencies: [float]</span>
+<span class="sd">            A list of 5 efficiency values, 1 each for this generator running at</span>
+<span class="sd">            0% (idle), 25%, 50%, 75%, and 100% running rate.  The units of</span>
+<span class="sd">            efficiency are fraction (0.0-1.0).</span>
+<span class="sd">        fuel_usages: [float]</span>
+<span class="sd">            A list of 5 fuel use values, 1 each for this generator running at</span>
+<span class="sd">            0% (idle), 25%, 50%, 75%, and 100% running rate.  The units of</span>
+<span class="sd">            efficiency during idling are gallons per hour.  The units of the</span>
+<span class="sd">            other rates is gallon per kW per hour.</span>
+<span class="sd">        voltage</span>
+<span class="sd">            A 2 element tuple or a list with 2 items in it where the first is</span>
+<span class="sd">            the real part and the second is the imaginary.</span>
+<span class="sd">        real: float</span>
+<span class="sd">            The real component of voltage.  Only used if the &quot;voltage&quot; keyword</span>
+<span class="sd">            argument is not provided.</span>
+<span class="sd">        imaginary: float</span>
+<span class="sd">            The imaginary component of voltage.  Only used if the &quot;voltage&quot;</span>
+<span class="sd">            keyword argument is not provided.</span>
+<span class="sd">        start_probabilities: [float]</span>
+<span class="sd">            A list of 1 or more startup probability values as fractions</span>
+<span class="sd">            (0.0-1.0).  The first is the likelihood of a generator starting on</span>
+<span class="sd">            the first attempt.  Each subsequent value corresponds to the</span>
+<span class="sd">            likelihood of the generator starting on subsequent attempts.  The</span>
+<span class="sd">            number of items in the list defines the maximum number of start</span>
+<span class="sd">            attempts allowed before the generator is considered to have suffered</span>
+<span class="sd">            startup failure.</span>
+<span class="sd">        startup_mttr: Common.Distributions.IDistribution</span>
+<span class="sd">            The distribution used to determine the time required to repair a</span>
+<span class="sd">            startup failure for this generator.  If no startup MTTR distribution</span>
+<span class="sd">            is provided, then the generator cannot be repaired during the DBT</span>
+<span class="sd">            occurrence.</span>
+<span class="sd">        startup_time: float</span>
+<span class="sd">            The amount of time required to start this generator and warm it up</span>
+<span class="sd">            to the point that it can begin to carry load in hours.</span>
+<span class="sd">        recoverable_heat_rate: float</span>
+<span class="sd">            An indicator of how much heat energy can be extracted from this</span>
+<span class="sd">            generator as a function of it&#39;s electrical output as a fraction</span>
+<span class="sd">            (0.0-1.0).  The fraction represents the number of kWh of heat per</span>
+<span class="sd">            kWh of electrical energy that can be extracted.</span>
+<span class="sd">        sync: bool</span>
+<span class="sd">            Whether or not to save the newly created spec to the specification</span>
+<span class="sd">            database.  This can be done later using the</span>
+<span class="sd">            SaveSpecificationDatabase method.  The default is to save the change</span>
+<span class="sd">            (True).</span>
+<span class="sd">        err_log: Common.Logging.Log</span>
+<span class="sd">            The log into which to record any errors encountered during the</span>
+<span class="sd">            building, loading, or saving of the new specification.  If this</span>
+<span class="sd">            argument is not provided, messages will be recorded into the</span>
+<span class="sd">            pymdt.GlobalErrorLog instance.</span>
+<span class="sd">        undos: Common.Undoing.IUndoPack</span>
+<span class="sd">            An optional undo pack into which to load the undoable objects</span>
+<span class="sd">            generated during this operation (if any).</span>
+<span class="sd">        notes:</span>
+<span class="sd">            Any notes to assign to the resulting specification.</span>
+<span class="sd">        guid:</span>
+<span class="sd">            The unique identifier to use for this new asset.  This can be</span>
+<span class="sd">            a string formatted as described in:</span>
+<span class="sd">            https://learn.microsoft.com/en-us/dotnet/api/system.guid.-ctor?view=net-8.0#system-guid-ctor(system-string)</span>
+<span class="sd">            or a System.Guid instance.  If not provided, a newly created,</span>
+<span class="sd">            random Guid is used.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    MDT.PropaneGeneratorSpec:</span>
+<span class="sd">        The newly created specification instance.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">spec</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">build_propane_generator_spec</span><span class="p">(</span>
+        <span class="n">name</span><span class="p">,</span> <span class="n">capacity</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+    <span class="n">errLog</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">_execute_spec_add</span><span class="p">(</span><span class="s2">&quot;PropaneGenerator&quot;</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sync&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)):</span> <span class="n">SaveSpecificationDatabase</span><span class="p">(</span><span class="n">errLog</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">spec</span></div>
+
+
+<div class="viewcode-block" id="MakeNaturalGasGeneratorSpecification">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.specs.MakeNaturalGasGeneratorSpecification">[docs]</a>
+<span class="k">def</span> <span class="nf">MakeNaturalGasGeneratorSpecification</span><span class="p">(</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">capacity</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">volume</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">NaturalGasGeneratorSpec</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; This helper function creates a new NaturalGasGeneratorSpec, extracts any</span>
+<span class="sd">        provided properties, loads it into the master list of specifications,</span>
+<span class="sd">        and returns it.</span>
+<span class="sd">        </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    name: str</span>
+<span class="sd">        The name to be given to the new specification.  Names of like-type</span>
+<span class="sd">        specifications must be unique.</span>
+<span class="sd">    capacity: float</span>
+<span class="sd">        The maximum output power this generator can produce (in kW).</span>
+<span class="sd">    capital_cost: float</span>
+<span class="sd">        The cost for this component type.</span>
+<span class="sd">    op_cost: float</span>
+<span class="sd">        The cost per hour of operation of this type of component.</span>
+<span class="sd">    weight: float</span>
+<span class="sd">        The weight in lbs of this component type.</span>
+<span class="sd">    volume: float</span>
+<span class="sd">        The physical volume in cubic feet of this component type.</span>
+<span class="sd">    kwargs: dict</span>
+<span class="sd">        A dictionary of all the variable arguments provided to this function.</span>
+<span class="sd">        The arguments used by this method include:</span>
+<span class="sd">        </span>
+<span class="sd">        Properties</span>
+<span class="sd">        ----------</span>
+<span class="sd">        efficiencies: [float]</span>
+<span class="sd">            A list of 5 efficiency values, 1 each for this generator running at</span>
+<span class="sd">            0% (idle), 25%, 50%, 75%, and 100% running rate.  The units of</span>
+<span class="sd">            efficiency are fraction (0.0-1.0).</span>
+<span class="sd">        fuel_usages: [float]</span>
+<span class="sd">            A list of 5 fuel use values, 1 each for this generator running at</span>
+<span class="sd">            0% (idle), 25%, 50%, 75%, and 100% running rate.  The units of</span>
+<span class="sd">            efficiency during idling are MMBTUs per hour.  The units of the</span>
+<span class="sd">            other rates is MMBTU per kW per hour.</span>
+<span class="sd">        voltage</span>
+<span class="sd">            A 2 element tuple or a list with 2 items in it where the first is</span>
+<span class="sd">            the real part and the second is the imaginary.</span>
+<span class="sd">        real: float</span>
+<span class="sd">            The real component of voltage.  Only used if the &quot;voltage&quot; keyword</span>
+<span class="sd">            argument is not provided.</span>
+<span class="sd">        imaginary: float</span>
+<span class="sd">            The imaginary component of voltage.  Only used if the &quot;voltage&quot;</span>
+<span class="sd">            keyword argument is not provided.</span>
+<span class="sd">        start_probabilities: [float]</span>
+<span class="sd">            A list of 1 or more startup probability values as fractions</span>
+<span class="sd">            (0.0-1.0).  The first is the likelihood of a generator starting on</span>
+<span class="sd">            the first attempt.  Each subsequent value corresponds to the</span>
+<span class="sd">            likelihood of the generator starting on subsequent attempts.  The</span>
+<span class="sd">            number of items in the list defines the maximum number of start</span>
+<span class="sd">            attempts allowed before the generator is considered to have suffered</span>
+<span class="sd">            startup failure.</span>
+<span class="sd">        startup_mttr: Common.Distributions.IDistribution</span>
+<span class="sd">            The distribution used to determine the time required to repair a</span>
+<span class="sd">            startup failure for this generator.  If no startup MTTR distribution</span>
+<span class="sd">            is provided, then the generator cannot be repaired during the DBT</span>
+<span class="sd">            occurrence.</span>
+<span class="sd">        startup_time: float</span>
+<span class="sd">            The amount of time required to start this generator and warm it up</span>
+<span class="sd">            to the point that it can begin to carry load in hours.</span>
+<span class="sd">        recoverable_heat_rate: float</span>
+<span class="sd">            An indicator of how much heat energy can be extracted from this</span>
+<span class="sd">            generator as a function of it&#39;s electrical output as a fraction</span>
+<span class="sd">            (0.0-1.0).  The fraction represents the number of kWh of heat per</span>
+<span class="sd">            kWh of electrical energy that can be extracted.</span>
+<span class="sd">        sync: bool</span>
+<span class="sd">            Whether or not to save the newly created spec to the specification</span>
+<span class="sd">            database.  This can be done later using the</span>
+<span class="sd">            SaveSpecificationDatabase method.  The default is to save the change</span>
+<span class="sd">            (True).</span>
+<span class="sd">        err_log: Common.Logging.Log</span>
+<span class="sd">            The log into which to record any errors encountered during the</span>
+<span class="sd">            building, loading, or saving of the new specification.  If this</span>
+<span class="sd">            argument is not provided, messages will be recorded into the</span>
+<span class="sd">            pymdt.GlobalErrorLog instance.</span>
+<span class="sd">        undos: Common.Undoing.IUndoPack</span>
+<span class="sd">            An optional undo pack into which to load the undoable objects</span>
+<span class="sd">            generated during this operation (if any).</span>
+<span class="sd">        notes:</span>
+<span class="sd">            Any notes to assign to the resulting specification.</span>
+<span class="sd">        guid:</span>
+<span class="sd">            The unique identifier to use for this new asset.  This can be</span>
+<span class="sd">            a string formatted as described in:</span>
+<span class="sd">            https://learn.microsoft.com/en-us/dotnet/api/system.guid.-ctor?view=net-8.0#system-guid-ctor(system-string)</span>
+<span class="sd">            or a System.Guid instance.  If not provided, a newly created,</span>
+<span class="sd">            random Guid is used.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    MDT.NaturalGasGeneratorSpec:</span>
+<span class="sd">        The newly created specification instance.</span>
+<span class="sd">    &quot;&quot;&quot;</span>    
+    <span class="n">spec</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">build_nat_gas_generator_spec</span><span class="p">(</span>
+        <span class="n">name</span><span class="p">,</span> <span class="n">capacity</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+    <span class="n">errLog</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">_execute_spec_add</span><span class="p">(</span><span class="s2">&quot;NaturalGasGenerator&quot;</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sync&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)):</span> <span class="n">SaveSpecificationDatabase</span><span class="p">(</span><span class="n">errLog</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">spec</span></div>
+
+
+<div class="viewcode-block" id="MakeSolarGeneratorSpecification">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.specs.MakeSolarGeneratorSpecification">[docs]</a>
+<span class="k">def</span> <span class="nf">MakeSolarGeneratorSpecification</span><span class="p">(</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">capacity</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">volume</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">SolarGeneratorSpec</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; This helper function creates a new SolarGeneratorSpec, extracts any</span>
+<span class="sd">        provided properties, loads it into the master list of specifications,</span>
+<span class="sd">        and returns it.</span>
+<span class="sd">        </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    name: str</span>
+<span class="sd">        The name to be given to the new specification.  Names of like-type</span>
+<span class="sd">        specifications must be unique.</span>
+<span class="sd">    capacity: float</span>
+<span class="sd">        The maximum output power this generator can produce (in kW).</span>
+<span class="sd">    capital_cost: float</span>
+<span class="sd">        The cost per foot for this component type.</span>
+<span class="sd">    op_cost: float</span>
+<span class="sd">        The cost per hour of operation of this type of component.</span>
+<span class="sd">    weight: float</span>
+<span class="sd">        The weight in lbs/ft of this component type.</span>
+<span class="sd">    volume: float</span>
+<span class="sd">        The physical volume in cubic feet of this component type.</span>
+<span class="sd">    kwargs: dict</span>
+<span class="sd">        A dictionary of all the variable arguments provided to this function.</span>
+<span class="sd">        The arguments used by this method include:</span>
+<span class="sd">        </span>
+<span class="sd">        Properties</span>
+<span class="sd">        ----------</span>
+<span class="sd">        failure_modes:</span>
+<span class="sd">            A list of all defined failure modes for the resulting specification,</span>
+<span class="sd">            if any. The elements of the list are of type MDT.FailureMode.</span>
+<span class="sd">        voltage</span>
+<span class="sd">            A 2 element tuple or a list with 2 items in it where the first is</span>
+<span class="sd">            the real part and the second is the imaginary.</span>
+<span class="sd">        real: float</span>
+<span class="sd">            The real component of voltage.  Only used if the &quot;voltage&quot; keyword</span>
+<span class="sd">            argument is not provided.</span>
+<span class="sd">        imaginary: float</span>
+<span class="sd">            The imaginary component of voltage.  Only used if the &quot;voltage&quot;</span>
+<span class="sd">            keyword argument is not provided.</span>
+<span class="sd">        sync: bool</span>
+<span class="sd">            Whether or not to save the newly created spec to the specification</span>
+<span class="sd">            database.  This can be done later using the</span>
+<span class="sd">            SaveSpecificationDatabase method.  The default is to save the change</span>
+<span class="sd">            (True).</span>
+<span class="sd">        err_log: Common.Logging.Log</span>
+<span class="sd">            The log into which to record any errors encountered during the</span>
+<span class="sd">            building, loading, or saving of the new specification.  If this</span>
+<span class="sd">            argument is not provided, messages will be recorded into the</span>
+<span class="sd">            pymdt.GlobalErrorLog instance.</span>
+<span class="sd">        undos: Common.Undoing.IUndoPack</span>
+<span class="sd">            An optional undo pack into which to load the undoable objects</span>
+<span class="sd">            generated during this operation (if any).</span>
+<span class="sd">        notes:</span>
+<span class="sd">            Any notes to assign to the resulting specification.</span>
+<span class="sd">        guid:</span>
+<span class="sd">            The unique identifier to use for this new asset.  This can be</span>
+<span class="sd">            a string formatted as described in:</span>
+<span class="sd">            https://learn.microsoft.com/en-us/dotnet/api/system.guid.-ctor?view=net-8.0#system-guid-ctor(system-string)</span>
+<span class="sd">            or a System.Guid instance.  If not provided, a newly created,</span>
+<span class="sd">            random Guid is used.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    MDT.SolarGeneratorSpec:</span>
+<span class="sd">        The newly created specification instance.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">spec</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">build_solar_generator_spec</span><span class="p">(</span>
+        <span class="n">name</span><span class="p">,</span> <span class="n">capacity</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+    <span class="n">errLog</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">_execute_spec_add</span><span class="p">(</span><span class="s2">&quot;SolarGenerator&quot;</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sync&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)):</span> <span class="n">SaveSpecificationDatabase</span><span class="p">(</span><span class="n">errLog</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">spec</span></div>
+
+
+<div class="viewcode-block" id="MakeWindGeneratorSpecification">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.specs.MakeWindGeneratorSpecification">[docs]</a>
+<span class="k">def</span> <span class="nf">MakeWindGeneratorSpecification</span><span class="p">(</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">capacity</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">volume</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">WindGeneratorSpec</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; This helper function creates a new WindGeneratorSpec, extracts any</span>
+<span class="sd">        provided properties, loads it into the master list of specifications,</span>
+<span class="sd">        and returns it.</span>
+<span class="sd">        </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    name: str</span>
+<span class="sd">        The name to be given to the new specification.  Names of like-type</span>
+<span class="sd">        specifications must be unique.</span>
+<span class="sd">    capacity: float</span>
+<span class="sd">        The maximum output power this generator can produce (in kW).</span>
+<span class="sd">    capital_cost: float</span>
+<span class="sd">        The cost per foot for this component type.</span>
+<span class="sd">    op_cost: float</span>
+<span class="sd">        The cost per hour of operation of this type of component.</span>
+<span class="sd">    weight: float</span>
+<span class="sd">        The weight in lbs/ft of this component type.</span>
+<span class="sd">    volume: float</span>
+<span class="sd">        The physical volume in cubic feet of this component type.</span>
+<span class="sd">    kwargs: dict</span>
+<span class="sd">        A dictionary of all the variable arguments provided to this function.</span>
+<span class="sd">        The arguments used by this method include:</span>
+<span class="sd">        </span>
+<span class="sd">        Properties</span>
+<span class="sd">        ----------</span>
+<span class="sd">        failure_modes:</span>
+<span class="sd">            A list of all defined failure modes for the resulting specification,</span>
+<span class="sd">            if any. The elements of the list are of type MDT.FailureMode.</span>
+<span class="sd">        voltage</span>
+<span class="sd">            A 2 element tuple or a list with 2 items in it where the first is</span>
+<span class="sd">            the real part and the second is the imaginary.</span>
+<span class="sd">        real: float</span>
+<span class="sd">            The real component of voltage.  Only used if the &quot;voltage&quot; keyword</span>
+<span class="sd">            argument is not provided.</span>
+<span class="sd">        imaginary: float</span>
+<span class="sd">            The imaginary component of voltage.  Only used if the &quot;voltage&quot;</span>
+<span class="sd">            keyword argument is not provided.</span>
+<span class="sd">        sync: bool</span>
+<span class="sd">            Whether or not to save the newly created spec to the specification</span>
+<span class="sd">            database.  This can be done later using the</span>
+<span class="sd">            SaveSpecificationDatabase method.  The default is to save the change</span>
+<span class="sd">            (True).</span>
+<span class="sd">        err_log: Common.Logging.Log</span>
+<span class="sd">            The log into which to record any errors encountered during the</span>
+<span class="sd">            building, loading, or saving of the new specification.  If this</span>
+<span class="sd">            argument is not provided, messages will be recorded into the</span>
+<span class="sd">            pymdt.GlobalErrorLog instance.</span>
+<span class="sd">        undos: Common.Undoing.IUndoPack</span>
+<span class="sd">            An optional undo pack into which to load the undoable objects</span>
+<span class="sd">            generated during this operation (if any).</span>
+<span class="sd">        notes:</span>
+<span class="sd">            Any notes to assign to the resulting specification.</span>
+<span class="sd">        guid:</span>
+<span class="sd">            The unique identifier to use for this new asset.  This can be</span>
+<span class="sd">            a string formatted as described in:</span>
+<span class="sd">            https://learn.microsoft.com/en-us/dotnet/api/system.guid.-ctor?view=net-8.0#system-guid-ctor(system-string)</span>
+<span class="sd">            or a System.Guid instance.  If not provided, a newly created,</span>
+<span class="sd">            random Guid is used.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    MDT.WindGeneratorSpec:</span>
+<span class="sd">        The newly created specification instance.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">spec</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">build_wind_generator_spec</span><span class="p">(</span>
+        <span class="n">name</span><span class="p">,</span> <span class="n">capacity</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+    <span class="n">errLog</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">_execute_spec_add</span><span class="p">(</span><span class="s2">&quot;WindGenerator&quot;</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sync&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)):</span> <span class="n">SaveSpecificationDatabase</span><span class="p">(</span><span class="n">errLog</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">spec</span></div>
+
+
+<div class="viewcode-block" id="MakeHydroGeneratorSpecification">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.specs.MakeHydroGeneratorSpecification">[docs]</a>
+<span class="k">def</span> <span class="nf">MakeHydroGeneratorSpecification</span><span class="p">(</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">capacity</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">volume</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">HydroGeneratorSpec</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; This helper function creates a new HydroGeneratorSpec, extracts any</span>
+<span class="sd">        provided properties, loads it into the master list of specifications,</span>
+<span class="sd">        and returns it.</span>
+<span class="sd">        </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    name: str</span>
+<span class="sd">        The name to be given to the new specification.  Names of like-type</span>
+<span class="sd">        specifications must be unique.</span>
+<span class="sd">    capacity: float</span>
+<span class="sd">        The maximum output power this generator can produce (in kW).</span>
+<span class="sd">    capital_cost: float</span>
+<span class="sd">        The cost per foot for this component type.</span>
+<span class="sd">    op_cost: float</span>
+<span class="sd">        The cost per hour of operation of this type of component.</span>
+<span class="sd">    weight: float</span>
+<span class="sd">        The weight in lbs/ft of this component type.</span>
+<span class="sd">    volume: float</span>
+<span class="sd">        The physical volume in cubic feet of this component type.</span>
+<span class="sd">    kwargs: dict</span>
+<span class="sd">        A dictionary of all the variable arguments provided to this function.</span>
+<span class="sd">        The arguments used by this method include:</span>
+<span class="sd">        </span>
+<span class="sd">        Properties</span>
+<span class="sd">        ----------</span>
+<span class="sd">        failure_modes:</span>
+<span class="sd">            A list of all defined failure modes for the resulting specification,</span>
+<span class="sd">            if any. The elements of the list are of type MDT.FailureMode.</span>
+<span class="sd">        voltage</span>
+<span class="sd">            A 2 element tuple or a list with 2 items in it where the first is</span>
+<span class="sd">            the real part and the second is the imaginary.</span>
+<span class="sd">        real: float</span>
+<span class="sd">            The real component of voltage.  Only used if the &quot;voltage&quot; keyword</span>
+<span class="sd">            argument is not provided.</span>
+<span class="sd">        imaginary: float</span>
+<span class="sd">            The imaginary component of voltage.  Only used if the &quot;voltage&quot;</span>
+<span class="sd">            keyword argument is not provided.</span>
+<span class="sd">        sync: bool</span>
+<span class="sd">            Whether or not to save the newly created spec to the specification</span>
+<span class="sd">            database.  This can be done later using the</span>
+<span class="sd">            SaveSpecificationDatabase method.  The default is to save the change</span>
+<span class="sd">            (True).</span>
+<span class="sd">        err_log: Common.Logging.Log</span>
+<span class="sd">            The log into which to record any errors encountered during the</span>
+<span class="sd">            building, loading, or saving of the new specification.  If this</span>
+<span class="sd">            argument is not provided, messages will be recorded into the</span>
+<span class="sd">            pymdt.GlobalErrorLog instance.</span>
+<span class="sd">        undos: Common.Undoing.IUndoPack</span>
+<span class="sd">            An optional undo pack into which to load the undoable objects</span>
+<span class="sd">            generated during this operation (if any).</span>
+<span class="sd">        notes:</span>
+<span class="sd">            Any notes to assign to the resulting specification.</span>
+<span class="sd">        guid:</span>
+<span class="sd">            The unique identifier to use for this new asset.  This can be</span>
+<span class="sd">            a string formatted as described in:</span>
+<span class="sd">            https://learn.microsoft.com/en-us/dotnet/api/system.guid.-ctor?view=net-8.0#system-guid-ctor(system-string)</span>
+<span class="sd">            or a System.Guid instance.  If not provided, a newly created,</span>
+<span class="sd">            random Guid is used.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    MDT.HydroGeneratorSpec:</span>
+<span class="sd">        The newly created specification instance.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">spec</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">build_hydro_generator_spec</span><span class="p">(</span>
+        <span class="n">name</span><span class="p">,</span> <span class="n">capacity</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+    <span class="n">errLog</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">_execute_spec_add</span><span class="p">(</span><span class="s2">&quot;HydroGenerator&quot;</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sync&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)):</span> <span class="n">SaveSpecificationDatabase</span><span class="p">(</span><span class="n">errLog</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">spec</span></div>
+
+
+<div class="viewcode-block" id="MakeInverterSpecification">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.specs.MakeInverterSpecification">[docs]</a>
+<span class="k">def</span> <span class="nf">MakeInverterSpecification</span><span class="p">(</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">volume</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">InverterSpec</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; This helper function creates a new InverterSpec, extracts any</span>
+<span class="sd">        provided properties, loads it into the master list of specifications,</span>
+<span class="sd">        and returns it.</span>
+<span class="sd">        </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    name: str</span>
+<span class="sd">        The name to be given to the new specification.  Names of like-type</span>
+<span class="sd">        specifications must be unique.</span>
+<span class="sd">    capital_cost: float</span>
+<span class="sd">        The cost per foot for this component type.</span>
+<span class="sd">    op_cost: float</span>
+<span class="sd">        The cost per hour of operation of this type of component.</span>
+<span class="sd">    weight: float</span>
+<span class="sd">        The weight in lbs/ft of this component type.</span>
+<span class="sd">    volume: float</span>
+<span class="sd">        The physical volume in cubic feet of this component type.</span>
+<span class="sd">    kwargs: dict</span>
+<span class="sd">        A dictionary of all the variable arguments provided to this function.</span>
+<span class="sd">        The arguments used by this method include:</span>
+<span class="sd">        </span>
+<span class="sd">        Properties</span>
+<span class="sd">        ----------</span>
+<span class="sd">        failure_modes:</span>
+<span class="sd">            A list of all defined failure modes for the resulting specification,</span>
+<span class="sd">            if any. The elements of the list are of type MDT.FailureMode.</span>
+<span class="sd">        sync: bool</span>
+<span class="sd">            Whether or not to save the newly created spec to the specification</span>
+<span class="sd">            database.  This can be done later using the</span>
+<span class="sd">            SaveSpecificationDatabase method.  The default is to save the change</span>
+<span class="sd">            (True).</span>
+<span class="sd">        err_log: Common.Logging.Log</span>
+<span class="sd">            The log into which to record any errors encountered during the</span>
+<span class="sd">            building, loading, or saving of the new specification.  If this</span>
+<span class="sd">            argument is not provided, messages will be recorded into the</span>
+<span class="sd">            pymdt.GlobalErrorLog instance.</span>
+<span class="sd">        undos: Common.Undoing.IUndoPack</span>
+<span class="sd">            An optional undo pack into which to load the undoable objects</span>
+<span class="sd">            generated during this operation (if any).</span>
+<span class="sd">        notes:</span>
+<span class="sd">            Any notes to assign to the resulting specification.</span>
+<span class="sd">        guid:</span>
+<span class="sd">            The unique identifier to use for this new asset.  This can be</span>
+<span class="sd">            a string formatted as described in:</span>
+<span class="sd">            https://learn.microsoft.com/en-us/dotnet/api/system.guid.-ctor?view=net-8.0#system-guid-ctor(system-string)</span>
+<span class="sd">            or a System.Guid instance.  If not provided, a newly created,</span>
+<span class="sd">            random Guid is used.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    MDT.InverterSpec:</span>
+<span class="sd">        The newly created specification instance.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">spec</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">build_inverter_spec</span><span class="p">(</span>
+        <span class="n">name</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+    <span class="n">errLog</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">_execute_spec_add</span><span class="p">(</span><span class="s2">&quot;Inverter&quot;</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sync&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)):</span> <span class="n">SaveSpecificationDatabase</span><span class="p">(</span><span class="n">errLog</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">spec</span></div>
+
+
+<div class="viewcode-block" id="MakeBatterySpecification">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.specs.MakeBatterySpecification">[docs]</a>
+<span class="k">def</span> <span class="nf">MakeBatterySpecification</span><span class="p">(</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">volume</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">BatterySpec</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; This helper function creates a new BatterySpec, extracts any</span>
+<span class="sd">        provided properties, loads it into the master list of specifications,</span>
+<span class="sd">        and returns it.</span>
+<span class="sd">        </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    name: str</span>
+<span class="sd">        The name to be given to the new specification.  Names of like-type</span>
+<span class="sd">        specifications must be unique.</span>
+<span class="sd">    capital_cost: float</span>
+<span class="sd">        The cost for this component type.</span>
+<span class="sd">    op_cost: float</span>
+<span class="sd">        The cost per hour of operation of this type of component.</span>
+<span class="sd">    weight: float</span>
+<span class="sd">        The weight in lbs of this component type.</span>
+<span class="sd">    volume: float</span>
+<span class="sd">        The physical volume in cubic feet of this component type.</span>
+<span class="sd">    kwargs: dict</span>
+<span class="sd">        A dictionary of all the variable arguments provided to this function.</span>
+<span class="sd">        The arguments used by this method include:</span>
+<span class="sd">        </span>
+<span class="sd">        Properties</span>
+<span class="sd">        ----------</span>
+<span class="sd">        charge_efficiencies: [float]</span>
+<span class="sd">            A list of 5 charging efficiency values, 1 each for this battery at</span>
+<span class="sd">            0%, 25%, 50%, 75%, and 100% state of charge.  The units of</span>
+<span class="sd">            efficiency are fraction (0.0-1.0).</span>
+<span class="sd">        discharge_efficiencies: [float]</span>
+<span class="sd">            A list of 5 discharging efficiency values, 1 each for this battery</span>
+<span class="sd">            at 0%, 25%, 50%, 75%, and 100% state of charge.  The units of</span>
+<span class="sd">            efficiency are fraction (0.0-1.0).</span>
+<span class="sd">        voltage</span>
+<span class="sd">            A 2 element tuple or a list with 2 items in it where the first is</span>
+<span class="sd">            the real part and the second is the imaginary.</span>
+<span class="sd">        real: float</span>
+<span class="sd">            The real component of voltage.  Only used if the &quot;voltage&quot; keyword</span>
+<span class="sd">            argument is not provided.</span>
+<span class="sd">        imaginary: float</span>
+<span class="sd">            The imaginary component of voltage.  Only used if the &quot;voltage&quot;</span>
+<span class="sd">            keyword argument is not provided.</span>
+<span class="sd">        max_charge_rate: float</span>
+<span class="sd">            The maximum rate at which power can be pushed into the battery in</span>
+<span class="sd">            kW.</span>
+<span class="sd">        max_discharge_rate: float</span>
+<span class="sd">            The maximum rate at which power can be extracted from the battery in</span>
+<span class="sd">            kW.</span>
+<span class="sd">        energy_capacity: float</span>
+<span class="sd">            The maximum number of kWh that can be stored in this battery</span>
+<span class="sd">            (at 100% state of charge).</span>
+<span class="sd">        min_state_of_charge: float</span>
+<span class="sd">            The minimum allowable state of charge of the battery in %.  The</span>
+<span class="sd">            default is 10%.</span>
+<span class="sd">        max_state_of_charge: float</span>
+<span class="sd">            The maximum allowable state of charge of the battery in %.  The</span>
+<span class="sd">            default is 90%.</span>
+<span class="sd">        desired_state_of_charge: float</span>
+<span class="sd">            The desired state of charge of the battery in %.  The default is</span>
+<span class="sd">            70%.</span>
+<span class="sd">        sync: bool</span>
+<span class="sd">            Whether or not to save the newly created spec to the specification</span>
+<span class="sd">            database.  This can be done later using the</span>
+<span class="sd">            SaveSpecificationDatabase method.  The default is to save the change</span>
+<span class="sd">            (True).</span>
+<span class="sd">        err_log: Common.Logging.Log</span>
+<span class="sd">            The log into which to record any errors encountered during the</span>
+<span class="sd">            building, loading, or saving of the new specification.  If this</span>
+<span class="sd">            argument is not provided, messages will be recorded into the</span>
+<span class="sd">            pymdt.GlobalErrorLog instance.</span>
+<span class="sd">        undos: Common.Undoing.IUndoPack</span>
+<span class="sd">            An optional undo pack into which to load the undoable objects</span>
+<span class="sd">            generated during this operation (if any).</span>
+<span class="sd">        notes:</span>
+<span class="sd">            Any notes to assign to the resulting specification.</span>
+<span class="sd">        guid:</span>
+<span class="sd">            The unique identifier to use for this new asset.  This can be</span>
+<span class="sd">            a string formatted as described in:</span>
+<span class="sd">            https://learn.microsoft.com/en-us/dotnet/api/system.guid.-ctor?view=net-8.0#system-guid-ctor(system-string)</span>
+<span class="sd">            or a System.Guid instance.  If not provided, a newly created,</span>
+<span class="sd">            random Guid is used.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    MDT.BatterySpec:</span>
+<span class="sd">        The newly created specification instance.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">spec</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">build_battery_spec</span><span class="p">(</span>
+        <span class="n">name</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+    <span class="n">errLog</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">_execute_spec_add</span><span class="p">(</span><span class="s2">&quot;Battery&quot;</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sync&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)):</span> <span class="n">SaveSpecificationDatabase</span><span class="p">(</span><span class="n">errLog</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">spec</span></div>
+
+
+<div class="viewcode-block" id="MakeUPSSpecification">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.specs.MakeUPSSpecification">[docs]</a>
+<span class="k">def</span> <span class="nf">MakeUPSSpecification</span><span class="p">(</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">volume</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">UPSSpec</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; This helper function creates a new UPSSpec, extracts any</span>
+<span class="sd">        provided properties, loads it into the master list of specifications,</span>
+<span class="sd">        and returns it.</span>
+<span class="sd">        </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    name: str</span>
+<span class="sd">        The name to be given to the new specification.  Names of like-type</span>
+<span class="sd">        specifications must be unique.</span>
+<span class="sd">    capital_cost: float</span>
+<span class="sd">        The cost for this component type.</span>
+<span class="sd">    op_cost: float</span>
+<span class="sd">        The cost per hour of operation of this type of component.</span>
+<span class="sd">    weight: float</span>
+<span class="sd">        The weight in lbs of this component type.</span>
+<span class="sd">    volume: float</span>
+<span class="sd">        The physical volume in cubic feet of this component type.</span>
+<span class="sd">    kwargs: dict</span>
+<span class="sd">        A dictionary of all the variable arguments provided to this function.</span>
+<span class="sd">        The arguments used by this method include:</span>
+<span class="sd">        </span>
+<span class="sd">        Properties</span>
+<span class="sd">        ----------</span>
+<span class="sd">        charge_efficiencies: [float]</span>
+<span class="sd">            A list of 5 charging efficiency values, 1 each for this UPS at</span>
+<span class="sd">            0%, 25%, 50%, 75%, and 100% state of charge.  The units of</span>
+<span class="sd">            efficiency are fraction (0.0-1.0).</span>
+<span class="sd">        discharge_efficiencies: [float]</span>
+<span class="sd">            A list of 5 discharging efficiency values, 1 each for this UPS</span>
+<span class="sd">            at 0%, 25%, 50%, 75%, and 100% state of charge.  The units of</span>
+<span class="sd">            efficiency are fraction (0.0-1.0).</span>
+<span class="sd">        voltage</span>
+<span class="sd">            A 2 element tuple or a list with 2 items in it where the first is</span>
+<span class="sd">            the real part and the second is the imaginary.</span>
+<span class="sd">        real: float</span>
+<span class="sd">            The real component of voltage.  Only used if the &quot;voltage&quot; keyword</span>
+<span class="sd">            argument is not provided.</span>
+<span class="sd">        imaginary: float</span>
+<span class="sd">            The imaginary component of voltage.  Only used if the &quot;voltage&quot;</span>
+<span class="sd">            keyword argument is not provided.</span>
+<span class="sd">        max_charge_rate: float</span>
+<span class="sd">            The maximum rate at which power can be pushed into the UPS in kW.</span>
+<span class="sd">        max_discharge_rate: float</span>
+<span class="sd">            The maximum rate at which power can be extracted from the UPS in kW.</span>
+<span class="sd">        energy_capacity: float</span>
+<span class="sd">            The maximum number of kWh that can be stored in this UPS</span>
+<span class="sd">            (at 100% state of charge).</span>
+<span class="sd">        min_state_of_charge: float</span>
+<span class="sd">            The minimum allowable state of charge of the UPS in %.  The default</span>
+<span class="sd">            is 10%.</span>
+<span class="sd">        max_state_of_charge: float</span>
+<span class="sd">            The maximum allowable state of charge of the UPS in %.  The default</span>
+<span class="sd">            is 90%.</span>
+<span class="sd">        desired_state_of_charge: float</span>
+<span class="sd">            The desired state of charge of the UPS in %.  The default is 70%.</span>
+<span class="sd">        sync: bool</span>
+<span class="sd">            Whether or not to save the newly created spec to the specification</span>
+<span class="sd">            database.  This can be done later using the</span>
+<span class="sd">            SaveSpecificationDatabase method.  The default is to save the change</span>
+<span class="sd">            (True).</span>
+<span class="sd">        err_log: Common.Logging.Log</span>
+<span class="sd">            The log into which to record any errors encountered during the</span>
+<span class="sd">            building, loading, or saving of the new specification.  If this</span>
+<span class="sd">            argument is not provided, messages will be recorded into the</span>
+<span class="sd">            pymdt.GlobalErrorLog instance.</span>
+<span class="sd">        undos: Common.Undoing.IUndoPack</span>
+<span class="sd">            An optional undo pack into which to load the undoable objects</span>
+<span class="sd">            generated during this operation (if any).</span>
+<span class="sd">        notes:</span>
+<span class="sd">            Any notes to assign to the resulting specification.</span>
+<span class="sd">        guid:</span>
+<span class="sd">            The unique identifier to use for this new asset.  This can be</span>
+<span class="sd">            a string formatted as described in:</span>
+<span class="sd">            https://learn.microsoft.com/en-us/dotnet/api/system.guid.-ctor?view=net-8.0#system-guid-ctor(system-string)</span>
+<span class="sd">            or a System.Guid instance.  If not provided, a newly created,</span>
+<span class="sd">            random Guid is used.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    MDT.UPSSpec:</span>
+<span class="sd">        The newly created specification instance.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">spec</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">build_ups_spec</span><span class="p">(</span>
+        <span class="n">name</span><span class="p">,</span> <span class="n">capital_cost</span><span class="p">,</span> <span class="n">op_cost</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">volume</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+    <span class="n">errLog</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">_execute_spec_add</span><span class="p">(</span><span class="s2">&quot;UPS&quot;</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sync&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)):</span> <span class="n">SaveSpecificationDatabase</span><span class="p">(</span><span class="n">errLog</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">spec</span></div>
+
+
+<div class="viewcode-block" id="SaveSpecificationDatabase">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.specs.SaveSpecificationDatabase">[docs]</a>
+<span class="k">def</span> <span class="nf">SaveSpecificationDatabase</span><span class="p">(</span><span class="n">errLog</span><span class="p">:</span> <span class="n">Common</span><span class="o">.</span><span class="n">Logging</span><span class="o">.</span><span class="n">Log</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Common</span><span class="o">.</span><span class="n">Logging</span><span class="o">.</span><span class="n">Log</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; A helper function to store any new, deleted, or changed specifications</span>
+<span class="sd">        to the underlying database.</span>
+<span class="sd">        </span>
+<span class="sd">        Without calling this function, any changes made will not be saved for</span>
+<span class="sd">        use in the future. </span>
+<span class="sd">        </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    errLog: Common.Logging.Log</span>
+<span class="sd">        A log that will receive any messages produced while saving the database</span>
+<span class="sd">        changes and additions. If this parameter is None, then the</span>
+<span class="sd">        pymdt.GlobalErrorLog will be used.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Common.Logging.Log:</span>
+<span class="sd">        A log containing any errors or messages creating during the</span>
+<span class="sd">        synchronization operation.  If the errLog parameter is None, then the</span>
+<span class="sd">        pymdt.GlobalErrorLog will be used and returned.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">MDT</span><span class="o">.</span><span class="n">Driver</span><span class="o">.</span><span class="n">INSTANCE</span><span class="o">.</span><span class="n">SynchronizeSpecificationsDB</span><span class="p">(</span>
+        <span class="n">errLog</span> <span class="ow">or</span> <span class="n">pymdt</span><span class="o">.</span><span class="n">GlobalErrorLog</span>
+        <span class="p">)</span></div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">sandia-pymdt</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">pymdt</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, John Eddy.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.3.7</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

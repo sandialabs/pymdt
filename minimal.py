@@ -1,7 +1,6 @@
 import os
 import sys
 import clr
-import subprocess
 import random
 
 # If providing this, it has to happen before importing anything from pymdt.
@@ -10,7 +9,7 @@ import random
 #sys.argv.append("MDT_VERSION=1.4.2518.0")
 
 # This line is only necessary if you want to reference MDT in a non-standard location.
-#sys.argv.append("MDT_BIN_DIR=C:/Users/jpeddy/Documents/dev/MDT/trunk/MDT-GUI/bin/x64/Debug")
+sys.argv.append("MDT_BIN_DIR=C:/Users/jpeddy/Documents/dev/MDT/trunk/MDT-GUI/bin/x64/Debug")
 
 import pymdt
 import pymdt.io
@@ -530,7 +529,7 @@ def main():
     #===========================================================================
     # pymdt.core.RunMDTGUI("C:/temp/pythonrun.mbf")
     #===========================================================================
-    
+
 
     
 

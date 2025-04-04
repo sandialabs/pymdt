@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pymdt.results &#8212; sandia-pymdt 1.4.2520 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=61cd365c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=12dfc556" />
+    <script src="../../_static/documentation_options.js?v=b081cfe2"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for pymdt.results</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">MDT</span>
+<span class="kn">import</span> <span class="nn">TMO</span>
+<span class="kn">import</span> <span class="nn">Common</span>
+<span class="kn">import</span> <span class="nn">System</span>
+
+<span class="kn">import</span> <span class="nn">pymdt</span>
+<span class="kn">import</span> <span class="nn">pymdt.utils</span>
+
+<div class="viewcode-block" id="details">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.results.details">[docs]</a>
+<span class="k">class</span> <span class="nc">details</span><span class="p">:</span>
+    
+    <span class="n">_site_list_extractors</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">MDT</span><span class="o">.</span><span class="n">Microgrid</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">mg</span><span class="p">:</span> <span class="n">mg</span><span class="o">.</span><span class="n">Microgrids</span><span class="p">,</span>
+        <span class="n">MDT</span><span class="o">.</span><span class="n">SolarResource</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">mg</span><span class="p">:</span> <span class="n">mg</span><span class="o">.</span><span class="n">SolarResources</span><span class="p">,</span>
+        <span class="n">MDT</span><span class="o">.</span><span class="n">WindResource</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">mg</span><span class="p">:</span> <span class="n">mg</span><span class="o">.</span><span class="n">WindResources</span><span class="p">,</span>
+        <span class="n">MDT</span><span class="o">.</span><span class="n">HydroResource</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">mg</span><span class="p">:</span> <span class="n">mg</span><span class="o">.</span><span class="n">HydroResources</span><span class="p">,</span>
+        <span class="n">MDT</span><span class="o">.</span><span class="n">Mission</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">mg</span><span class="p">:</span> <span class="n">mg</span><span class="o">.</span><span class="n">Missions</span><span class="p">,</span>
+        <span class="n">MDT</span><span class="o">.</span><span class="n">MissionFunction</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">mg</span><span class="p">:</span> <span class="n">mg</span><span class="o">.</span><span class="n">MissionFunctions</span><span class="p">,</span>
+        <span class="n">MDT</span><span class="o">.</span><span class="n">SiteNodeGroup</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">mg</span><span class="p">:</span> <span class="n">mg</span><span class="o">.</span><span class="n">NodeGroups</span>
+        <span class="p">}</span>
+    
+    <span class="n">_mg_list_extractors</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">MDT</span><span class="o">.</span><span class="n">Line</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">mg</span><span class="p">:</span> <span class="n">mg</span><span class="o">.</span><span class="n">get_Lines</span><span class="p">(</span><span class="kc">False</span><span class="p">),</span>
+        <span class="n">MDT</span><span class="o">.</span><span class="n">Bus</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">mg</span><span class="p">:</span> <span class="n">mg</span><span class="o">.</span><span class="n">get_Busses</span><span class="p">(</span><span class="kc">False</span><span class="p">),</span>
+        <span class="n">MDT</span><span class="o">.</span><span class="n">Node</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">mg</span><span class="p">:</span> <span class="n">mg</span><span class="o">.</span><span class="n">get_Nodes</span><span class="p">(</span><span class="kc">False</span><span class="p">),</span>
+        <span class="n">MDT</span><span class="o">.</span><span class="n">Switch</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">mg</span><span class="p">:</span> <span class="n">mg</span><span class="o">.</span><span class="n">get_Switches</span><span class="p">(</span><span class="kc">False</span><span class="p">),</span>
+        <span class="n">MDT</span><span class="o">.</span><span class="n">DieselTank</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">mg</span><span class="p">:</span> <span class="n">mg</span><span class="o">.</span><span class="n">get_DieselTanks</span><span class="p">(</span><span class="kc">False</span><span class="p">),</span>
+        <span class="n">MDT</span><span class="o">.</span><span class="n">PropaneTank</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">mg</span><span class="p">:</span> <span class="n">mg</span><span class="o">.</span><span class="n">get_PropaneTanks</span><span class="p">(</span><span class="kc">False</span><span class="p">),</span>
+        <span class="n">MDT</span><span class="o">.</span><span class="n">ThermalLoad</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">mg</span><span class="p">:</span> <span class="n">mg</span><span class="o">.</span><span class="n">get_ThermalLoads</span><span class="p">(</span><span class="kc">False</span><span class="p">),</span>
+        <span class="n">MDT</span><span class="o">.</span><span class="n">Transformer</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">mg</span><span class="p">:</span> <span class="n">mg</span><span class="o">.</span><span class="n">get_Transformers</span><span class="p">(</span><span class="kc">False</span><span class="p">),</span>
+        <span class="n">MDT</span><span class="o">.</span><span class="n">MicrogridNodeGroup</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">mg</span><span class="p">:</span> <span class="n">mg</span><span class="o">.</span><span class="n">NodeGroups</span><span class="p">,</span>
+        <span class="n">MDT</span><span class="o">.</span><span class="n">MicrogridNecessitationDependency</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">mg</span><span class="p">:</span> <span class="n">mg</span><span class="o">.</span><span class="n">NecessitationDependencies</span><span class="p">,</span>
+        <span class="n">MDT</span><span class="o">.</span><span class="n">MicrogridDesignOption</span><span class="p">:</span> <span class="k">lambda</span> <span class="n">mg</span><span class="p">:</span> <span class="n">mg</span><span class="o">.</span><span class="n">DesignOptions</span>
+        <span class="p">}</span>
+    
+    <span class="n">_bus_list_extractors</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">MDT</span><span class="o">.</span><span class="n">ILoadSection</span><span class="p">:</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">b</span><span class="p">:</span> <span class="n">b</span><span class="o">.</span><span class="n">LoadSections</span><span class="p">),</span>
+        <span class="n">MDT</span><span class="o">.</span><span class="n">DieselGenerator</span><span class="p">:</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">b</span><span class="p">:</span> <span class="n">b</span><span class="o">.</span><span class="n">DieselGenerators</span><span class="p">),</span>
+        <span class="n">MDT</span><span class="o">.</span><span class="n">NaturalGasGenerator</span><span class="p">:</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">b</span><span class="p">:</span> <span class="n">b</span><span class="o">.</span><span class="n">NaturalGasGenerators</span><span class="p">),</span>
+        <span class="n">MDT</span><span class="o">.</span><span class="n">PropaneGenerator</span><span class="p">:</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">b</span><span class="p">:</span> <span class="n">b</span><span class="o">.</span><span class="n">PropaneGenerators</span><span class="p">),</span>
+        <span class="n">MDT</span><span class="o">.</span><span class="n">WindGenerator</span><span class="p">:</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">b</span><span class="p">:</span> <span class="n">b</span><span class="o">.</span><span class="n">WindGenerators</span><span class="p">),</span>
+        <span class="n">MDT</span><span class="o">.</span><span class="n">HydroGenerator</span><span class="p">:</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">b</span><span class="p">:</span> <span class="n">b</span><span class="o">.</span><span class="n">HydroGenerators</span><span class="p">),</span>
+        <span class="n">MDT</span><span class="o">.</span><span class="n">SolarGenerator</span><span class="p">:</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">b</span><span class="p">:</span> <span class="n">b</span><span class="o">.</span><span class="n">SolarGenerators</span><span class="p">),</span>
+        <span class="n">MDT</span><span class="o">.</span><span class="n">Battery</span><span class="p">:</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">b</span><span class="p">:</span> <span class="n">b</span><span class="o">.</span><span class="n">Batteries</span><span class="p">),</span>
+        <span class="n">MDT</span><span class="o">.</span><span class="n">Inverter</span><span class="p">:</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">b</span><span class="p">:</span> <span class="n">b</span><span class="o">.</span><span class="n">Inverters</span><span class="p">),</span>
+        <span class="n">MDT</span><span class="o">.</span><span class="n">UninterruptiblePowerSupply</span><span class="p">:</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">b</span><span class="p">:</span> <span class="n">b</span><span class="o">.</span><span class="n">UninterruptiblePowerSupplies</span><span class="p">)</span>
+        <span class="p">}</span>
+    
+<div class="viewcode-block" id="details.extract_site">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.results.details.extract_site">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">extract_site</span><span class="p">(</span><span class="n">asset</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Site</span><span class="p">,</span> <span class="n">within</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Site</span><span class="p">:</span>        
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">within</span><span class="p">,</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Site</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">within</span> <span class="k">if</span> <span class="n">within</span><span class="o">.</span><span class="n">StringID</span> <span class="o">==</span> <span class="n">asset</span><span class="o">.</span><span class="n">StringID</span> <span class="k">else</span> <span class="kc">None</span>
+    
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">within</span><span class="p">,</span> <span class="n">MDT</span><span class="o">.</span><span class="n">SiteUpgradeConfiguration</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">extract_site_from_config</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">within</span><span class="o">.</span><span class="n">MainSite</span><span class="p">)</span>
+    
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">within</span><span class="p">,</span> <span class="n">TMO</span><span class="o">.</span><span class="n">SolverRunInfo</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">extract_site_from_run_info</span><span class="p">(</span>
+                <span class="n">asset</span><span class="p">,</span> <span class="n">within</span><span class="o">.</span><span class="n">SystemOfSystems</span>
+                <span class="p">)</span>
+    
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+        
+<div class="viewcode-block" id="details.extract_site_from_run_info">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.results.details.extract_site_from_run_info">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">extract_site_from_run_info</span><span class="p">(</span><span class="n">asset</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Site</span><span class="p">,</span> <span class="n">inSRI</span><span class="p">:</span> <span class="n">TMO</span><span class="o">.</span><span class="n">SolverRunInfo</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Site</span><span class="p">:</span>
+        <span class="n">osite</span> <span class="o">=</span> <span class="n">inSRI</span><span class="o">.</span><span class="n">SystemOfSystems</span>
+        <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">extract_site</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">osite</span><span class="p">)</span></div>
+
+        
+<div class="viewcode-block" id="details.extract_site_from_config">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.results.details.extract_site_from_config">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">extract_site_from_config</span><span class="p">(</span><span class="n">asset</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Site</span><span class="p">,</span> <span class="n">inConfig</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">SiteUpgradeConfiguration</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Site</span><span class="p">:</span>
+        <span class="n">osite</span> <span class="o">=</span> <span class="n">inConfig</span><span class="o">.</span><span class="n">MainSite</span>
+        <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">extract_site</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">osite</span><span class="p">)</span></div>
+
+        
+<div class="viewcode-block" id="details.extract_site_entity">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.results.details.extract_site_entity">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">extract_site_entity</span><span class="p">(</span><span class="n">asset</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">ISiteEntity</span><span class="p">,</span> <span class="n">inSite</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Site</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">ISiteEntity</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">inSite</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">getter</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">_site_list_extractors</span><span class="p">[</span><span class="nb">type</span><span class="p">(</span><span class="n">asset</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">FindEntityByName</span><span class="p">(</span><span class="n">getter</span><span class="p">(</span><span class="n">inSite</span><span class="p">),</span> <span class="n">asset</span><span class="o">.</span><span class="n">StringID</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="details.extract_site_entity_from_site">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.results.details.extract_site_entity_from_site">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">extract_site_entity_from_site</span><span class="p">(</span><span class="n">asset</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">ISiteEntity</span><span class="p">,</span> <span class="n">inSite</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Site</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">ISiteEntity</span><span class="p">:</span>
+        <span class="n">osite</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">extract_site</span><span class="p">(</span><span class="n">asset</span><span class="o">.</span><span class="n">Site</span><span class="p">,</span> <span class="n">inSite</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">extract_site_entity</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">osite</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="details.extract_site_entity_from_run_info">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.results.details.extract_site_entity_from_run_info">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">extract_site_entity_from_run_info</span><span class="p">(</span><span class="n">asset</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">ISiteEntity</span><span class="p">,</span> <span class="n">inSRI</span><span class="p">:</span> <span class="n">TMO</span><span class="o">.</span><span class="n">SolverRunInfo</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">ISiteEntity</span><span class="p">:</span>
+        <span class="n">osite</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">extract_site_from_run_info</span><span class="p">(</span><span class="n">asset</span><span class="o">.</span><span class="n">Site</span><span class="p">,</span> <span class="n">inSRI</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">extract_site_entity</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">osite</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="details.extract_site_entity_from_config">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.results.details.extract_site_entity_from_config">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">extract_site_entity_from_config</span><span class="p">(</span><span class="n">asset</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">ISiteEntity</span><span class="p">,</span> <span class="n">inConfig</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">SiteUpgradeConfiguration</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">ISiteEntity</span><span class="p">:</span>
+        <span class="n">osite</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">extract_site_from_config</span><span class="p">(</span><span class="n">asset</span><span class="o">.</span><span class="n">Site</span><span class="p">,</span> <span class="n">inConfig</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">extract_site_entity</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">osite</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="details.extract_microgrid_entity">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.results.details.extract_microgrid_entity">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">extract_microgrid_entity</span><span class="p">(</span><span class="n">asset</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">IMicrogridEntity</span><span class="p">,</span> <span class="n">inMG</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Microgrid</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">IMicrogridEntity</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">inMG</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">getter</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">_mg_list_extractors</span><span class="p">[</span><span class="nb">type</span><span class="p">(</span><span class="n">asset</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">FindEntityByName</span><span class="p">(</span><span class="n">getter</span><span class="p">(</span><span class="n">inMG</span><span class="p">),</span> <span class="n">asset</span><span class="o">.</span><span class="n">StringID</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="details.extract_microgrid_entity_from_site">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.results.details.extract_microgrid_entity_from_site">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">extract_microgrid_entity_from_site</span><span class="p">(</span><span class="n">asset</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">IMicrogridEntity</span><span class="p">,</span> <span class="n">inSite</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Site</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">IMicrogridEntity</span><span class="p">:</span>
+        <span class="n">omg</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">extract_site_entity_from_site</span><span class="p">(</span><span class="n">asset</span><span class="o">.</span><span class="n">Microgrid</span><span class="p">,</span> <span class="n">inSite</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">extract_microgrid_entity</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">omg</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="details.extract_microgrid_entity_from_run_info">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.results.details.extract_microgrid_entity_from_run_info">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">extract_microgrid_entity_from_run_info</span><span class="p">(</span><span class="n">asset</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">IMicrogridEntity</span><span class="p">,</span> <span class="n">inSRI</span><span class="p">:</span> <span class="n">TMO</span><span class="o">.</span><span class="n">SolverRunInfo</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">IMicrogridEntity</span><span class="p">:</span>
+        <span class="n">omg</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">extract_site_entity_from_run_info</span><span class="p">(</span><span class="n">asset</span><span class="o">.</span><span class="n">Microgrid</span><span class="p">,</span> <span class="n">inSRI</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">extract_microgrid_entity</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">omg</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="details.extract_microgrid_entity_from_config">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.results.details.extract_microgrid_entity_from_config">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">extract_microgrid_entity_from_config</span><span class="p">(</span><span class="n">asset</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">IMicrogridEntity</span><span class="p">,</span> <span class="n">inConfig</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">SiteUpgradeConfiguration</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">IMicrogridEntity</span><span class="p">:</span>
+        <span class="n">omg</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">extract_site_entity_from_config</span><span class="p">(</span><span class="n">asset</span><span class="o">.</span><span class="n">Microgrid</span><span class="p">,</span> <span class="n">inConfig</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">extract_microgrid_entity</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">omg</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="details.extract_bus_entity">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.results.details.extract_bus_entity">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">extract_bus_entity</span><span class="p">(</span><span class="n">asset</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">IBusEntity</span><span class="p">,</span> <span class="n">inBus</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Bus</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">IBusEntity</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">inBus</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">getter</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">_bus_list_extractors</span><span class="p">[</span><span class="nb">type</span><span class="p">(</span><span class="n">asset</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">FindEntityByName</span><span class="p">(</span><span class="n">getter</span><span class="p">(</span><span class="n">inBus</span><span class="p">),</span> <span class="n">asset</span><span class="o">.</span><span class="n">StringID</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="details.extract_bus_entity_from_site">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.results.details.extract_bus_entity_from_site">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">extract_bus_entity_from_site</span><span class="p">(</span><span class="n">asset</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">IBusEntity</span><span class="p">,</span> <span class="n">inSite</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Site</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">IBusEntity</span><span class="p">:</span>
+        <span class="n">obus</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">extract_microgrid_entity_from_site</span><span class="p">(</span><span class="n">asset</span><span class="o">.</span><span class="n">Bus</span><span class="p">,</span> <span class="n">inSite</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">extract_bus_entity</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">obus</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="details.extract_bus_entity_from_run_info">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.results.details.extract_bus_entity_from_run_info">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">extract_bus_entity_from_run_info</span><span class="p">(</span><span class="n">asset</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">IBusEntity</span><span class="p">,</span> <span class="n">inSRI</span><span class="p">:</span> <span class="n">TMO</span><span class="o">.</span><span class="n">SolverRunInfo</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">IBusEntity</span><span class="p">:</span>
+        <span class="n">obus</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">extract_microgrid_entity_from_run_info</span><span class="p">(</span><span class="n">asset</span><span class="o">.</span><span class="n">Bus</span><span class="p">,</span> <span class="n">inSRI</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">extract_bus_entity</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">obus</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="details.extract_bus_entity_from_config">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.results.details.extract_bus_entity_from_config">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">extract_bus_entity_from_config</span><span class="p">(</span><span class="n">asset</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">IBusEntity</span><span class="p">,</span> <span class="n">inConfig</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">SiteUpgradeConfiguration</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">IBusEntity</span><span class="p">:</span>
+        <span class="n">obus</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">extract_microgrid_entity_from_config</span><span class="p">(</span><span class="n">asset</span><span class="o">.</span><span class="n">Bus</span><span class="p">,</span> <span class="n">inConfig</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">extract_bus_entity</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">obus</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="details.extract_variable_selections">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.results.details.extract_variable_selections">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">extract_variable_selections</span><span class="p">(</span><span class="n">respSet</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">{}:</span>
+        <span class="n">upgs</span> <span class="o">=</span> <span class="n">respSet</span><span class="o">.</span><span class="n">Upgrades</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">kvp</span> <span class="ow">in</span> <span class="n">upgs</span><span class="p">:</span>
+            <span class="n">tecOpt</span> <span class="o">=</span> <span class="n">kvp</span><span class="o">.</span><span class="n">Key</span>
+            <span class="n">entity</span> <span class="o">=</span> <span class="kc">None</span>
+        
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tecOpt</span><span class="p">,</span> <span class="n">MDT</span><span class="o">.</span><span class="n">MicrogridDesignOptionOption</span><span class="p">):</span>
+                <span class="n">entity</span> <span class="o">=</span> <span class="n">tecOpt</span><span class="o">.</span><span class="n">DesignOption</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">entity</span> <span class="o">=</span> <span class="n">tecOpt</span><span class="o">.</span><span class="n">Entity</span>
+            
+            <span class="n">rdMap</span> <span class="o">=</span> <span class="n">kvp</span><span class="o">.</span><span class="n">Value</span>
+            <span class="n">subOpt</span> <span class="o">=</span> <span class="n">rdMap</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">Value</span>
+
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">subOpt</span><span class="p">,</span> <span class="n">MDT</span><span class="o">.</span><span class="n">MicrogridDesignOptionRealizationSuboption</span><span class="p">):</span>
+                <span class="n">ret</span><span class="p">[</span><span class="n">entity</span><span class="p">]</span> <span class="o">=</span> <span class="n">subOpt</span><span class="o">.</span><span class="n">Realization</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ret</span><span class="p">[</span><span class="n">entity</span><span class="p">]</span> <span class="o">=</span> <span class="n">subOpt</span><span class="o">.</span><span class="n">Specification</span>
+        
+        <span class="k">return</span> <span class="n">ret</span></div>
+</div>
+
+    
+<div class="viewcode-block" id="GetResultManagers">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.results.GetResultManagers">[docs]</a>
+<span class="k">def</span> <span class="nf">GetResultManagers</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Common</span><span class="o">.</span><span class="n">Databinding</span><span class="o">.</span><span class="n">IKeyedCollectionWithUndo</span><span class="p">[</span><span class="n">System</span><span class="o">.</span><span class="n">Guid</span><span class="p">,</span> <span class="n">MDT</span><span class="o">.</span><span class="n">ResultViewManager</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Driver</span><span class="o">.</span><span class="n">INSTANCE</span><span class="o">.</span><span class="n">ResultViewManagers</span></div>
+
+
+<div class="viewcode-block" id="MakeResultManager">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.results.MakeResultManager">[docs]</a>
+<span class="k">def</span> <span class="nf">MakeResultManager</span><span class="p">(</span><span class="n">sri</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">ResultViewManager</span><span class="p">:</span>
+    <span class="n">rvm</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">ResultViewManager</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_is_collection</span><span class="p">(</span><span class="n">sri</span><span class="p">):</span> <span class="n">sri</span> <span class="o">=</span> <span class="p">[</span><span class="n">sri</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">sri</span><span class="p">:</span> <span class="n">rvm</span><span class="o">.</span><span class="n">get_SolverRunInfos</span><span class="p">()</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">rvm</span></div>
+
+
+
+<div class="viewcode-block" id="GetMicrogridRealization">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.results.GetMicrogridRealization">[docs]</a>
+<span class="k">def</span> <span class="nf">GetMicrogridRealization</span><span class="p">(</span><span class="n">mg</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Microgrid</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">SiteUpgradeConfiguration</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">MicrogridRealization</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Extracts and returns the MDT.MicrogridRealization for the specified</span>
+<span class="sd">        Microgrid (mg) from the specified upgrade configuration.</span>
+<span class="sd">        </span>
+<span class="sd">    The supplied microgrid must be one extracted from a result set as opposed </span>
+<span class="sd">    to one created as part of an input set.  See the</span>
+<span class="sd">    FindCorrespondingMicrogridFromRunInfo or similar function in this module for</span>
+<span class="sd">    more information.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    mg: MDT.Microgrid</span>
+<span class="sd">        The microgrid for which the realization is sought.</span>
+<span class="sd">    config: MDT.SiteUpgradeConfiguration</span>
+<span class="sd">        The site configuration from which to attempt to extract a realization</span>
+<span class="sd">        for the supplied Microgrid.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    MDT.MicrogridRealization:</span>
+<span class="sd">        The found realization if one.  None otherwise.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">config</span><span class="o">.</span><span class="n">RealizedSite</span><span class="o">.</span><span class="n">get_MicrogridRealization</span><span class="p">(</span><span class="n">mg</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GetResponseFunctionGroups">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.results.GetResponseFunctionGroups">[docs]</a>
+<span class="k">def</span> <span class="nf">GetResponseFunctionGroups</span><span class="p">(</span><span class="n">sri</span><span class="p">:</span> <span class="n">TMO</span><span class="o">.</span><span class="n">SolverRunInfo</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Common</span><span class="o">.</span><span class="n">Databinding</span><span class="o">.</span><span class="n">IKeyedCollectionWithUndo</span><span class="p">[</span><span class="n">System</span><span class="o">.</span><span class="n">Guid</span><span class="p">,</span> <span class="n">TMO</span><span class="o">.</span><span class="n">ResponseFunctionGroup</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="n">sri</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">solver</span> <span class="o">=</span> <span class="n">sri</span><span class="o">.</span><span class="n">Solver</span>
+    <span class="k">if</span> <span class="n">solver</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="n">solver</span><span class="o">.</span><span class="n">ResponseFunctionGroups</span></div>
+
+
+<div class="viewcode-block" id="GetVariableSelections">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.results.GetVariableSelections">[docs]</a>
+<span class="k">def</span> <span class="nf">GetVariableSelections</span><span class="p">(</span><span class="n">config</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">SiteUpgradeConfiguration</span><span class="p">):</span>
+    
+    <span class="n">ret</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">extract_variable_selections</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+        
+    <span class="k">for</span> <span class="n">kvp</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">ModelUpgradeConfigs</span><span class="p">:</span>
+        <span class="n">ret</span> <span class="o">|=</span> <span class="n">details</span><span class="o">.</span><span class="n">extract_variable_selections</span><span class="p">(</span><span class="n">kvp</span><span class="o">.</span><span class="n">Value</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">ret</span>    </div>
+
+
+<div class="viewcode-block" id="GetFinalSolutionSet">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.results.GetFinalSolutionSet">[docs]</a>
+<span class="k">def</span> <span class="nf">GetFinalSolutionSet</span><span class="p">(</span><span class="n">sri</span><span class="p">:</span> <span class="n">TMO</span><span class="o">.</span><span class="n">SolverRunInfo</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TMO</span><span class="o">.</span><span class="n">IterationData</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    </span>
+<span class="sd">    One can use the .Configurations property of the returned IterationData</span>
+<span class="sd">    object to access an iterable collection of the actual</span>
+<span class="sd">    SiteUpgradeConfiguration objects.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">sri</span><span class="o">.</span><span class="n">AllData</span><span class="o">.</span><span class="n">Count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="n">sri</span><span class="o">.</span><span class="n">AllData</span><span class="o">.</span><span class="n">Count</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">ids</span> <span class="o">=</span> <span class="n">sri</span><span class="o">.</span><span class="n">AllData</span><span class="o">.</span><span class="n">AllData</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">ids</span><span class="o">.</span><span class="n">Count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="n">ids</span><span class="o">.</span><span class="n">Count</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">ids</span><span class="p">[</span><span class="n">index</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="FindCorrespondingSiteFromSite">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.results.FindCorrespondingSiteFromSite">[docs]</a>
+<span class="k">def</span> <span class="nf">FindCorrespondingSiteFromSite</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Site</span><span class="p">,</span> <span class="n">inSite</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Site</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Microgrid</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">extract_site</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">inSite</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="FindCorrespondingMicrogridFromSite">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.results.FindCorrespondingMicrogridFromSite">[docs]</a>
+<span class="k">def</span> <span class="nf">FindCorrespondingMicrogridFromSite</span><span class="p">(</span><span class="n">mg</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Microgrid</span><span class="p">,</span> <span class="n">inSite</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Site</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Microgrid</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">extract_site_entity</span><span class="p">(</span><span class="n">mg</span><span class="p">,</span> <span class="n">inSite</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="FindCorrespondingBusFromSite">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.results.FindCorrespondingBusFromSite">[docs]</a>
+<span class="k">def</span> <span class="nf">FindCorrespondingBusFromSite</span><span class="p">(</span><span class="n">b</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Bus</span><span class="p">,</span> <span class="n">inSite</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Site</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Bus</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">extract_microgrid_entity_from_site</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">inSite</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="FindCorrespondingAssetFromSite">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.results.FindCorrespondingAssetFromSite">[docs]</a>
+<span class="k">def</span> <span class="nf">FindCorrespondingAssetFromSite</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">inSite</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Site</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Site</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">extract_site</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">inSite</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">MDT</span><span class="o">.</span><span class="n">IBusEntity</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">extract_bus_entity_from_site</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">inSite</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">MDT</span><span class="o">.</span><span class="n">IMicrogridEntity</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">extract_microgrid_entity_from_site</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">inSite</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">MDT</span><span class="o">.</span><span class="n">ISiteEntity</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">extract_site_entity_from_site</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">inSite</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="FindCorrespondingSiteFromRunInfo">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.results.FindCorrespondingSiteFromRunInfo">[docs]</a>
+<span class="k">def</span> <span class="nf">FindCorrespondingSiteFromRunInfo</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Site</span><span class="p">,</span> <span class="n">inSRI</span><span class="p">:</span> <span class="n">TMO</span><span class="o">.</span><span class="n">SolverRunInfo</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Site</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">extract_site_from_run_info</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">inSRI</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="FindCorrespondingMicrogridFromRunInfo">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.results.FindCorrespondingMicrogridFromRunInfo">[docs]</a>
+<span class="k">def</span> <span class="nf">FindCorrespondingMicrogridFromRunInfo</span><span class="p">(</span><span class="n">mg</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Microgrid</span><span class="p">,</span> <span class="n">inSRI</span><span class="p">:</span> <span class="n">TMO</span><span class="o">.</span><span class="n">SolverRunInfo</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Microgrid</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">extract_site_entity_from_run_info</span><span class="p">(</span><span class="n">mg</span><span class="p">,</span> <span class="n">inSRI</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="FindCorrespondingBusFromRunInfo">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.results.FindCorrespondingBusFromRunInfo">[docs]</a>
+<span class="k">def</span> <span class="nf">FindCorrespondingBusFromRunInfo</span><span class="p">(</span><span class="n">b</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Bus</span><span class="p">,</span> <span class="n">inSRI</span><span class="p">:</span> <span class="n">TMO</span><span class="o">.</span><span class="n">SolverRunInfo</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Bus</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">extract_microgrid_entity_from_run_info</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">inSRI</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="FindCorrespondingAssetFromRunInfo">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.results.FindCorrespondingAssetFromRunInfo">[docs]</a>
+<span class="k">def</span> <span class="nf">FindCorrespondingAssetFromRunInfo</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">inSRI</span><span class="p">:</span> <span class="n">TMO</span><span class="o">.</span><span class="n">SolverRunInfo</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Site</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">FindCorrespondingSiteFromRunInfo</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">inSRI</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">MDT</span><span class="o">.</span><span class="n">IBusEntity</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">extract_bus_entity_from_run_info</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">inSRI</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">MDT</span><span class="o">.</span><span class="n">IMicrogridEntity</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">extract_microgrid_entity_from_run_info</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">inSRI</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">MDT</span><span class="o">.</span><span class="n">ISiteEntity</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">extract_site_entity_from_run_info</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">inSRI</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="FindCorrespondingSiteFromConfig">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.results.FindCorrespondingSiteFromConfig">[docs]</a>
+<span class="k">def</span> <span class="nf">FindCorrespondingSiteFromConfig</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Site</span><span class="p">,</span> <span class="n">inConfig</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">SiteUpgradeConfiguration</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Site</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">extract_site_from_config</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">inConfig</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="FindCorrespondingMicrogridFromConfig">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.results.FindCorrespondingMicrogridFromConfig">[docs]</a>
+<span class="k">def</span> <span class="nf">FindCorrespondingMicrogridFromConfig</span><span class="p">(</span><span class="n">mg</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Microgrid</span><span class="p">,</span> <span class="n">inConfig</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">SiteUpgradeConfiguration</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Microgrid</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">extract_site_entity_from_config</span><span class="p">(</span><span class="n">mg</span><span class="p">,</span> <span class="n">inConfig</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="FindCorrespondingBusFromConfig">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.results.FindCorrespondingBusFromConfig">[docs]</a>
+<span class="k">def</span> <span class="nf">FindCorrespondingBusFromConfig</span><span class="p">(</span><span class="n">b</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Bus</span><span class="p">,</span> <span class="n">inConfig</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">SiteUpgradeConfiguration</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Bus</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">extract_microgrid_entity_from_config</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">inConfig</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="FindCorrespondingAssetFromConfig">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.results.FindCorrespondingAssetFromConfig">[docs]</a>
+<span class="k">def</span> <span class="nf">FindCorrespondingAssetFromConfig</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">inConfig</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">SiteUpgradeConfiguration</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Site</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">FindCorrespondingSiteFromConfig</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">inConfig</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">MDT</span><span class="o">.</span><span class="n">IBusEntity</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">extract_bus_entity_from_config</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">inConfig</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">MDT</span><span class="o">.</span><span class="n">IMicrogridEntity</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">extract_microgrid_entity_from_config</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">inConfig</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">MDT</span><span class="o">.</span><span class="n">ISiteEntity</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">extract_site_entity_from_config</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">inConfig</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="FindCorrespondingSite">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.results.FindCorrespondingSite">[docs]</a>
+<span class="k">def</span> <span class="nf">FindCorrespondingSite</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Site</span><span class="p">,</span> <span class="n">within</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Site</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">within</span><span class="p">,</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Site</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">FindCorrespondingSiteFromSite</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">within</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">within</span><span class="p">,</span> <span class="n">MDT</span><span class="o">.</span><span class="n">SiteUpgradeConfiguration</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">FindCorrespondingSiteFromConfig</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">within</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">within</span><span class="p">,</span> <span class="n">TMO</span><span class="o">.</span><span class="n">SolverRunInfo</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">FindCorrespondingSiteFromRunInfo</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">within</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="FindCorrespondingMicrogrid">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.results.FindCorrespondingMicrogrid">[docs]</a>
+<span class="k">def</span> <span class="nf">FindCorrespondingMicrogrid</span><span class="p">(</span><span class="n">mg</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Microgrid</span><span class="p">,</span> <span class="n">within</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Microgrid</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">within</span><span class="p">,</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Site</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">FindCorrespondingMicrogridFromSite</span><span class="p">(</span><span class="n">mg</span><span class="p">,</span> <span class="n">within</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">within</span><span class="p">,</span> <span class="n">MDT</span><span class="o">.</span><span class="n">SiteUpgradeConfiguration</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">FindCorrespondingMicrogridFromConfig</span><span class="p">(</span><span class="n">mg</span><span class="p">,</span> <span class="n">within</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">within</span><span class="p">,</span> <span class="n">TMO</span><span class="o">.</span><span class="n">SolverRunInfo</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">FindCorrespondingMicrogridFromRunInfo</span><span class="p">(</span><span class="n">mg</span><span class="p">,</span> <span class="n">within</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="FindCorrespondingBus">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.results.FindCorrespondingBus">[docs]</a>
+<span class="k">def</span> <span class="nf">FindCorrespondingBus</span><span class="p">(</span><span class="n">b</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Bus</span><span class="p">,</span> <span class="n">within</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Bus</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">within</span><span class="p">,</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Site</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">FindCorrespondingBusFromSite</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">within</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">within</span><span class="p">,</span> <span class="n">MDT</span><span class="o">.</span><span class="n">SiteUpgradeConfiguration</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">FindCorrespondingBusFromConfig</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">within</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">within</span><span class="p">,</span> <span class="n">TMO</span><span class="o">.</span><span class="n">SolverRunInfo</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">FindCorrespondingBusFromRunInfo</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">within</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="FindCorrespondingAsset">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.results.FindCorrespondingAsset">[docs]</a>
+<span class="k">def</span> <span class="nf">FindCorrespondingAsset</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">within</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Site</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">extract_site</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">within</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">within</span><span class="p">,</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Site</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">FindCorrespondingAssetFromSite</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">within</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">within</span><span class="p">,</span> <span class="n">MDT</span><span class="o">.</span><span class="n">SiteUpgradeConfiguration</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">FindCorrespondingAssetFromConfig</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">within</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">within</span><span class="p">,</span> <span class="n">TMO</span><span class="o">.</span><span class="n">SolverRunInfo</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">FindCorrespondingAssetFromRunInfo</span><span class="p">(</span><span class="n">asset</span><span class="p">,</span> <span class="n">within</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="kc">None</span></div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">sandia-pymdt</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">pymdt</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, John Eddy.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.3.7</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -193,15 +193,15 @@ class details:
     def _extract_refueler_settings(refueler, **kwargs):
         pymdt.utils.details._execute_loggable_property_set_with_undo(
             refueler, "RefuelingTimeOfDay",
-            kwargs.get("time_of_day", kwargs.RefuelingTimeOfDay), **kwargs
+            kwargs.get("time_of_day", refueler.RefuelingTimeOfDay), **kwargs
             )
         pymdt.utils.details._execute_loggable_property_set_with_undo(
             refueler, "RefuelingPeriod",
-            kwargs.get("period", kwargs.RefuelingTimeOfDay), **kwargs
+            kwargs.get("period", refueler.RefuelingPeriod), **kwargs
             )
         pymdt.utils.details._execute_loggable_property_set_with_undo(
             refueler, "RefuelingQuantity",
-            kwargs.get("quantity", kwargs.RefuelingTimeOfDay), **kwargs
+            kwargs.get("quantity", refueler.RefuelingQuantity), **kwargs
             )
 
     @staticmethod
@@ -3596,7 +3596,7 @@ def ConfigureDieselRefueller(mg: MDT.Microgrid, **kwargs):
             (infinite).
     """
     mgSets = details._extract_prm_microgrid_settings(mg)
-    rfSets = mgSets.DieselRefuelingStrategySettings()
+    rfSets = mgSets.DieselRefuelingStrategySettings
     details._extract_refueler_settings(rfSets, **kwargs)
     
 def ConfigurePropaneRefueller(mg: MDT.Microgrid, **kwargs):
@@ -3624,7 +3624,7 @@ def ConfigurePropaneRefueller(mg: MDT.Microgrid, **kwargs):
             (infinite).
     """
     mgSets = details._extract_prm_microgrid_settings(mg)
-    rfSets = mgSets.PropaneRefuelingStrategySettings()
+    rfSets = mgSets.PropaneRefuelingStrategySettings
     details._extract_refueler_settings(rfSets, **kwargs)
     
 def ExtractPRMSettings() -> MDT.PRMSettings:
