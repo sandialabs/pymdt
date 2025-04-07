@@ -48,6 +48,12 @@ class details:
     StoredHydroProfiles = []
     StoredThermalProfiles = []
     
+    
+    if "__PYMDT_DOC_BUILD__" not in os.environ:
+        MDTDVR = MDT.Driver.INSTANCE
+    else:
+        MDTDVR = None
+
     @staticmethod
     def _load_all_stored_configs(pth, list, ext="*.msrd"):
         for fname in glob.iglob(os.path.join(pth, ext)):
@@ -166,7 +172,7 @@ class details:
         if t is None: return None
         if type(t) is str:
             t = pymdt.utils.FindEntityByName(
-                MDT.Driver.INSTANCE.LoadTiers, t,
+                details.MDTDVR.LoadTiers, t,
                 find_fail_behavior=pymdt.utils.find_fail_behavior.throw,
                 find_context="load tier master list"
                 )
@@ -186,7 +192,7 @@ class details:
     
     @staticmethod
     def _extract_prm_settings() -> MDT.PRMSettings:
-        return MDT.Driver.INSTANCE.PRMSettings
+        return details.MDTDVR.PRMSettings
 
     @staticmethod
     def _extract_refueler_settings(refueler, **kwargs):
@@ -223,7 +229,7 @@ class details:
         
         details._add_spec_find_args("line", kwargs)
         details._extract_specifications(
-            l, MDT.Driver.INSTANCE.LineSpecifications, **kwargs
+            l, details.MDTDVR.LineSpecifications, **kwargs
             )
         details._extract_retrofit_cost(l, **kwargs)
         pymdt.utils.details._extract_failure_modes(l, **kwargs)
@@ -241,7 +247,7 @@ class details:
         details._extract_node_location(t, **kwargs)
         details._add_spec_find_args("diesel tank", kwargs)
         details._extract_specifications(
-            t, MDT.Driver.INSTANCE.DieselTankSpecifications, **kwargs
+            t, details.MDTDVR.DieselTankSpecifications, **kwargs
             )
         pymdt.utils.details._extract_notes(t, **kwargs)
         details._extract_retrofit_cost(t, **kwargs)
@@ -260,7 +266,7 @@ class details:
         details._extract_node_location(t, **kwargs)
         details._add_spec_find_args("propane tank", kwargs)
         details._extract_specifications(
-            t, MDT.Driver.INSTANCE.PropaneTankSpecifications, **kwargs
+            t, details.MDTDVR.PropaneTankSpecifications, **kwargs
             )
         pymdt.utils.details._extract_notes(t, **kwargs)
         details._extract_retrofit_cost(t, **kwargs)
@@ -300,7 +306,7 @@ class details:
         pymdt.utils.details._extract_guid(sg, **kwargs)
         details._add_spec_find_args("solar generator", kwargs)
         details._extract_specifications(
-            sg, MDT.Driver.INSTANCE.SolarGeneratorSpecifications, **kwargs
+            sg, details.MDTDVR.SolarGeneratorSpecifications, **kwargs
             )
         details._extract_node_location(sg, **kwargs)
         pymdt.utils.details._extract_failure_modes(sg, **kwargs)
@@ -321,7 +327,7 @@ class details:
         pymdt.utils.details._extract_guid(wg, **kwargs)
         details._add_spec_find_args("wind generator", kwargs)
         details._extract_specifications(
-            wg, MDT.Driver.INSTANCE.WindGeneratorSpecifications, **kwargs
+            wg, details.MDTDVR.WindGeneratorSpecifications, **kwargs
             )
         details._extract_node_location(wg, **kwargs)
         pymdt.utils.details._extract_failure_modes(wg, **kwargs)
@@ -342,7 +348,7 @@ class details:
         pymdt.utils.details._extract_guid(hg, **kwargs)
         details._add_spec_find_args("hydro generator", kwargs)
         details._extract_specifications(
-            hg, MDT.Driver.INSTANCE.HydroGeneratorSpecifications, **kwargs
+            hg, details.MDTDVR.HydroGeneratorSpecifications, **kwargs
             )
         details._extract_node_location(hg, **kwargs)
         pymdt.utils.details._extract_failure_modes(hg, **kwargs)
@@ -363,7 +369,7 @@ class details:
         pymdt.utils.details._extract_guid(dg, **kwargs)
         details._add_spec_find_args("diesel generator", kwargs)
         details._extract_specifications(
-            dg, MDT.Driver.INSTANCE.DieselGeneratorSpecifications, **kwargs
+            dg, details.MDTDVR.DieselGeneratorSpecifications, **kwargs
             )
         details._extract_fuel_tanks(dg, b.Microgrid.get_DieselTanks(), **kwargs)
         pymdt.utils.details._extract_failure_modes(dg, **kwargs)
@@ -379,7 +385,7 @@ class details:
         pymdt.utils.details._extract_guid(pg, **kwargs)
         details._add_spec_find_args("propane generator", kwargs)
         details._extract_specifications(
-            pg, MDT.Driver.INSTANCE.PropaneGeneratorSpecifications, **kwargs
+            pg, details.MDTDVR.PropaneGeneratorSpecifications, **kwargs
             )
         details._extract_fuel_tanks(pg, b.Microgrid.get_PropaneTanks(), **kwargs)
         pymdt.utils.details._extract_failure_modes(pg, **kwargs)
@@ -395,7 +401,7 @@ class details:
         pymdt.utils.details._extract_guid(ngg, **kwargs)
         details._add_spec_find_args("natural gas generator", kwargs)
         details._extract_specifications(
-            ngg, MDT.Driver.INSTANCE.NaturalGasGeneratorSpecifications, **kwargs
+            ngg, details.MDTDVR.NaturalGasGeneratorSpecifications, **kwargs
             )
         details._extract_node_location(ngg, **kwargs)
         pymdt.utils.details._extract_failure_modes(ngg, **kwargs)
@@ -410,7 +416,7 @@ class details:
         pymdt.utils.details._extract_guid(bat, **kwargs)
         details._add_spec_find_args("battery", kwargs)
         details._extract_specifications(
-            bat, MDT.Driver.INSTANCE.BatterySpecifications, **kwargs
+            bat, details.MDTDVR.BatterySpecifications, **kwargs
             )
         details._extract_node_location(bat, **kwargs)
         pymdt.utils.details._extract_failure_modes(bat, **kwargs)
@@ -425,7 +431,7 @@ class details:
         pymdt.utils.details._extract_guid(inv, **kwargs)
         details._add_spec_find_args("inverter", kwargs)
         details._extract_specifications(
-            inv, MDT.Driver.INSTANCE.InverterSpecifications, **kwargs
+            inv, details.MDTDVR.InverterSpecifications, **kwargs
             )
         details._extract_node_location(inv, **kwargs)
         pymdt.utils.details._extract_failure_modes(inv, **kwargs)
@@ -440,7 +446,7 @@ class details:
         pymdt.utils.details._extract_guid(ups, **kwargs)
         details._add_spec_find_args("UPS", kwargs)
         details._extract_specifications(
-            ups, MDT.Driver.INSTANCE.UninterruptiblePowerSupplySpecifications,
+            ups, details.MDTDVR.UninterruptiblePowerSupplySpecifications,
             **kwargs
             )
         details._extract_node_location(ups, **kwargs)
@@ -480,7 +486,7 @@ class details:
         details._extract_node_location(t, **kwargs)
         details._add_spec_find_args("transformer", kwargs)
         details._extract_specifications(
-            t, MDT.Driver.INSTANCE.TransformerSpecifications, **kwargs
+            t, details.MDTDVR.TransformerSpecifications, **kwargs
             )
         pymdt.utils.details._extract_failure_modes(t, **kwargs)
         details._extract_fragilities(t, **kwargs)
@@ -559,7 +565,7 @@ class details:
         details._extract_node_location(sw, **kwargs)
         details._add_spec_find_args("switch", kwargs)
         details._extract_specifications(
-            sw, MDT.Driver.INSTANCE.SwitchSpecifications, **kwargs
+            sw, details.MDTDVR.SwitchSpecifications, **kwargs
             )
         pymdt.utils.details._extract_failure_modes(sw, **kwargs)
         details._extract_fragilities(sw, **kwargs)
@@ -712,26 +718,27 @@ class details:
         fStr.Close()
         return stDat
     
-details._load_all_stored_configs(
-    MDT.Driver.INSTANCE.MakeLoadDataDirectory(), details.StoredLoadProfiles
-    )
+if "__PYMDT_DOC_BUILD__" not in os.environ:
+    details._load_all_stored_configs(
+        details.MDTDVR.MakeLoadDataDirectory(), details.StoredLoadProfiles
+        )
         
-details._load_all_stored_configs(
-    MDT.Driver.INSTANCE.MakeThermalLoadDataDirectory(),
-    details.StoredThermalProfiles
-    )
+    details._load_all_stored_configs(
+        details.MDTDVR.MakeThermalLoadDataDirectory(),
+        details.StoredThermalProfiles
+        )
         
-details._load_all_stored_configs(
-    MDT.Driver.INSTANCE.MakeSolarDataDirectory(), details.StoredSolarProfiles
-    )
+    details._load_all_stored_configs(
+        details.MDTDVR.MakeSolarDataDirectory(), details.StoredSolarProfiles
+        )
         
-details._load_all_stored_configs(
-    MDT.Driver.INSTANCE.MakeWindDataDirectory(), details.StoredWindProfiles
-    )
+    details._load_all_stored_configs(
+        details.MDTDVR.MakeWindDataDirectory(), details.StoredWindProfiles
+        )
         
-details._load_all_stored_configs(
-    MDT.Driver.INSTANCE.MakeHydroDataDirectory(), details.StoredHydroProfiles
-    )
+    details._load_all_stored_configs(
+        details.MDTDVR.MakeHydroDataDirectory(), details.StoredHydroProfiles
+        )
     
 def FindStoredSolarConfiguration(name: str) -> MDT.StoredTierLoadConfiguration:
     """ This function searches through all previously defined stored solar
@@ -878,9 +885,10 @@ def MakeStoredLoadConfiguration(name: str, **kwargs) -> MDT.StoredTierLoadConfig
     MDT.StoredTierLoadConfiguration:
         The newly created representation of the new data file.
     """
-    return details._create_stored_data_file(
-        name, MDT.Driver.INSTANCE.MakeLoadDataDirectory(), **kwargs
-        )
+    if "__PYMDT_DOC_BUILD__" not in os.environ:
+        return details._create_stored_data_file(
+            name, details.MDTDVR.MakeLoadDataDirectory(), **kwargs
+            )
 
 def MakeStoredSolarDataConfiguration(name: str, **kwargs) -> MDT.StoredTierLoadConfiguration:
     """ This helper function creates a new file containing solar data information
@@ -926,9 +934,10 @@ def MakeStoredSolarDataConfiguration(name: str, **kwargs) -> MDT.StoredTierLoadC
     MDT.StoredTierLoadConfiguration:
         The newly created representation of the new data file.
     """
-    return details._create_stored_data_file(
-        name, MDT.Driver.INSTANCE.MakeSolarDataDirectory(), **kwargs
-        )
+    if "__PYMDT_DOC_BUILD__" not in os.environ:
+        return details._create_stored_data_file(
+            name, details.MDTDVR.MakeSolarDataDirectory(), **kwargs
+            )
 
 def MakeStoredWindDataConfiguration(name: str, **kwargs) -> MDT.StoredTierLoadConfiguration:
     """ This helper function creates a new file containing wind data information
@@ -974,9 +983,10 @@ def MakeStoredWindDataConfiguration(name: str, **kwargs) -> MDT.StoredTierLoadCo
     MDT.StoredTierLoadConfiguration:
         The newly created representation of the new data file.
     """
-    return details._create_stored_data_file(
-        name, MDT.Driver.INSTANCE.MakeWindDataDirectory(), **kwargs
-        )
+    if "__PYMDT_DOC_BUILD__" not in os.environ:
+        return details._create_stored_data_file(
+            name, details.MDTDVR.MakeWindDataDirectory(), **kwargs
+            )
 
 def MakeStoredHydroDataConfiguration(name: str, **kwargs) -> MDT.StoredTierLoadConfiguration:
     """ This helper function creates a new file containing hydro data
@@ -1022,9 +1032,10 @@ def MakeStoredHydroDataConfiguration(name: str, **kwargs) -> MDT.StoredTierLoadC
     MDT.StoredTierLoadConfiguration:
         The newly created representation of the new data file.
     """
-    return details._create_stored_data_file(
-        name, MDT.Driver.INSTANCE.MakeHydroDataDirectory(), **kwargs
-        )
+    if "__PYMDT_DOC_BUILD__" not in os.environ:
+        return details._create_stored_data_file(
+            name, details.MDTDVR.MakeHydroDataDirectory(), **kwargs
+            )
 
 def MakeStoredThermalDataConfiguration(name: str, **kwargs) -> MDT.StoredTierLoadConfiguration:
     """ This helper function creates a new file containing thermal data
@@ -1070,9 +1081,10 @@ def MakeStoredThermalDataConfiguration(name: str, **kwargs) -> MDT.StoredTierLoa
     MDT.StoredTierLoadConfiguration:
         The newly created representation of the new data file.
     """
-    return details._create_stored_data_file(
-        name, MDT.Driver.INSTANCE.MakeThermalDataDirectory(), **kwargs
-        )
+    if "__PYMDT_DOC_BUILD__" not in os.environ:
+        return details._create_stored_data_file(
+            name, details.MDTDVR.MakeThermalDataDirectory(), **kwargs
+            )
 
 def MakeLine(mg: MDT.Microgrid, name: str, fn, sn, **kwargs) -> MDT.Line:
     """ This helper function creates a new line, extracts any provided
@@ -3024,7 +3036,7 @@ def MakeLoadTier(name: str, priority: int, **kwargs) -> MDT.LoadTier:
         The newly created load tier instance.
     """
     lt = details.build_load_tier(name, priority, **kwargs)
-    owner = details._extract_owner(MDT.Driver.INSTANCE, **kwargs)
+    owner = details._extract_owner(MDTDVR, **kwargs)
     if owner is not None:
         pymdt.utils.details._execute_1_arg_add_with_undo(
             owner, "AddLoadTierCanceled", "get_LoadTiers", lt, **kwargs
