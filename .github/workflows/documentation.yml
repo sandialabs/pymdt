@@ -27,7 +27,7 @@ on:
 
 jobs:
   docs:
-    runs-on: [windows-latest, x64]
+    runs-on: [windows-latest]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
