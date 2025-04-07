@@ -16,7 +16,7 @@ for item in items:
     print(item)
 
 os.environ["__PYMDT_DOC_BUILD__"] = "1"
-os.environ["__PYMDT_DOC_BUILD_DIR__"] = os.path.join("C:\\","Users","jpeddy","Documents","dev","temp") # os.path.abspath(".")
+os.environ["__PYMDT_DOC_BUILD_DIR__"] = os.path.abspath(os.path.join(".", "mdt_bin"))
 
 print("curr path is " + os.path.abspath("."))
 items = os.listdir(os.path.abspath("."))

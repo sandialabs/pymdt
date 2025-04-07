@@ -19,16 +19,15 @@ for px in sys.argv:
         MDT_BIN_DIR = value
     elif key == "MDT_DATA_DIR":
         MDT_DATA_DIR = value
+
+if "__PYMDT_DOC_BUILD__" in os.environ:
+    MDT_BIN_DIR = os.environ["__PYMDT_DOC_BUILD_DIR__"]
         
 if MDT_BIN_DIR is None:
-    if "__PYMDT_DOC_BUILD__" in os.environ:
-        MDT_BIN_DIR = os.environ["__PYMDT_DOC_BUILD_DIR__"]
-    else:
-        MDT_BIN_DIR = os.path.join("C:\\","Users","jpeddy","Documents","dev","temp")
-        # MDT_BIN_DIR = os.path.join(
-        #     "C:\\", "Program Files", "Sandia National Laboratories",
-        #     "Microgrid Design Toolkit v" + MDT_VERSION.ToString()
-        #     )
+    MDT_BIN_DIR = os.path.join(
+        "C:\\", "Program Files", "Sandia National Laboratories",
+        "Microgrid Design Toolkit v" + MDT_VERSION.ToString()
+        )
     
 if "__PYMDT_DOC_BUILD__" not in os.environ and MDT_DATA_DIR is None:
     MDT_DATA_DIR = os.path.join(
