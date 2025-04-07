@@ -46,6 +46,7 @@ if "__PYMDT_DOC_BUILD__" not in os.environ:
             "MDT data directory not found.  Value is: " + MDT_DATA_DIR
             )
    
+print("MDT_BIN_DIR=" + MDT_BIN_DIR)
 sys.path.append(MDT_BIN_DIR)
 
 clr.AddReference(r"MDT-AC")
