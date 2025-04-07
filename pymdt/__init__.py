@@ -24,10 +24,11 @@ if MDT_BIN_DIR is None:
     if "__PYMDT_DOC_BUILD__" in os.environ:
         MDT_BIN_DIR = os.environ["__PYMDT_DOC_BUILD_DIR__"]
     else:
-        MDT_BIN_DIR = os.path.join(
-            "C:\\", "Program Files", "Sandia National Laboratories",
-            "Microgrid Design Toolkit v" + MDT_VERSION.ToString()
-            )
+        MDT_BIN_DIR = os.path.join("C:\\","Users","jpeddy","Documents","dev","temp")
+        # MDT_BIN_DIR = os.path.join(
+        #     "C:\\", "Program Files", "Sandia National Laboratories",
+        #     "Microgrid Design Toolkit v" + MDT_VERSION.ToString()
+        #     )
     
 if "__PYMDT_DOC_BUILD__" not in os.environ and MDT_DATA_DIR is None:
     MDT_DATA_DIR = os.path.join(
@@ -51,7 +52,8 @@ sys.path.append(MDT_BIN_DIR)
 clr.AddReference(r"MDT-AC")
 clr.AddReference(r"MDT-PRM-x64")
 
-MDT_DATA_VER_DIR = os.path.join(MDT_DATA_DIR, MDT_VERSION.ToString())
+if "__PYMDT_DOC_BUILD__" not in os.environ:
+    MDT_DATA_VER_DIR = os.path.join(MDT_DATA_DIR, MDT_VERSION.ToString())
 
 import MDT
 import Common
@@ -63,12 +65,16 @@ import Common
 GlobalErrorLog = Common.Logging.Log()
 
 def _InvokeFilePath():
-    return os.path.join(MDT_DATA_VER_DIR, "been.invoked")
+    if "__PYMDT_DOC_BUILD__" not in os.environ:
+        return os.path.join(MDT_DATA_VER_DIR, "been.invoked")
 
 def _IsFirstAppRun():
-    return not os.path.exists(_InvokeFilePath())
+    if "__PYMDT_DOC_BUILD__" not in os.environ:
+        return not os.path.exists(_InvokeFilePath())
+    else:
+        return False
 
-if _IsFirstAppRun():
+if "__PYMDT_DOC_BUILD__" not in os.environ and _IsFirstAppRun():
     if not os.path.exists(MDT_DATA_VER_DIR): os.makedirs(MDT_DATA_VER_DIR)
     # using the MDT GUI manager for ease. Python users would probably prefer
     # not to have MDT GUI components popping up so may in the future create some
