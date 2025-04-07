@@ -168,9 +168,10 @@ def ReadInputFile(file_name, errLog: Common.Logging.Log=None, **kwargs) -> Commo
     if errLog is None: errLog = Common.Logging.Log()
     
     try:
-        return serializer.Load(
-            SUF.INPUT_TYPE_TAG, MDT.Driver.INSTANCE, binder, errLog
-            )
+        if "__PYMDT_DOC_BUILD__" not in os.environ:
+            return serializer.Load(
+                SUF.INPUT_TYPE_TAG, MDT.Driver.INSTANCE, binder, errLog
+                )
     except SYSEX as e:
         errLog.AddEntry(Common.Logging.LogCategories.Error, str(e))
     except BaseException as e:
@@ -209,9 +210,10 @@ def WriteInputFile(file_name, errLog: Common.Logging.Log=None) -> Common.Logging
     slog = Common.Logging.Log()
     
     try:
-        slog = serializer.Save(
-            SUF.INPUT_TYPE_TAG, MDT.Driver.INSTANCE, pymdt.MDT_VERSION
-            )
+        if "__PYMDT_DOC_BUILD__" not in os.environ:
+            slog = serializer.Save(
+                SUF.INPUT_TYPE_TAG, MDT.Driver.INSTANCE, pymdt.MDT_VERSION
+                )
     except SYSEX as e:
         slog.AddEntry(Common.Logging.LogCategories.Error, str(e))
     except BaseException as e:
@@ -253,19 +255,20 @@ def WriteOutputFile(file_name: str, sri, errLog: Common.Logging.Log=None) -> Com
     slog = Common.Logging.Log()
     
     try:
-        ext = os.path.splitext(file_name)[-1]
-        fileFmt = SUF.FindFileFormat(SUF.SAVE_OUTPUT_TYPE_TAG, ext)
-        serializer = SUF.GetSerializer(SUF.SAVE_OUTPUT_TYPE_TAG, fileFmt, file_name)
-        drv = MDT.Driver.INSTANCE
-        drv.OutputDataToSave.Clear()
-        rvm = MDT.ResultViewManager()
-        if not pymdt.utils.details._is_collection(sri): sri = [sri]
-        for r in sri: rvm.get_SolverRunInfos().Add(r)
-        drv.get_ResultViewManagers().Add(rvm)
-        drv.get_OutputDataToSave().Add(rvm)
-        slog = serializer.Save(SUF.OUTPUT_TYPE_TAG, drv, pymdt.MDT_VERSION)
-        drv.get_ResultViewManagers().Remove(rvm)
-        drv.OutputDataToSave.Clear()
+        if "__PYMDT_DOC_BUILD__" not in os.environ:
+            ext = os.path.splitext(file_name)[-1]
+            fileFmt = SUF.FindFileFormat(SUF.SAVE_OUTPUT_TYPE_TAG, ext)
+            serializer = SUF.GetSerializer(SUF.SAVE_OUTPUT_TYPE_TAG, fileFmt, file_name)
+            drv = MDT.Driver.INSTANCE
+            drv.OutputDataToSave.Clear()
+            rvm = MDT.ResultViewManager()
+            if not pymdt.utils.details._is_collection(sri): sri = [sri]
+            for r in sri: rvm.get_SolverRunInfos().Add(r)
+            drv.get_ResultViewManagers().Add(rvm)
+            drv.get_OutputDataToSave().Add(rvm)
+            slog = serializer.Save(SUF.OUTPUT_TYPE_TAG, drv, pymdt.MDT_VERSION)
+            drv.get_ResultViewManagers().Remove(rvm)
+            drv.OutputDataToSave.Clear()
     except SYSEX as e:
         slog.AddEntry(Common.Logging.LogCategories.Error, str(e))
     except BaseException as e:
