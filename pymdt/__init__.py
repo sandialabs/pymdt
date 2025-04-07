@@ -90,9 +90,13 @@ if "__PYMDT_DOC_BUILD__" not in os.environ and _IsFirstAppRun():
     with open(_InvokeFilePath(), 'a') as fp: pass    
     
 try:
+    print("Looking for specDB in " + MDT_SPEC_DB_DIR if MDT_SPEC_DB_DIR else " the default loc.")
     MDT.UtilFuncs.InitializeDB(MDT_SPEC_DB_DIR)
-    MDT.Driver.INSTANCE
+    print("DB Initialized")
+    _ = MDT.Driver.INSTANCE
+    print("Get the Driver Instance")
     MDT.Driver.INSTANCE.Interface = MDT.Driver.InterfaceEnum.PyMDT
+    print("Set the interface type to PyMDT")
     MDT.Driver.LogEntryRegistry.AddTabooTag("W0025")
 except System.Exception as e:
     raise Exception(

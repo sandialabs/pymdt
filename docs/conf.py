@@ -5,28 +5,21 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath(".."))
-print("curr path is " + os.path.abspath("."))
-items = os.listdir(os.path.abspath("."))
-for item in items:
-    print(item)
-
-print("parent path is " + os.path.abspath(".."))
-items = os.listdir(os.path.abspath(".."))
-for item in items:
-    print(item)
 
 os.environ["__PYMDT_DOC_BUILD__"] = "1"
 os.environ["__PYMDT_DOC_BUILD_DIR__"] = os.path.abspath(os.path.join(".", "mdt_bin"))
 
-print("curr path is " + os.path.abspath("."))
-items = os.listdir(os.path.abspath("."))
-for item in items:
-    print(item)
+print("doc build dir = " + os.environ["__PYMDT_DOC_BUILD_DIR__"])
 
-print("parent path is " + os.path.abspath(".."))
-items = os.listdir(os.path.abspath(".."))
-for item in items:
-    print(item)
+# print("curr path is " + os.path.abspath("."))
+# items = os.listdir(os.path.abspath("."))
+# for item in items:
+#     print(item)
+
+# print("parent path is " + os.path.abspath(".."))
+# items = os.listdir(os.path.abspath(".."))
+# for item in items:
+#     print(item)
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
@@ -48,19 +41,15 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 def skip(app, what, name, obj, skip, options):
     ret = False
-    if what == "module" and "details" in name:
-        ret = True
-    if what == "module" and "MDT" in name:
-        ret = True
-    if what == "module" and "TMO" in name:
-        ret = True
-    if what == "module" and "Common" in name:
-        ret = True
 
-    if ret:
-        print(str(what), " ")
-        print(str(name), " ")
-        print(str(obj))
+    if what == "module":
+        ret = "details" in name or "MDT" in name or \
+              "TMO" in name or "Common" in name
+
+    # if ret:
+    #     print(str(what), " ")
+    #     print(str(name), " ")
+    #     print(str(obj))
 
     return ret
 
