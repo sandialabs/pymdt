@@ -5,6 +5,15 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath(".."))
+print("curr path is " + os.path.abspath("."))
+items = os.listdir(os.path.abspath("."))
+for item in items:
+    print(item)
+
+print("parent path is " + os.path.abspath(".."))
+items = os.listdir(os.path.abspath(".."))
+for item in items:
+    print(item)
 
 os.environ["__PYMDT_DOC_BUILD__"] = "1"
 os.environ["__PYMDT_DOC_BUILD_DIR__"] = os.path.abspath(".")
