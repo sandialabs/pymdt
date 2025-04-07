@@ -70,6 +70,195 @@ import Common
 # and that it also be reviewed before solving.
 GlobalErrorLog = Common.Logging.Log()
 
+class interface_enum(Enum):
+    
+    if "__PYMDT_DOC_BUILD__" not in os.environ:
+        PyMDT = MDT.Driver.InterfaceEnum.PyMDT
+
+        COMMAND_LINE = MDT.Driver.InterfaceEnum.COMMAND_LINE
+
+        PRIMARY_GUI = MDT.Driver.InterfaceEnum.PRIMARY_GUI
+    else:
+        PyMDT = 0
+
+        COMMAND_LINE = 1
+
+        PRIMARY_GUI = 2
+
+class DriverProxy:
+    
+    @staticmethod
+    @property
+    def INSTANCE():
+        if "__PYMDT_DOC_BUILD__" not in os.environ:
+            return None
+        else:
+            return MDT.Driver.INSTANCE
+        
+    @staticmethod
+    @property
+    def LoadTiers():
+        if "__PYMDT_DOC_BUILD__" not in os.environ:
+            return MDT.Driver.INSTANCE.LoadTiers
+        else:
+            return []
+        
+    @staticmethod
+    @property
+    def PRMSettings():
+        if "__PYMDT_DOC_BUILD__" not in os.environ:
+            return MDT.Driver.INSTANCE.PRMSettings
+        else:
+            return None
+             
+    @staticmethod
+    @property
+    def LineSpecifications():
+        if "__PYMDT_DOC_BUILD__" not in os.environ:
+            return MDT.Driver.INSTANCE.LineSpecifications
+        else:
+            return []
+        
+    @staticmethod
+    @property
+    def DieselGeneratorSpecifications():
+        if "__PYMDT_DOC_BUILD__" not in os.environ:
+            return MDT.Driver.INSTANCE.DieselGeneratorSpecifications
+        else:
+            return []
+        
+    @staticmethod
+    @property
+    def NaturalGasGeneratorSpecifications():
+        if "__PYMDT_DOC_BUILD__" not in os.environ:
+            return MDT.Driver.INSTANCE.NaturalGasGeneratorSpecifications
+        else:
+            return []
+        
+    @staticmethod
+    @property
+    def PropaneGeneratorSpecifications():
+        if "__PYMDT_DOC_BUILD__" not in os.environ:
+            return MDT.Driver.INSTANCE.PropaneGeneratorSpecifications
+        else:
+            return []
+        
+    @staticmethod
+    @property
+    def DieselTankSpecifications():
+        if "__PYMDT_DOC_BUILD__" not in os.environ:
+            return MDT.Driver.INSTANCE.DieselTankSpecifications
+        else:
+            return []
+        
+    @staticmethod
+    @property
+    def PropaneTankSpecifications():
+        if "__PYMDT_DOC_BUILD__" not in os.environ:
+            return MDT.Driver.INSTANCE.PropaneTankSpecifications
+        else:
+            return []
+        
+    @staticmethod
+    @property
+    def SolarGeneratorSpecifications():
+        if "__PYMDT_DOC_BUILD__" not in os.environ:
+            return MDT.Driver.INSTANCE.SolarGeneratorSpecifications
+        else:
+            return []
+        
+    @staticmethod
+    @property
+    def WindGeneratorSpecifications():
+        if "__PYMDT_DOC_BUILD__" not in os.environ:
+            return MDT.Driver.INSTANCE.WindGeneratorSpecifications
+        else:
+            return []
+        
+    @staticmethod
+    @property
+    def HydroGeneratorSpecifications():
+        if "__PYMDT_DOC_BUILD__" not in os.environ:
+            return MDT.Driver.INSTANCE.HydroGeneratorSpecifications
+        else:
+            return []
+        
+    @staticmethod
+    @property
+    def BatteryGeneratorSpecifications():
+        if "__PYMDT_DOC_BUILD__" not in os.environ:
+            return MDT.Driver.INSTANCE.BatteryGeneratorSpecifications
+        else:
+            return []
+        
+    @staticmethod
+    @property
+    def InverterGeneratorSpecifications():
+        if "__PYMDT_DOC_BUILD__" not in os.environ:
+            return MDT.Driver.INSTANCE.InverterGeneratorSpecifications
+        else:
+            return []
+        
+    @staticmethod
+    @property
+    def UninterruptiblePowerSupplySpecifications():
+        if "__PYMDT_DOC_BUILD__" not in os.environ:
+            return MDT.Driver.INSTANCE.UninterruptiblePowerSupplySpecifications
+        else:
+            return []
+        
+    @staticmethod
+    @property
+    def TransformerSpecifications():
+        if "__PYMDT_DOC_BUILD__" not in os.environ:
+            return MDT.Driver.INSTANCE.TransformerSpecifications
+        else:
+            return []
+        
+    @staticmethod
+    @property
+    def SwitchSpecifications():
+        if "__PYMDT_DOC_BUILD__" not in os.environ:
+            return MDT.Driver.INSTANCE.SwitchSpecifications
+        else:
+            return []
+        
+    @staticmethod
+    def MakeLoadDataDirectory():
+        if "__PYMDT_DOC_BUILD__" not in os.environ:
+            return MDT.Driver.INSTANCE.MakeLoadDataDirectory()
+        else:
+            return ""
+        
+    @staticmethod
+    def MakeThermalLoadDataDirectory():
+        if "__PYMDT_DOC_BUILD__" not in os.environ:
+            return MDT.Driver.INSTANCE.MakeThermalLoadDataDirectory()
+        else:
+            return ""
+        
+    @staticmethod
+    def MakeSolarDataDirectory():
+        if "__PYMDT_DOC_BUILD__" not in os.environ:
+            return MDT.Driver.INSTANCE.MakeSolarDataDirectory()
+        else:
+            return ""
+        
+    @staticmethod
+    def MakeWindDataDirectory():
+        if "__PYMDT_DOC_BUILD__" not in os.environ:
+            return MDT.Driver.INSTANCE.MakeWindDataDirectory()
+        else:
+            return ""
+
+    @staticmethod
+    def MakeHydroDataDirectory():
+        if "__PYMDT_DOC_BUILD__" not in os.environ:
+            return MDT.Driver.INSTANCE.MakeHydroDataDirectory()
+        else:
+            return ""
+
+
 def _InvokeFilePath():
     if "__PYMDT_DOC_BUILD__" not in os.environ:
         return os.path.join(MDT_DATA_VER_DIR, "been.invoked")
@@ -92,13 +281,10 @@ if "__PYMDT_DOC_BUILD__" not in os.environ and _IsFirstAppRun():
 try:
     print("Looking for specDB in " + MDT_SPEC_DB_DIR if MDT_SPEC_DB_DIR else " the default loc.")
     MDT.UtilFuncs.InitializeDB(MDT_SPEC_DB_DIR)
+    _ = DriverProxy.INSTANCE
     
     if "__PYMDT_DOC_BUILD__" not in os.environ:
-        print("DB Initialized")
-        _ = MDT.Driver.INSTANCE
-        print("Get the Driver Instance")
-        MDT.Driver.INSTANCE.Interface = MDT.Driver.InterfaceEnum.PyMDT
-        print("Set the interface type to PyMDT")
+        MDT.Driver.INSTANCE.Interface = interface_enum.PyMDT
         MDT.Driver.LogEntryRegistry.AddTabooTag("W0025")
 except System.Exception as e:
     raise Exception(

@@ -15,22 +15,28 @@ class ImportFormats:
        files from other applications.
     """
     
-    Windmill = MDT.WindmillTextImporter.TXT_FORMAT
-    """ The text format exported from a Windmill model. (*.txt)
-    """
+    if "__PYMDT_DOC_BUILD__" not in os.environ:
+        Windmill = MDT.WindmillTextImporter.TXT_FORMAT
+        ReNCAT = MDT.ReNCATResultsImporter.JSON_FORMAT
+        OpenDSS = MDT.OpenDSSImporter.DSS_FORMAT
+        MDTProject = MDT.MDTProjectImporterExporter.PROJ_FORMAT
+    else:
+        Windmill = None
+        """ The text format exported from a Windmill model. (*.txt)
+        """
     
-    ReNCAT = MDT.ReNCATResultsImporter.JSON_FORMAT
-    """ The JSON format exported from a ReNCAT model. (*.json)
-    """
+        ReNCAT = None
+        """ The JSON format exported from a ReNCAT model. (*.json)
+        """
     
-    OpenDSS = MDT.OpenDSSImporter.DSS_FORMAT
-    """ The OpenDSS file format. (*.dss)
-    """
+        OpenDSS = None
+        """ The OpenDSS file format. (*.dss)
+        """
     
-    MDTProject = MDT.MDTProjectImporterExporter.PROJ_FORMAT
-    """ The project files created by the MDT that include any external data
-    packaged in. (*.mpf)
-    """
+        MDTProject = None
+        """ The project files created by the MDT that include any external data
+        packaged in. (*.mpf)
+        """
     
 class details:
     
@@ -170,7 +176,7 @@ def ReadInputFile(file_name, errLog: Common.Logging.Log=None, **kwargs) -> Commo
     try:
         if "__PYMDT_DOC_BUILD__" not in os.environ:
             return serializer.Load(
-                SUF.INPUT_TYPE_TAG, MDT.Driver.INSTANCE, binder, errLog
+                SUF.INPUT_TYPE_TAG, pymdt.DriverProxy.INSTANCE, binder, errLog
                 )
     except SYSEX as e:
         errLog.AddEntry(Common.Logging.LogCategories.Error, str(e))
@@ -212,7 +218,7 @@ def WriteInputFile(file_name, errLog: Common.Logging.Log=None) -> Common.Logging
     try:
         if "__PYMDT_DOC_BUILD__" not in os.environ:
             slog = serializer.Save(
-                SUF.INPUT_TYPE_TAG, MDT.Driver.INSTANCE, pymdt.MDT_VERSION
+                SUF.INPUT_TYPE_TAG, pymdt.DriverProxy.INSTANCE, pymdt.MDT_VERSION
                 )
     except SYSEX as e:
         slog.AddEntry(Common.Logging.LogCategories.Error, str(e))
@@ -259,7 +265,7 @@ def WriteOutputFile(file_name: str, sri, errLog: Common.Logging.Log=None) -> Com
             ext = os.path.splitext(file_name)[-1]
             fileFmt = SUF.FindFileFormat(SUF.SAVE_OUTPUT_TYPE_TAG, ext)
             serializer = SUF.GetSerializer(SUF.SAVE_OUTPUT_TYPE_TAG, fileFmt, file_name)
-            drv = MDT.Driver.INSTANCE
+            drv = pymdt.DriverProxy.INSTANCE
             drv.OutputDataToSave.Clear()
             rvm = MDT.ResultViewManager()
             if not pymdt.utils.details._is_collection(sri): sri = [sri]

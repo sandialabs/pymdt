@@ -44,7 +44,7 @@ def skip(app, what, name, obj, skip, options):
 
     if what == "module":
         ret = "details" in name or "MDT" in name or \
-              "TMO" in name or "Common" in name
+              "TMO" in name or "Common" in name or "DriverProxy" in name
 
     # if ret:
     #     print(str(what), " ")
