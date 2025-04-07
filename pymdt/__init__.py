@@ -7,6 +7,7 @@ import System
 MDT_VERSION = System.Version(1, 4, 2520, 0)
 MDT_BIN_DIR=None
 MDT_DATA_DIR=None
+MDT_SPEC_DB_DIR=None
 
 for px in sys.argv:
     argInfo = px.split("=")
@@ -28,6 +29,12 @@ if MDT_BIN_DIR is None:
         "C:\\", "Program Files", "Sandia National Laboratories",
         "Microgrid Design Toolkit v" + MDT_VERSION.ToString()
         )
+
+# If building docs, then make sure the SpecDB directory is set.  Otherwise,
+# leave it at whatever it is.  Even None.  If None, the MDT will try and find
+# it in the default location.
+if MDT_SPEC_DB_DIR is None and "__PYMDT_DOC_BUILD__" in os.environ:    
+    MDT_SPEC_DB_DIR = os.environ["__PYMDT_DOC_BUILD_DIR__"]
     
 if "__PYMDT_DOC_BUILD__" not in os.environ and MDT_DATA_DIR is None:
     MDT_DATA_DIR = os.path.join(
@@ -46,7 +53,6 @@ if "__PYMDT_DOC_BUILD__" not in os.environ:
             "MDT data directory not found.  Value is: " + MDT_DATA_DIR
             )
    
-print("MDT_BIN_DIR=" + MDT_BIN_DIR)
 sys.path.append(MDT_BIN_DIR)
 
 clr.AddReference(r"MDT-AC")
@@ -84,7 +90,7 @@ if "__PYMDT_DOC_BUILD__" not in os.environ and _IsFirstAppRun():
     with open(_InvokeFilePath(), 'a') as fp: pass    
     
 try:
-    MDT.UtilFuncs.InitializeDB()
+    MDT.UtilFuncs.InitializeDB(MDT_SPEC_DB_DIR)
     MDT.Driver.INSTANCE
     MDT.Driver.INSTANCE.Interface = MDT.Driver.InterfaceEnum.PyMDT
     MDT.Driver.LogEntryRegistry.AddTabooTag("W0025")
