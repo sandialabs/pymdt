@@ -7,13 +7,13 @@ import sys
 sys.path.insert(0, os.path.abspath(".."))
 print("curr path is " + os.path.abspath("."))
 items = os.listdir(os.path.abspath("."))
-    for item in items:
-        print(item)
+for item in items:
+    print(item)
 
 print("parent path is " + os.path.abspath(".."))
 items = os.listdir(os.path.abspath(".."))
-    for item in items:
-        print(item)
+for item in items:
+    print(item)
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
