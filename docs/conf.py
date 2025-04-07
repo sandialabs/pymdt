@@ -6,6 +6,19 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath(".."))
 
+os.environ["__PYMDT_DOC_BUILD__"] = "1"
+os.environ["__PYMDT_DOC_BUILD_DIR__"] = os.path.abspath(".")
+
+print("curr path is " + os.path.abspath("."))
+items = os.listdir(os.path.abspath("."))
+for item in items:
+    print(item)
+
+print("parent path is " + os.path.abspath(".."))
+items = os.listdir(os.path.abspath(".."))
+for item in items:
+    print(item)
+
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
@@ -25,16 +38,28 @@ templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 def skip(app, what, name, obj, skip, options):
+    ret = False
     if what == "module" and "details" in name:
-        return True
-    return None
+        ret = True
+    if what == "module" and "MDT" in name:
+        ret = True
+    if what == "module" and "TMO" in name:
+        ret = True
+    if what == "module" and "Common" in name:
+        ret = True
+
+    if ret:
+        print(str(what), " ")
+        print(str(name), " ")
+        print(str(obj))
+
+    return ret
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
-
 
 def setup(app):
     print("connecting to skipmember")

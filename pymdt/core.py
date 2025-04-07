@@ -9,7 +9,6 @@ from enum import Enum
 import System
 from System import Exception as SYSEX
 
-import TMO
 import MDT
 import Common
 

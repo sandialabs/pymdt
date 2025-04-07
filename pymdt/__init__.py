@@ -21,42 +21,46 @@ for px in sys.argv:
         MDT_DATA_DIR = value
         
 if MDT_BIN_DIR is None:
-    MDT_BIN_DIR="C:/Users/jpeddy/Documents/dev/MDT/trunk/MDT-GUI/bin/x64/Debug"
-    # MDT_BIN_DIR = os.path.join(
-    #     "C:\\", "Program Files", "Sandia National Laboratories",
-    #     "Microgrid Design Toolkit v" + MDT_VERSION.ToString()
-    #     )
+
+    if "__PYMDT_DOC_BUILD__" not in os.environ:
+        MDT_BIN_DIR = os.environ["__PYMDT_DOC_BUILD_DIR__"]
+    else:
+        MDT_BIN_DIR = os.path.join(
+            "C:\\", "Program Files", "Sandia National Laboratories",
+            "Microgrid Design Toolkit v" + MDT_VERSION.ToString()
+            )
     
-if MDT_DATA_DIR is None:
+if "__PYMDT_DOC_BUILD__" not in os.environ and MDT_DATA_DIR is None:
     MDT_DATA_DIR = os.path.join(
         "C:\\", "ProgramData", "Sandia National Laboratories",
         "Microgrid Design Toolkit"
         )
-
+    
 if not os.path.exists(MDT_BIN_DIR):
     raise FileNotFoundError(
         "MDT binary directory not found.  Value is: " + MDT_BIN_DIR
         )
 
-if not os.path.exists(MDT_DATA_DIR):
-    raise FileNotFoundError(
-        "MDT data directory not found.  Value is: " + MDT_DATA_DIR
-        )
-
-MDT_DATA_VER_DIR = os.path.join(MDT_DATA_DIR, MDT_VERSION.ToString())
-
+if "__PYMDT_DOC_BUILD__" not in os.environ:
+    if not os.path.exists(MDT_DATA_DIR):
+        raise FileNotFoundError(
+            "MDT data directory not found.  Value is: " + MDT_DATA_DIR
+            )
+   
 sys.path.append(MDT_BIN_DIR)
 
 clr.AddReference(r"MDT-AC")
 clr.AddReference(r"MDT-PRM-x64")
 
+MDT_DATA_VER_DIR = os.path.join(MDT_DATA_DIR, MDT_VERSION.ToString())
+
 import MDT
 import Common
 
-# This log is the default log used by a pymdt app when another log has not been
-# provided to methods that make input changes that may be rejected.  It is
-# recommended that this log be viewed frequently during the input phase and that
-# it also be reviewed before solving.
+# This log is the default log used by a pymdt app when another log has not
+# been provided to methods that make input changes that may be rejected.  It
+# is recommended that this log be viewed frequently during the input phase
+# and that it also be reviewed before solving.
 GlobalErrorLog = Common.Logging.Log()
 
 def _InvokeFilePath():
