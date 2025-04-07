@@ -21,8 +21,7 @@ for px in sys.argv:
         MDT_DATA_DIR = value
         
 if MDT_BIN_DIR is None:
-
-    if "__PYMDT_DOC_BUILD__" not in os.environ:
+    if "__PYMDT_DOC_BUILD__" in os.environ:
         MDT_BIN_DIR = os.environ["__PYMDT_DOC_BUILD_DIR__"]
     else:
         MDT_BIN_DIR = os.path.join(
