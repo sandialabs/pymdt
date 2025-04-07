@@ -104,6 +104,7 @@ except System.Exception as e:
         "Specifications Database and/or Driver reading " + str(e) + "."
         )
 except BaseException as e:
+    print("Exception, DBG=" & MDT.UtilFuncs.DBG)
     raise Exception(
         "Caught a python exception while trying to initialize the MDT " + \
         "Specifications Database and/or Driver reading " + str(e) + "."
