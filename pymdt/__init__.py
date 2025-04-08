@@ -4,6 +4,8 @@ import subprocess
 import clr
 import System
 
+from enum import Enum
+
 MDT_VERSION = System.Version(1, 4, 2520, 0)
 MDT_BIN_DIR=None
 MDT_DATA_DIR=None
