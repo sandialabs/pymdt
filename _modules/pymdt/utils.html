@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pymdt.utils &mdash; sandia-pymdt 1.4.2520 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=b081cfe2"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            sandia-pymdt
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">pymdt</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">sandia-pymdt</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pymdt.utils</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pymdt.utils</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numbers</span>
+
+<span class="kn">import</span> <span class="nn">MDT</span>
+<span class="kn">import</span> <span class="nn">System</span>
+<span class="kn">import</span> <span class="nn">Common</span>
+
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+
+<span class="kn">import</span> <span class="nn">pymdt.distributions</span>
+
+<div class="viewcode-block" id="time_units">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.utils.time_units">[docs]</a>
+<span class="k">class</span> <span class="nc">time_units</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">milliseconds</span> <span class="o">=</span> <span class="n">Common</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">TimeAccumulation</span><span class="o">.</span><span class="n">Units</span><span class="o">.</span><span class="n">Milliseconds</span>
+    <span class="n">seconds</span> <span class="o">=</span> <span class="n">Common</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">TimeAccumulation</span><span class="o">.</span><span class="n">Units</span><span class="o">.</span><span class="n">Seconds</span>
+    <span class="n">minutes</span> <span class="o">=</span> <span class="n">Common</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">TimeAccumulation</span><span class="o">.</span><span class="n">Units</span><span class="o">.</span><span class="n">Minutes</span>
+    <span class="n">hours</span> <span class="o">=</span> <span class="n">Common</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">TimeAccumulation</span><span class="o">.</span><span class="n">Units</span><span class="o">.</span><span class="n">Hours</span>
+    <span class="n">days</span> <span class="o">=</span> <span class="n">Common</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">TimeAccumulation</span><span class="o">.</span><span class="n">Units</span><span class="o">.</span><span class="n">Days</span>
+    <span class="n">weeks</span> <span class="o">=</span> <span class="n">Common</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">TimeAccumulation</span><span class="o">.</span><span class="n">Units</span><span class="o">.</span><span class="n">Weeks</span>
+    <span class="n">months</span> <span class="o">=</span> <span class="n">Common</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">TimeAccumulation</span><span class="o">.</span><span class="n">Units</span><span class="o">.</span><span class="n">Months</span>
+    <span class="n">years</span> <span class="o">=</span> <span class="n">Common</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">TimeAccumulation</span><span class="o">.</span><span class="n">Units</span><span class="o">.</span><span class="n">Years</span></div>
+
+
+<div class="viewcode-block" id="find_fail_behavior">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.utils.find_fail_behavior">[docs]</a>
+<span class="k">class</span> <span class="nc">find_fail_behavior</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">ignore</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">throw</span> <span class="o">=</span> <span class="mi">1</span></div>
+
+
+<div class="viewcode-block" id="text_alignment">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.utils.text_alignment">[docs]</a>
+<span class="k">class</span> <span class="nc">text_alignment</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">top_left</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">NodeGroup</span><span class="o">.</span><span class="n">TextAlignEnum</span><span class="o">.</span><span class="n">TopLeft</span>
+    <span class="n">top_center</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">NodeGroup</span><span class="o">.</span><span class="n">TextAlignEnum</span><span class="o">.</span><span class="n">TopCenter</span>
+    <span class="n">top_right</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">NodeGroup</span><span class="o">.</span><span class="n">TextAlignEnum</span><span class="o">.</span><span class="n">TopRight</span>
+    <span class="n">middle_left</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">NodeGroup</span><span class="o">.</span><span class="n">TextAlignEnum</span><span class="o">.</span><span class="n">MiddleLeft</span>
+    <span class="n">middle_center</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">NodeGroup</span><span class="o">.</span><span class="n">TextAlignEnum</span><span class="o">.</span><span class="n">MiddleCenter</span>
+    <span class="n">middle_right</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">NodeGroup</span><span class="o">.</span><span class="n">TextAlignEnum</span><span class="o">.</span><span class="n">MiddleRight</span>
+    <span class="n">bottom_left</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">NodeGroup</span><span class="o">.</span><span class="n">TextAlignEnum</span><span class="o">.</span><span class="n">BottomLeft</span>
+    <span class="n">bottom_center</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">NodeGroup</span><span class="o">.</span><span class="n">TextAlignEnum</span><span class="o">.</span><span class="n">BottomCenter</span>
+    <span class="n">bottom_right</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">NodeGroup</span><span class="o">.</span><span class="n">TextAlignEnum</span><span class="o">.</span><span class="n">BottomRight</span></div>
+
+  
+<span class="k">class</span> <span class="nc">details</span><span class="p">:</span>
+            
+    <span class="n">currentLog</span><span class="p">:</span> <span class="n">Common</span><span class="o">.</span><span class="n">Logging</span><span class="o">.</span><span class="n">Log</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_log_merge_handler</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">details</span><span class="o">.</span><span class="n">currentLog</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">details</span><span class="o">.</span><span class="n">currentLog</span><span class="o">.</span><span class="n">Merge</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">Log</span><span class="p">)</span>
+            
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_extract_guid</span><span class="p">(</span><span class="n">identified</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="c1"># can be missing all together, a string, or a System.Guid.  If missing,</span>
+        <span class="c1"># do nothing. The default that already exists in the identified object</span>
+        <span class="c1"># can be kept.</span>
+        <span class="n">guid</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;guid&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">guid</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span>
+                <span class="n">guid</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="n">Guid</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span>
+            <span class="n">identified</span><span class="o">.</span><span class="n">ResetUID</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span>
+        
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_execute_loggable_action</span><span class="p">(</span>
+        <span class="n">obj</span><span class="p">,</span> <span class="n">cancelEvtName</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Common</span><span class="o">.</span><span class="n">Logging</span><span class="o">.</span><span class="n">Log</span><span class="p">:</span>
+        
+        <span class="n">errLog</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;err_log&quot;</span><span class="p">,</span> <span class="n">pymdt</span><span class="o">.</span><span class="n">GlobalErrorLog</span><span class="p">)</span>
+        <span class="n">hdnlr</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">cancelEvtName</span><span class="p">)</span>
+        
+        <span class="n">hdnlr</span> <span class="o">+=</span> <span class="n">details</span><span class="o">.</span><span class="n">_log_merge_handler</span>
+        <span class="n">details</span><span class="o">.</span><span class="n">currentLog</span> <span class="o">=</span> <span class="n">errLog</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">l</span><span class="p">()</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">details</span><span class="o">.</span><span class="n">currentLog</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">hdnlr</span> <span class="o">-=</span> <span class="n">details</span><span class="o">.</span><span class="n">_log_merge_handler</span>
+        <span class="k">return</span> <span class="n">errLog</span>
+    
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_execute_3_arg_add_with_undo</span><span class="p">(</span>
+        <span class="n">into</span><span class="p">,</span> <span class="n">cancelEvtName</span><span class="p">,</span> <span class="n">collectionGetterName</span><span class="p">,</span> <span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">,</span> <span class="n">a3</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Common</span><span class="o">.</span><span class="n">Logging</span><span class="o">.</span><span class="n">Log</span><span class="p">:</span>
+        
+        <span class="n">lst</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">into</span><span class="p">,</span> <span class="n">collectionGetterName</span><span class="p">)</span>
+        <span class="c1"># Don&#39;t use kwargs.get to avoid creation of the UndoPack if not needed.</span>
+        <span class="n">undos</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;undos&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;undos&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span> <span class="k">else</span> <span class="n">Common</span><span class="o">.</span><span class="n">Undoing</span><span class="o">.</span><span class="n">UndoPack</span><span class="p">()</span>   
+        <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_action</span><span class="p">(</span>
+            <span class="n">into</span><span class="p">,</span> <span class="n">cancelEvtName</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">lst</span><span class="p">()</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">,</span> <span class="n">a3</span><span class="p">,</span> <span class="n">undos</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+    
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_execute_3_arg_add</span><span class="p">(</span>
+        <span class="n">into</span><span class="p">,</span> <span class="n">cancelEvtName</span><span class="p">,</span> <span class="n">collectionGetterName</span><span class="p">,</span> <span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">,</span> <span class="n">a3</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Common</span><span class="o">.</span><span class="n">Logging</span><span class="o">.</span><span class="n">Log</span><span class="p">:</span>
+        
+        <span class="n">lst</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">into</span><span class="p">,</span> <span class="n">collectionGetterName</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_action</span><span class="p">(</span>
+            <span class="n">into</span><span class="p">,</span> <span class="n">cancelEvtName</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">lst</span><span class="p">()</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">,</span> <span class="n">a3</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+    
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_execute_2_arg_add_with_undo</span><span class="p">(</span>
+        <span class="n">into</span><span class="p">,</span> <span class="n">cancelEvtName</span><span class="p">,</span> <span class="n">collectionGetterName</span><span class="p">,</span> <span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Common</span><span class="o">.</span><span class="n">Logging</span><span class="o">.</span><span class="n">Log</span><span class="p">:</span>
+        
+        <span class="n">lst</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">into</span><span class="p">,</span> <span class="n">collectionGetterName</span><span class="p">)</span>        
+        <span class="c1"># Don&#39;t use kwargs.get to avoid creation of the UndoPack if not needed.</span>
+        <span class="n">undos</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;undos&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;undos&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span> <span class="k">else</span> <span class="n">Common</span><span class="o">.</span><span class="n">Undoing</span><span class="o">.</span><span class="n">UndoPack</span><span class="p">()</span>  
+        <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_action</span><span class="p">(</span>
+            <span class="n">into</span><span class="p">,</span> <span class="n">cancelEvtName</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">lst</span><span class="p">()</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">,</span> <span class="n">undos</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+    
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_execute_2_arg_add</span><span class="p">(</span>
+        <span class="n">into</span><span class="p">,</span> <span class="n">cancelEvtName</span><span class="p">,</span> <span class="n">collectionGetterName</span><span class="p">,</span> <span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Common</span><span class="o">.</span><span class="n">Logging</span><span class="o">.</span><span class="n">Log</span><span class="p">:</span>
+        
+        <span class="n">lst</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">into</span><span class="p">,</span> <span class="n">collectionGetterName</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_action</span><span class="p">(</span>
+            <span class="n">into</span><span class="p">,</span> <span class="n">cancelEvtName</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">lst</span><span class="p">()</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+    
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_execute_1_arg_add_with_undo</span><span class="p">(</span>
+        <span class="n">into</span><span class="p">,</span> <span class="n">cancelEvtName</span><span class="p">,</span> <span class="n">collectionGetterName</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Common</span><span class="o">.</span><span class="n">Logging</span><span class="o">.</span><span class="n">Log</span><span class="p">:</span>
+        
+        <span class="n">lst</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">into</span><span class="p">,</span> <span class="n">collectionGetterName</span><span class="p">)</span>        
+        <span class="c1"># Don&#39;t use kwargs.get to avoid creation of the UndoPack if not needed.</span>
+        <span class="n">undos</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;undos&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;undos&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span> <span class="k">else</span> <span class="n">Common</span><span class="o">.</span><span class="n">Undoing</span><span class="o">.</span><span class="n">UndoPack</span><span class="p">()</span>     
+        <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_action</span><span class="p">(</span>
+            <span class="n">into</span><span class="p">,</span> <span class="n">cancelEvtName</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">lst</span><span class="p">()</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">undos</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+    
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_execute_1_arg_add</span><span class="p">(</span>
+        <span class="n">into</span><span class="p">,</span> <span class="n">cancelEvtName</span><span class="p">,</span> <span class="n">collectionGetterName</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Common</span><span class="o">.</span><span class="n">Logging</span><span class="o">.</span><span class="n">Log</span><span class="p">:</span>
+        
+        <span class="n">lst</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">into</span><span class="p">,</span> <span class="n">collectionGetterName</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_action</span><span class="p">(</span>
+            <span class="n">into</span><span class="p">,</span> <span class="n">cancelEvtName</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">lst</span><span class="p">()</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">item</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+    
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
+        <span class="n">obj</span><span class="p">,</span> <span class="n">propName</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">custom_cancel_evt_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Common</span><span class="o">.</span><span class="n">Logging</span><span class="o">.</span><span class="n">Log</span><span class="p">:</span>
+        
+        <span class="n">prop</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;set_&quot;</span> <span class="o">+</span> <span class="n">propName</span><span class="p">)</span>
+        
+        <span class="c1"># Don&#39;t use kwargs.get to avoid creation of the UndoPack if not needed.</span>
+        <span class="n">undos</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;undos&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;undos&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span> <span class="k">else</span> <span class="n">Common</span><span class="o">.</span><span class="n">Undoing</span><span class="o">.</span><span class="n">UndoPack</span><span class="p">()</span>
+        
+        <span class="k">if</span> <span class="n">custom_cancel_evt_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> 
+            <span class="n">custom_cancel_evt_name</span> <span class="o">=</span> <span class="s2">&quot;Change&quot;</span> <span class="o">+</span> <span class="n">propName</span> <span class="o">+</span> <span class="s2">&quot;Canceled&quot;</span>
+            
+        <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_action</span><span class="p">(</span>
+            <span class="n">obj</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">custom_cancel_evt_name</span><span class="p">),</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">prop</span><span class="p">(</span><span class="n">undos</span><span class="p">,</span> <span class="n">value</span><span class="p">),</span>
+            <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+    
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_execute_loggable_property_set</span><span class="p">(</span>
+        <span class="n">obj</span><span class="p">,</span> <span class="n">propName</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">custom_cancel_evt_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Common</span><span class="o">.</span><span class="n">Logging</span><span class="o">.</span><span class="n">Log</span><span class="p">:</span>
+        
+        <span class="n">prop</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;set_&quot;</span> <span class="o">+</span> <span class="n">propName</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">custom_cancel_evt_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> 
+            <span class="n">custom_cancel_evt_name</span> <span class="o">=</span> <span class="s2">&quot;Change&quot;</span> <span class="o">+</span> <span class="n">propName</span> <span class="o">+</span> <span class="s2">&quot;Canceled&quot;</span>
+            
+        <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_action</span><span class="p">(</span>
+            <span class="n">obj</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">custom_cancel_evt_name</span><span class="p">),</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">prop</span><span class="p">(</span><span class="n">value</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+    
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_execute_loggable_indexed_property_set_with_undo</span><span class="p">(</span>
+        <span class="n">obj</span><span class="p">,</span> <span class="n">propName</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">custom_cancel_evt_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Common</span><span class="o">.</span><span class="n">Logging</span><span class="o">.</span><span class="n">Log</span><span class="p">:</span>
+        
+        <span class="n">prop</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;set_&quot;</span> <span class="o">+</span> <span class="n">propName</span><span class="p">)</span>
+        
+        <span class="c1"># Don&#39;t use kwargs.get to avoid creation of the UndoPack if not needed.</span>
+        <span class="n">undos</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;undos&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;undos&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span> <span class="k">else</span> <span class="n">Common</span><span class="o">.</span><span class="n">Undoing</span><span class="o">.</span><span class="n">UndoPack</span><span class="p">()</span>
+        
+        <span class="k">if</span> <span class="n">custom_cancel_evt_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> 
+            <span class="n">custom_cancel_evt_name</span> <span class="o">=</span> <span class="s2">&quot;Change&quot;</span> <span class="o">+</span> <span class="n">propName</span> <span class="o">+</span> <span class="s2">&quot;Canceled&quot;</span>
+            
+        <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_action</span><span class="p">(</span>
+            <span class="n">obj</span><span class="p">,</span> <span class="n">custom_cancel_evt_name</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">prop</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">undos</span><span class="p">,</span> <span class="n">value</span><span class="p">),</span>
+            <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_execute_loggable_indexed_property_set</span><span class="p">(</span>
+        <span class="n">obj</span><span class="p">,</span> <span class="n">propName</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">custom_cancel_evt_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Common</span><span class="o">.</span><span class="n">Logging</span><span class="o">.</span><span class="n">Log</span><span class="p">:</span>
+        
+        <span class="n">prop</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;set_&quot;</span> <span class="o">+</span> <span class="n">propName</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">custom_cancel_evt_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> 
+            <span class="n">custom_cancel_evt_name</span> <span class="o">=</span> <span class="s2">&quot;Change&quot;</span> <span class="o">+</span> <span class="n">propName</span> <span class="o">+</span> <span class="s2">&quot;Canceled&quot;</span>
+            
+        <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_action</span><span class="p">(</span>
+            <span class="n">obj</span><span class="p">,</span> <span class="n">custom_cancel_evt_name</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">prop</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">value</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_is_integer</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span> <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span> <span class="k">return</span> <span class="n">n</span><span class="o">.</span><span class="n">is_integer</span><span class="p">()</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_is_iterable</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">_</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_is_collection</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">details</span><span class="o">.</span><span class="n">_is_iterable</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+    
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_extract_notes</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
+            <span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;Notes&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;notes&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)),</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_extract_distribution</span><span class="p">(</span>
+        <span class="n">paramName</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Common</span><span class="o">.</span><span class="n">Distributions</span><span class="o">.</span><span class="n">IDistribution</span><span class="p">:</span>
+        <span class="n">dist</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">paramName</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Number</span><span class="p">):</span>
+            <span class="n">dist</span> <span class="o">=</span> <span class="n">pymdt</span><span class="o">.</span><span class="n">distributions</span><span class="o">.</span><span class="n">MakeFixed</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">dist</span><span class="p">))</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">MDT</span><span class="o">.</span><span class="n">CustomDistributionBase</span><span class="p">):</span>
+            <span class="n">allowed</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;allow_custom_distributions&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">allowed</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                    <span class="s2">&quot;Custom distributions cannot be used in this context.&quot;</span> <span class="o">+</span>
+                    <span class="s2">&quot; This is typically thrown when building specifications.&quot;</span>
+                    <span class="p">)</span>
+            <span class="n">dist</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">CustomDistributionWrapper</span><span class="p">(</span><span class="n">dist</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">dist</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_extract_failure_distributions</span><span class="p">(</span><span class="n">fm</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">FailureMode</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
+            <span class="n">fm</span><span class="p">,</span> <span class="s2">&quot;MTBF&quot;</span><span class="p">,</span> <span class="n">details</span><span class="o">.</span><span class="n">_extract_distribution</span><span class="p">(</span><span class="s2">&quot;mtbf&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">),</span>
+            <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        
+        <span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
+            <span class="n">fm</span><span class="p">,</span> <span class="s2">&quot;MTTR&quot;</span><span class="p">,</span> <span class="n">details</span><span class="o">.</span><span class="n">_extract_distribution</span><span class="p">(</span><span class="s2">&quot;mttr&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">),</span>
+            <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+            
+    <span class="nd">@staticmethod</span>    
+    <span class="k">def</span> <span class="nf">_extract_failure_modes</span><span class="p">(</span><span class="n">unrel</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">fms</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;failure_modes&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">fms</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="k">return</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">details</span><span class="o">.</span><span class="n">_is_collection</span><span class="p">(</span><span class="n">fms</span><span class="p">):</span> <span class="n">fms</span> <span class="o">=</span> <span class="p">[</span><span class="n">fms</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">fm</span> <span class="ow">in</span> <span class="n">fms</span><span class="p">:</span>
+            <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_execute_1_arg_add_with_undo</span><span class="p">(</span>
+                <span class="n">unrel</span><span class="p">,</span> <span class="s2">&quot;AddFailureModeCanceled&quot;</span><span class="p">,</span> <span class="s2">&quot;get_FailureModes&quot;</span><span class="p">,</span> <span class="n">fm</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">kwargs</span>
+                <span class="p">)</span> 
+            
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_extract_impedance</span><span class="p">(</span><span class="n">impedes</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">imp</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;impedance&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">imp</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">resist</span> <span class="o">=</span> <span class="n">imp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">react</span> <span class="o">=</span> <span class="n">imp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">resist</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;resistance&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+            <span class="n">react</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;reactance&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+            
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
+            <span class="n">impedes</span><span class="p">,</span> <span class="s2">&quot;Impedance&quot;</span><span class="p">,</span> <span class="n">System</span><span class="o">.</span><span class="n">Numerics</span><span class="o">.</span><span class="n">Complex</span><span class="p">(</span><span class="n">resist</span><span class="p">,</span> <span class="n">react</span><span class="p">),</span>
+            <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_extract_voltage</span><span class="p">(</span><span class="n">volt_node</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">rv</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;voltage&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">rv</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">real</span> <span class="o">=</span> <span class="n">rv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">imag</span> <span class="o">=</span> <span class="n">rv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">real</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;real&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+            <span class="n">imag</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;imaginary&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+            
+        <span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
+            <span class="n">volt_node</span><span class="p">,</span> <span class="s2">&quot;Voltage&quot;</span><span class="p">,</span> <span class="n">System</span><span class="o">.</span><span class="n">Numerics</span><span class="o">.</span><span class="n">Complex</span><span class="p">(</span><span class="n">real</span><span class="p">,</span> <span class="n">imag</span><span class="p">),</span>
+            <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_extract_color</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="n">Drawing</span><span class="o">.</span><span class="n">Color</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;color&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span> <span class="k">return</span> <span class="n">System</span><span class="o">.</span><span class="n">Drawing</span><span class="o">.</span><span class="n">Color</span><span class="o">.</span><span class="n">Empty</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;color&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="n">Drawing</span><span class="o">.</span><span class="n">Color</span><span class="o">.</span><span class="n">FromName</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">c</span>
+        
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_extract_font</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="n">Drawing</span><span class="o">.</span><span class="n">Font</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;font&quot;</span><span class="p">,</span> <span class="n">System</span><span class="o">.</span><span class="n">Drawing</span><span class="o">.</span><span class="n">SystemFonts</span><span class="o">.</span><span class="n">DefaultFont</span><span class="p">)</span>
+        
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_extract_text_alignment</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">NodeGroup</span><span class="o">.</span><span class="n">TextAlignEnum</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;text_alignment&quot;</span><span class="p">,</span> <span class="n">text_alignment</span><span class="o">.</span><span class="n">top_left</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+        
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">build_failure_mode</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">FailureMode</span><span class="p">:</span>
+        <span class="n">fm</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">FailureMode</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">details</span><span class="o">.</span><span class="n">_extract_guid</span><span class="p">(</span><span class="n">fm</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">details</span><span class="o">.</span><span class="n">_extract_failure_distributions</span><span class="p">(</span><span class="n">fm</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">details</span><span class="o">.</span><span class="n">_extract_notes</span><span class="p">(</span><span class="n">fm</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">fm</span>
+ 
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">build_fragility_curve</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">FragilityCurve</span><span class="p">:</span>
+        <span class="n">fc</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">FragilityCurve</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">details</span><span class="o">.</span><span class="n">_extract_guid</span><span class="p">(</span><span class="n">fc</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
+            <span class="n">fc</span><span class="p">,</span> <span class="s2">&quot;MTTR&quot;</span><span class="p">,</span> <span class="n">details</span><span class="o">.</span><span class="n">_extract_distribution</span><span class="p">(</span><span class="s2">&quot;mttr&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">),</span>
+            <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
+            <span class="n">fc</span><span class="p">,</span> <span class="s2">&quot;ProbabilityGenerator&quot;</span><span class="p">,</span> 
+            <span class="n">details</span><span class="o">.</span><span class="n">_extract_distribution</span><span class="p">(</span><span class="s2">&quot;probability_generator&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">),</span>
+            <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="n">details</span><span class="o">.</span><span class="n">_extract_notes</span><span class="p">(</span><span class="n">fc</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">fc</span>
+ 
+<div class="viewcode-block" id="FindEntityByName">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.utils.FindEntityByName">[docs]</a>
+<span class="k">def</span> <span class="nf">FindEntityByName</span><span class="p">(</span><span class="n">all_ents</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Searches through a collection to find an item with the given name.</span>
+<span class="sd">    </span>
+<span class="sd">    In the case of the MDT interface, the name is indicated by the value of</span>
+<span class="sd">    the StringID property of an entry in all_ents.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    all_ents:</span>
+<span class="sd">        Something that can be iterated to search for an item with the supplied</span>
+<span class="sd">        name.  Then entities in this list must have a property named StringID</span>
+<span class="sd">        that is used as the name getter.</span>
+<span class="sd">    name: str</span>
+<span class="sd">        The name to search for.</span>
+<span class="sd">    kwargs: dict</span>
+<span class="sd">        A dictionary of all the variable arguments provided to this function.</span>
+<span class="sd">        The arguments used by this method include:</span>
+<span class="sd">        </span>
+<span class="sd">        find_context:</span>
+<span class="sd">            A descriptor of the find operation that is happening, typically a</span>
+<span class="sd">            description of the list being searched.  This is used if no matching</span>
+<span class="sd">            item is found to give a more meaningful error message.  If not</span>
+<span class="sd">            supplied, the context is an empty string.</span>
+<span class="sd">        case_sensitive:</span>
+<span class="sd">            An indicator of whether the search should be case sensitive or not.</span>
+<span class="sd">            if not provided, the default is True for a case sensitive search.</span>
+<span class="sd">        find_fail_behavior: find_fail_behavior</span>
+<span class="sd">            A member of the find_fail_behavior enumeration indicating what to do</span>
+<span class="sd">            if the search is unsuccessful.  The default is to ignore and return</span>
+<span class="sd">            None.  Optionally, if this argument is find_fail_behavior.throw, an</span>
+<span class="sd">            exception is thrown with a message meant to give information about</span>
+<span class="sd">            the failed search.</span>
+<span class="sd">            </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Found Item:</span>
+<span class="sd">        The item that was found or None if no matching item is found.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fb</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;find_fail_behavior&quot;</span><span class="p">,</span> <span class="n">find_fail_behavior</span><span class="o">.</span><span class="n">ignore</span><span class="p">)</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;find_context&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">casesen</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;case_sensitive&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">casesen</span><span class="p">:</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">all_ents</span> <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">StringID</span> <span class="o">==</span> <span class="n">name</span><span class="p">)),</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">all_ents</span> <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">StringID</span><span class="o">.</span><span class="n">casefold</span><span class="p">()</span> <span class="o">==</span> <span class="n">name</span><span class="o">.</span><span class="n">casefold</span><span class="p">())),</span>
+            <span class="kc">None</span>
+            <span class="p">)</span>
+    <span class="k">if</span> <span class="n">ret</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">fb</span> <span class="o">==</span> <span class="n">find_fail_behavior</span><span class="o">.</span><span class="n">throw</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Unable to find entity with name &quot;</span> <span class="o">+</span> <span class="n">name</span>
+        <span class="k">if</span> <span class="n">context</span><span class="p">:</span> <span class="n">msg</span> <span class="o">+=</span> <span class="s2">&quot; in &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ret</span></div>
+
+
+<div class="viewcode-block" id="MakeUsableName">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.utils.MakeUsableName">[docs]</a>
+<span class="k">def</span> <span class="nf">MakeUsableName</span><span class="p">(</span><span class="n">all_ents</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Creates a usable name from the supplied name that does not duplicate any</span>
+<span class="sd">    names in the collection all_ents by adding digits to the end.</span>
+<span class="sd">    </span>
+<span class="sd">    In the case of the MDT interface, the name is indicated by the value of</span>
+<span class="sd">    the StringID property of an entry in all_ents.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    all_ents:</span>
+<span class="sd">        Something that can be iterated to search for an item with the supplied</span>
+<span class="sd">        name.  Then entities in this list must have a property named StringID</span>
+<span class="sd">        that is used as the name getter.</span>
+<span class="sd">    name: str</span>
+<span class="sd">        The name to search for.</span>
+<span class="sd">    kwargs: dict</span>
+<span class="sd">        A dictionary of all the variable arguments provided to this function.</span>
+<span class="sd">        The arguments used by this method include:</span>
+<span class="sd">        </span>
+<span class="sd">        start: int</span>
+<span class="sd">            The lowest usable digit to append in the case of the need to append</span>
+<span class="sd">            them to get a unique name.</span>
+<span class="sd">            </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str:</span>
+<span class="sd">        The name that is unique to the supplied collection which may be the</span>
+<span class="sd">        supplied name if it was already unique.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">strt</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;start&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">done</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">base</span> <span class="o">=</span> <span class="n">name</span>
+    <span class="k">while</span> <span class="ow">not</span> <span class="n">done</span><span class="p">:</span>
+        <span class="n">done</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">for</span> <span class="n">ent</span> <span class="ow">in</span> <span class="n">all_ents</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">ent</span><span class="o">.</span><span class="n">StringID</span> <span class="o">==</span> <span class="n">name</span><span class="p">:</span>
+                <span class="n">done</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">base</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">strt</span><span class="p">)</span>
+                <span class="n">strt</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">return</span> <span class="n">name</span></div>
+
+
+<div class="viewcode-block" id="MakeFailureMode">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.utils.MakeFailureMode">[docs]</a>
+<span class="k">def</span> <span class="nf">MakeFailureMode</span><span class="p">(</span><span class="n">u</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">IUnreliable</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">FailureMode</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; This helper function creates a new failure mode, extracts any</span>
+<span class="sd">    provided properties, loads it into its owner (u), and returns it.</span>
+<span class="sd">        </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    u: MDT.IUnreliable</span>
+<span class="sd">        The unreliable entity for which this failure mode is being built.  This</span>
+<span class="sd">        argument can be None and if no owner is provided or the owner provided</span>
+<span class="sd">        is None, then the returned mode will not be added to any owner.  It</span>
+<span class="sd">        should thus be added to an owner at some later time.</span>
+<span class="sd">    name: str</span>
+<span class="sd">        The name to be given to the new failure mode.  Names of failure modes</span>
+<span class="sd">        within an unreliable entity must be unique.</span>
+<span class="sd">    kwargs: dict</span>
+<span class="sd">        A dictionary of all the variable arguments provided to this function.</span>
+<span class="sd">        The arguments used by this method include:</span>
+<span class="sd">        </span>
+<span class="sd">        mtbf: Common.Distributions.IDistribution</span>
+<span class="sd">            The probability distribution describing the mean time between</span>
+<span class="sd">            failures for this failure mode.  This could also be a float in which</span>
+<span class="sd">            case a fixed distribution will be used.</span>
+<span class="sd">        mttr: Common.Distributions.IDistribution</span>
+<span class="sd">            The probability distribution describing the mean time to repair for</span>
+<span class="sd">            this failure mode.  This could also be a float in which case a fixed</span>
+<span class="sd">            distribution will be used.</span>
+<span class="sd">        owner:</span>
+<span class="sd">            An optional parameter to serve as the owner of the new failure mode.</span>
+<span class="sd">            This is typically used if one does not want the failure mode added</span>
+<span class="sd">            to the unreliable asset as part of this call in which case None is</span>
+<span class="sd">            specified as the owner.  If no owner is provided, then the supplied</span>
+<span class="sd">            unreliable (u) is used.</span>
+<span class="sd">        err_log: Common.Logging.Log</span>
+<span class="sd">            The log into which to record any errors encountered during the</span>
+<span class="sd">            building, loading, or saving of the new item.  If this argument is</span>
+<span class="sd">            not provided, messages will be recorded into the</span>
+<span class="sd">            pymdt.GlobalErrorLog instance.</span>
+<span class="sd">        undos: Common.Undoing.IUndoPack</span>
+<span class="sd">            An optional undo pack into which to load the undoable objects</span>
+<span class="sd">            generated during this operation (if any).</span>
+<span class="sd">        notes: str</span>
+<span class="sd">            Any notes to assign to the resulting failure mode.</span>
+<span class="sd">        guid:</span>
+<span class="sd">            The unique identifier to use for this new asset.  This can be</span>
+<span class="sd">            a string formatted as described in:</span>
+<span class="sd">            https://learn.microsoft.com/en-us/dotnet/api/system.guid.-ctor?view=net-8.0#system-guid-ctor(system-string)</span>
+<span class="sd">            or a System.Guid instance.  If not provided, a newly created,</span>
+<span class="sd">            random Guid is used.</span>
+<span class="sd">            </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    MDT.FailureMode:</span>
+<span class="sd">        The newly created and loaded failure mode.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fm</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">build_failure_mode</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">owner</span> <span class="o">=</span> <span class="n">pymdt</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_extract_owner</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">owner</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">details</span><span class="o">.</span><span class="n">_execute_1_arg_add_with_undo</span><span class="p">(</span>
+            <span class="n">owner</span><span class="p">,</span> <span class="s2">&quot;AddFailureModeCanceled&quot;</span><span class="p">,</span> <span class="s2">&quot;get_FailureModes&quot;</span><span class="p">,</span> <span class="n">fm</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+    <span class="k">return</span> <span class="n">fm</span></div>
+
+    
+<div class="viewcode-block" id="MakeFragilityCurve">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.utils.MakeFragilityCurve">[docs]</a>
+<span class="k">def</span> <span class="nf">MakeFragilityCurve</span><span class="p">(</span>
+    <span class="n">f</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">IFragile</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">haz</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Hazard</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">FragilityCurve</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; This helper function creates a new fragility curve, extracts any</span>
+<span class="sd">    provided properties, loads it into its owner (f) mapped to the supplied</span>
+<span class="sd">    hazard, and returns it.</span>
+<span class="sd">        </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    f: MDT.IFragile</span>
+<span class="sd">        The fragile entity for which this fragility curve is being built. This</span>
+<span class="sd">        parameter can be None and if so, and if no explicit non-None owner is</span>
+<span class="sd">        provided, the fragility curve will be built and returned but no mapping</span>
+<span class="sd">        to haz will take place.  At some later time, the newly created fragility</span>
+<span class="sd">        curve should be added to an asset mapped to a hazard.</span>
+<span class="sd">    name: str</span>
+<span class="sd">        The name to be given to the new fragility curve.  Names of fragility</span>
+<span class="sd">        curves within an unreliable entity must be unique.</span>
+<span class="sd">    haz: MDT.Hazard</span>
+<span class="sd">        The hazard to which this fragility curve applies in the given fragile</span>
+<span class="sd">        entity.  If the parameter f is None, or if an explicit owner=None is</span>
+<span class="sd">        provided, this parameter can also be None. Otherwise, it cannot.</span>
+<span class="sd">    kwargs: dict</span>
+<span class="sd">        A dictionary of all the variable arguments provided to this function.</span>
+<span class="sd">        The arguments used by this method include:</span>
+<span class="sd">        </span>
+<span class="sd">        mttr: Common.Distributions.IDistribution</span>
+<span class="sd">            The probability distribution describing the mean time to repair for</span>
+<span class="sd">            this fragility curve.  This could also be a float in which case a</span>
+<span class="sd">            fixed distribution will be used.</span>
+<span class="sd">        probability_generator: Common.Distributions.IDistribution</span>
+<span class="sd">            The distribution that determines the likelihood of failure in terms</span>
+<span class="sd">            of the hazard intensity units for this fragility.</span>
+<span class="sd">        owner:</span>
+<span class="sd">            An optional parameter to serve as the owner of the new fragility</span>
+<span class="sd">            curve. This is typically used if one does not want the fragility</span>
+<span class="sd">            curve added to the fragile asset as part of this call in which case</span>
+<span class="sd">            None is specified as the owner.  If no owner is provided, then the</span>
+<span class="sd">            supplied fragile asset (f) is used.</span>
+<span class="sd">        err_log: Common.Logging.Log</span>
+<span class="sd">            The log into which to record any errors encountered during the</span>
+<span class="sd">            building, loading, or saving of the new item.  If this argument is</span>
+<span class="sd">            not provided, messages will be recorded into the</span>
+<span class="sd">            pymdt.GlobalErrorLog instance.</span>
+<span class="sd">        undos: Common.Undoing.IUndoPack</span>
+<span class="sd">            An optional undo pack into which to load the undoable objects</span>
+<span class="sd">            generated during this operation (if any).</span>
+<span class="sd">        notes: str</span>
+<span class="sd">            Any notes to assign to the resulting fragility curve.</span>
+<span class="sd">        guid:</span>
+<span class="sd">            The unique identifier to use for this new asset.  This can be</span>
+<span class="sd">            a string formatted as described in:</span>
+<span class="sd">            https://learn.microsoft.com/en-us/dotnet/api/system.guid.-ctor?view=net-8.0#system-guid-ctor(system-string)</span>
+<span class="sd">            or a System.Guid instance.  If not provided, a newly created,</span>
+<span class="sd">            random Guid is used.</span>
+<span class="sd">            </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    MDT.FragilityCurve:</span>
+<span class="sd">        The newly created and loaded fragility curve.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fc</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">build_fragility_curve</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">owner</span> <span class="o">=</span> <span class="n">pymdt</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_extract_owner</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">owner</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">details</span><span class="o">.</span><span class="n">_execute_2_arg_add_with_undo</span><span class="p">(</span>
+            <span class="n">owner</span><span class="p">,</span> <span class="s2">&quot;AddFragilityCurveCanceled&quot;</span><span class="p">,</span> <span class="s2">&quot;get_FragilityCurves&quot;</span><span class="p">,</span> <span class="n">haz</span><span class="p">,</span> <span class="n">fc</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+    <span class="k">return</span> <span class="n">fc</span></div>
+
+
+<div class="viewcode-block" id="ExecutePropertySet">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.utils.ExecutePropertySet">[docs]</a>
+<span class="k">def</span> <span class="nf">ExecutePropertySet</span><span class="p">(</span>
+    <span class="n">obj</span><span class="p">,</span> <span class="n">propName</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">custom_cancel_evt_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Common</span><span class="o">.</span><span class="n">Logging</span><span class="o">.</span><span class="n">Log</span><span class="p">:</span>
+
+    <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
+        <span class="n">obj</span><span class="p">,</span> <span class="n">propName</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">custom_cancel_evt_name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PrintLog">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.utils.PrintLog">[docs]</a>
+<span class="k">def</span> <span class="nf">PrintLog</span><span class="p">(</span><span class="n">log</span><span class="p">:</span> <span class="n">Common</span><span class="o">.</span><span class="n">Logging</span><span class="o">.</span><span class="n">Log</span><span class="p">,</span> <span class="n">writeTags</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">maxEntries</span><span class="p">:</span> <span class="nb">int</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; A simple helper function to print out the contents of a Log.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    log: Common.Logging.Log</span>
+<span class="sd">        The log to print using the print() function.</span>
+<span class="sd">    writeTags: bool</span>
+<span class="sd">        True if the tags (like E0001, W0032, etc.) should be written along with</span>
+<span class="sd">        each entry in the log.</span>
+<span class="sd">    maxEntries: int</span>
+<span class="sd">        The maximum number of log entries to write.  if this value is -1 (the</span>
+<span class="sd">        default), than all log entries are written.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">log</span><span class="o">.</span><span class="n">ToString</span><span class="p">(</span><span class="n">writeTags</span><span class="p">,</span> <span class="n">maxEntries</span><span class="p">))</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, John Eddy.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
