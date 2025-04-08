@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pymdt.utils &mdash; sandia-pymdt 1.4.2520 documentation</title>
+  <title>pymdt.utils &mdash; PyMDT 1.4.2520 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
 
@@ -31,7 +31,7 @@
           
           
           <a href="../../index.html" class="icon icon-home">
-            sandia-pymdt
+            PyMDT
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -52,7 +52,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">sandia-pymdt</a>
+          <a href="../../index.html">PyMDT</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -97,8 +97,19 @@
 <div class="viewcode-block" id="find_fail_behavior">
 <a class="viewcode-back" href="../../pymdt.html#pymdt.utils.find_fail_behavior">[docs]</a>
 <span class="k">class</span> <span class="nc">find_fail_behavior</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; An enumeration of the possible responses to a failed attempt to find</span>
+<span class="sd">    something in a list using the FindEntityByName function.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">ignore</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">throw</span> <span class="o">=</span> <span class="mi">1</span></div>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Indicates that the find function should just return None.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">throw</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Indicates that the find function should throw an exception.  See the</span>
+<span class="sd">    docs for the FindEntityByName function for details of what the exception</span>
+<span class="sd">    message will say.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
 
 
 <div class="viewcode-block" id="text_alignment">
@@ -694,7 +705,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2025, John Eddy.</p>
+    <p>&#169; Copyright 2025 National Technology &amp; Engineering Solutions of Sandia, LLC (NTESS)..</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
