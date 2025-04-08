@@ -14,29 +14,24 @@ class ImportFormats:
     """A class used to organize the import file formats that can be used to read
        files from other applications.
     """
-    
-    if "__PYMDT_DOC_BUILD__" not in os.environ:
-        Windmill = MDT.WindmillTextImporter.TXT_FORMAT
-        ReNCAT = MDT.ReNCATResultsImporter.JSON_FORMAT
-        OpenDSS = MDT.OpenDSSImporter.DSS_FORMAT
-        MDTProject = MDT.MDTProjectImporterExporter.PROJ_FORMAT
-    else:
-        Windmill = None
-        """ The text format exported from a Windmill model. (*.txt)
-        """
-    
-        ReNCAT = None
-        """ The JSON format exported from a ReNCAT model. (*.json)
-        """
-    
-        OpenDSS = None
-        """ The OpenDSS file format. (*.dss)
-        """
-    
-        MDTProject = None
-        """ The project files created by the MDT that include any external data
-        packaged in. (*.mpf)
-        """
+   
+    Windmill = MDT.WindmillTextImporter.TXT_FORMAT
+    """ The text format exported from a Windmill model. (*.txt)
+    """
+
+    ReNCAT = MDT.ReNCATResultsImporter.JSON_FORMAT
+    """ The JSON format exported from a ReNCAT model. (*.json)
+    """
+
+    OpenDSS = MDT.OpenDSSImporter.DSS_FORMAT
+    """ The OpenDSS file format. (*.dss)
+    """
+
+    MDTProject = MDT.MDTProjectImporterExporter.PROJ_FORMAT
+    """ The project files created by the MDT that include any external data
+    packaged in. (*.mpf)
+    """
+   
     
 class details:
     
@@ -174,10 +169,9 @@ def ReadInputFile(file_name, errLog: Common.Logging.Log=None, **kwargs) -> Commo
     if errLog is None: errLog = Common.Logging.Log()
     
     try:
-        if "__PYMDT_DOC_BUILD__" not in os.environ:
-            return serializer.Load(
-                SUF.INPUT_TYPE_TAG, pymdt.DriverProxy.INSTANCE, binder, errLog
-                )
+        return serializer.Load(
+            SUF.INPUT_TYPE_TAG, MDT.Driver.INSTANCE, binder, errLog
+            )
     except SYSEX as e:
         errLog.AddEntry(Common.Logging.LogCategories.Error, str(e))
     except BaseException as e:
@@ -216,10 +210,9 @@ def WriteInputFile(file_name, errLog: Common.Logging.Log=None) -> Common.Logging
     slog = Common.Logging.Log()
     
     try:
-        if "__PYMDT_DOC_BUILD__" not in os.environ:
-            slog = serializer.Save(
-                SUF.INPUT_TYPE_TAG, pymdt.DriverProxy.INSTANCE, pymdt.MDT_VERSION
-                )
+        slog = serializer.Save(
+            SUF.INPUT_TYPE_TAG, MDT.Driver.INSTANCE, pymdt.MDT_VERSION
+            )
     except SYSEX as e:
         slog.AddEntry(Common.Logging.LogCategories.Error, str(e))
     except BaseException as e:
@@ -261,20 +254,19 @@ def WriteOutputFile(file_name: str, sri, errLog: Common.Logging.Log=None) -> Com
     slog = Common.Logging.Log()
     
     try:
-        if "__PYMDT_DOC_BUILD__" not in os.environ:
-            ext = os.path.splitext(file_name)[-1]
-            fileFmt = SUF.FindFileFormat(SUF.SAVE_OUTPUT_TYPE_TAG, ext)
-            serializer = SUF.GetSerializer(SUF.SAVE_OUTPUT_TYPE_TAG, fileFmt, file_name)
-            drv = pymdt.DriverProxy.INSTANCE
-            drv.OutputDataToSave.Clear()
-            rvm = MDT.ResultViewManager()
-            if not pymdt.utils.details._is_collection(sri): sri = [sri]
-            for r in sri: rvm.get_SolverRunInfos().Add(r)
-            drv.get_ResultViewManagers().Add(rvm)
-            drv.get_OutputDataToSave().Add(rvm)
-            slog = serializer.Save(SUF.OUTPUT_TYPE_TAG, drv, pymdt.MDT_VERSION)
-            drv.get_ResultViewManagers().Remove(rvm)
-            drv.OutputDataToSave.Clear()
+        ext = os.path.splitext(file_name)[-1]
+        fileFmt = SUF.FindFileFormat(SUF.SAVE_OUTPUT_TYPE_TAG, ext)
+        serializer = SUF.GetSerializer(SUF.SAVE_OUTPUT_TYPE_TAG, fileFmt, file_name)
+        drv = MDT.Driver.INSTANCE
+        drv.OutputDataToSave.Clear()
+        rvm = MDT.ResultViewManager()
+        if not pymdt.utils.details._is_collection(sri): sri = [sri]
+        for r in sri: rvm.get_SolverRunInfos().Add(r)
+        drv.get_ResultViewManagers().Add(rvm)
+        drv.get_OutputDataToSave().Add(rvm)
+        slog = serializer.Save(SUF.OUTPUT_TYPE_TAG, drv, pymdt.MDT_VERSION)
+        drv.get_ResultViewManagers().Remove(rvm)
+        drv.OutputDataToSave.Clear()
     except SYSEX as e:
         slog.AddEntry(Common.Logging.LogCategories.Error, str(e))
     except BaseException as e:

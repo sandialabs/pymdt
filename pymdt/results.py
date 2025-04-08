@@ -206,8 +206,7 @@ def GetVariableSelections(config: MDT.SiteUpgradeConfiguration):
     return ret    
 
 def GetFinalSolutionSet(sri: TMO.SolverRunInfo) -> TMO.IterationData:
-    """
-    
+    """    
     One can use the .Configurations property of the returned IterationData
     object to access an iterable collection of the actual
     SiteUpgradeConfiguration objects.

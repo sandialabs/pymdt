@@ -7,19 +7,6 @@ import sys
 sys.path.insert(0, os.path.abspath(".."))
 
 os.environ["__PYMDT_DOC_BUILD__"] = "1"
-os.environ["__PYMDT_DOC_BUILD_DIR__"] = os.path.abspath(os.path.join(".", "mdt_bin"))
-
-print("doc build dir = " + os.environ["__PYMDT_DOC_BUILD_DIR__"])
-
-# print("curr path is " + os.path.abspath("."))
-# items = os.listdir(os.path.abspath("."))
-# for item in items:
-#     print(item)
-
-# print("parent path is " + os.path.abspath(".."))
-# items = os.listdir(os.path.abspath(".."))
-# for item in items:
-#     print(item)
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
@@ -44,7 +31,7 @@ def skip(app, what, name, obj, skip, options):
 
     if what == "module":
         ret = "details" in name or "MDT" in name or \
-              "TMO" in name or "Common" in name or "DriverProxy" in name
+              "TMO" in name or "Common" in name
 
     # if ret:
     #     print(str(what), " ")
