@@ -11,8 +11,8 @@ os.environ["__PYMDT_DOC_BUILD__"] = "1"
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'sandia-pymdt'
-copyright = '2025, John Eddy'
+project = 'PyMDT'
+copyright = '2025 National Technology & Engineering Solutions of Sandia, LLC (NTESS).'
 author = 'Sandia National Laboratories'
 release = '1.4.2520'
 
@@ -33,10 +33,14 @@ def skip(app, what, name, obj, skip, options):
         ret = "details" in name or "MDT" in name or \
               "TMO" in name or "Common" in name
 
-    # if ret:
-    #     print(str(what), " ")
-    #     print(str(name), " ")
-    #     print(str(obj))
+    elif what == "class":
+        ret = name.startswith("__") and name.endswith("__")
+
+    if ret:
+        print("Skipping:", end=" ")
+        print(str(what), end=" ")
+        print(str(name), end=" ")
+        print(str(obj))
 
     return ret
 

@@ -19,8 +19,19 @@ class time_units(Enum):
     years = Common.Time.TimeAccumulation.Units.Years
 
 class find_fail_behavior(Enum):
+    """ An enumeration of the possible responses to a failed attempt to find
+    something in a list using the FindEntityByName function.
+    """
+
     ignore = 0
+    """ Indicates that the find function should just return None.
+    """
+
     throw = 1
+    """ Indicates that the find function should throw an exception.  See the
+    docs for the FindEntityByName function for details of what the exception
+    message will say.
+    """
 
 class text_alignment(Enum):
     top_left = MDT.NodeGroup.TextAlignEnum.TopLeft
@@ -223,7 +234,18 @@ class details:
         details._execute_loggable_property_set_with_undo(
             entity, "Notes", str(kwargs.get("notes", "")), **kwargs
             )
-
+        
+    @staticmethod    
+    def _extract_failure_modes(unrel, **kwargs):
+        fms = kwargs.get("failure_modes")
+        if fms is None: return
+        if not details._is_collection(fms): fms = [fms]
+        for fm in fms:
+            details._execute_1_arg_add_with_undo(
+                unrel, "AddFailureModeCanceled", "get_FailureModes", fm,
+                **kwargs
+                ) 
+            
     @staticmethod
     def _extract_distribution(
         paramName: str, **kwargs
@@ -241,29 +263,6 @@ class details:
             dist = MDT.CustomDistributionWrapper(dist)
         return dist
 
-    @staticmethod
-    def _extract_failure_distributions(fm: MDT.FailureMode, **kwargs):
-        details._execute_loggable_property_set_with_undo(
-            fm, "MTBF", details._extract_distribution("mtbf", **kwargs),
-            **kwargs
-            )
-        
-        details._execute_loggable_property_set_with_undo(
-            fm, "MTTR", details._extract_distribution("mttr", **kwargs),
-            **kwargs
-            )
-            
-    @staticmethod    
-    def _extract_failure_modes(unrel, **kwargs):
-        fms = kwargs.get("failure_modes")
-        if fms is None: return
-        if not details._is_collection(fms): fms = [fms]
-        for fm in fms:
-            pymdt.utils.details._execute_1_arg_add_with_undo(
-                unrel, "AddFailureModeCanceled", "get_FailureModes", fm,
-                **kwargs
-                ) 
-            
     @staticmethod
     def _extract_impedance(impedes, **kwargs):
         imp = kwargs.get("impedance")
@@ -310,30 +309,6 @@ class details:
     def _extract_text_alignment(**kwargs) -> MDT.NodeGroup.TextAlignEnum:
         return kwargs.get("text_alignment", text_alignment.top_left).value
         
-    @staticmethod
-    def build_failure_mode(name: str, **kwargs) -> MDT.FailureMode:
-        fm = MDT.FailureMode(name)
-        details._extract_guid(fm, **kwargs)
-        details._extract_failure_distributions(fm, **kwargs)
-        details._extract_notes(fm, **kwargs)
-        return fm
- 
-    @staticmethod
-    def build_fragility_curve(name: str, **kwargs) -> MDT.FragilityCurve:
-        fc = MDT.FragilityCurve(name)
-        details._extract_guid(fc, **kwargs)
-        details._execute_loggable_property_set_with_undo(
-            fc, "MTTR", details._extract_distribution("mttr", **kwargs),
-            **kwargs
-            )
-        details._execute_loggable_property_set_with_undo(
-            fc, "ProbabilityGenerator", 
-            details._extract_distribution("probability_generator", **kwargs),
-            **kwargs
-            )
-        details._extract_notes(fc, **kwargs)
-        return fc
- 
 def FindEntityByName(all_ents, name: str, **kwargs):
     """ Searches through a collection to find an item with the given name.
     
@@ -429,138 +404,6 @@ def MakeUsableName(all_ents, name: str, **kwargs) -> str:
                 strt += 1
 
     return name
-
-def MakeFailureMode(u: MDT.IUnreliable, name: str, **kwargs) -> MDT.FailureMode:
-    """ This helper function creates a new failure mode, extracts any
-    provided properties, loads it into its owner (u), and returns it.
-        
-    Parameters
-    ----------
-    u: MDT.IUnreliable
-        The unreliable entity for which this failure mode is being built.  This
-        argument can be None and if no owner is provided or the owner provided
-        is None, then the returned mode will not be added to any owner.  It
-        should thus be added to an owner at some later time.
-    name: str
-        The name to be given to the new failure mode.  Names of failure modes
-        within an unreliable entity must be unique.
-    kwargs: dict
-        A dictionary of all the variable arguments provided to this function.
-        The arguments used by this method include:
-        
-        mtbf: Common.Distributions.IDistribution
-            The probability distribution describing the mean time between
-            failures for this failure mode.  This could also be a float in which
-            case a fixed distribution will be used.
-        mttr: Common.Distributions.IDistribution
-            The probability distribution describing the mean time to repair for
-            this failure mode.  This could also be a float in which case a fixed
-            distribution will be used.
-        owner:
-            An optional parameter to serve as the owner of the new failure mode.
-            This is typically used if one does not want the failure mode added
-            to the unreliable asset as part of this call in which case None is
-            specified as the owner.  If no owner is provided, then the supplied
-            unreliable (u) is used.
-        err_log: Common.Logging.Log
-            The log into which to record any errors encountered during the
-            building, loading, or saving of the new item.  If this argument is
-            not provided, messages will be recorded into the
-            pymdt.GlobalErrorLog instance.
-        undos: Common.Undoing.IUndoPack
-            An optional undo pack into which to load the undoable objects
-            generated during this operation (if any).
-        notes: str
-            Any notes to assign to the resulting failure mode.
-        guid:
-            The unique identifier to use for this new asset.  This can be
-            a string formatted as described in:
-            https://learn.microsoft.com/en-us/dotnet/api/system.guid.-ctor?view=net-8.0#system-guid-ctor(system-string)
-            or a System.Guid instance.  If not provided, a newly created,
-            random Guid is used.
-            
-    Returns
-    -------
-    MDT.FailureMode:
-        The newly created and loaded failure mode.
-    """
-    fm = details.build_failure_mode(name, **kwargs)
-    owner = pymdt.core.details._extract_owner(u, **kwargs)
-    if owner is not None:
-        details._execute_1_arg_add_with_undo(
-            owner, "AddFailureModeCanceled", "get_FailureModes", fm, **kwargs
-            )
-    return fm
-    
-def MakeFragilityCurve(
-    f: MDT.IFragile, name: str, haz: MDT.Hazard, **kwargs
-    ) -> MDT.FragilityCurve:
-    """ This helper function creates a new fragility curve, extracts any
-    provided properties, loads it into its owner (f) mapped to the supplied
-    hazard, and returns it.
-        
-    Parameters
-    ----------
-    f: MDT.IFragile
-        The fragile entity for which this fragility curve is being built. This
-        parameter can be None and if so, and if no explicit non-None owner is
-        provided, the fragility curve will be built and returned but no mapping
-        to haz will take place.  At some later time, the newly created fragility
-        curve should be added to an asset mapped to a hazard.
-    name: str
-        The name to be given to the new fragility curve.  Names of fragility
-        curves within an unreliable entity must be unique.
-    haz: MDT.Hazard
-        The hazard to which this fragility curve applies in the given fragile
-        entity.  If the parameter f is None, or if an explicit owner=None is
-        provided, this parameter can also be None. Otherwise, it cannot.
-    kwargs: dict
-        A dictionary of all the variable arguments provided to this function.
-        The arguments used by this method include:
-        
-        mttr: Common.Distributions.IDistribution
-            The probability distribution describing the mean time to repair for
-            this fragility curve.  This could also be a float in which case a
-            fixed distribution will be used.
-        probability_generator: Common.Distributions.IDistribution
-            The distribution that determines the likelihood of failure in terms
-            of the hazard intensity units for this fragility.
-        owner:
-            An optional parameter to serve as the owner of the new fragility
-            curve. This is typically used if one does not want the fragility
-            curve added to the fragile asset as part of this call in which case
-            None is specified as the owner.  If no owner is provided, then the
-            supplied fragile asset (f) is used.
-        err_log: Common.Logging.Log
-            The log into which to record any errors encountered during the
-            building, loading, or saving of the new item.  If this argument is
-            not provided, messages will be recorded into the
-            pymdt.GlobalErrorLog instance.
-        undos: Common.Undoing.IUndoPack
-            An optional undo pack into which to load the undoable objects
-            generated during this operation (if any).
-        notes: str
-            Any notes to assign to the resulting fragility curve.
-        guid:
-            The unique identifier to use for this new asset.  This can be
-            a string formatted as described in:
-            https://learn.microsoft.com/en-us/dotnet/api/system.guid.-ctor?view=net-8.0#system-guid-ctor(system-string)
-            or a System.Guid instance.  If not provided, a newly created,
-            random Guid is used.
-            
-    Returns
-    -------
-    MDT.FragilityCurve:
-        The newly created and loaded fragility curve.
-    """
-    fc = details.build_fragility_curve(name, **kwargs)
-    owner = pymdt.core.details._extract_owner(f, **kwargs)
-    if owner is not None:
-        details._execute_2_arg_add_with_undo(
-            owner, "AddFragilityCurveCanceled", "get_FragilityCurves", haz, fc,
-            **kwargs
-            )
-    return fc
 
 def ExecutePropertySet(
     obj, propName, value, custom_cancel_evt_name=None, **kwargs
