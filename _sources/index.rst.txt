@@ -18,3 +18,8 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+
+Visit our GitHub Repo
+=====================
+
+`PyMDT on GitHub <https://github.com/sandialabs/pymdt>`_

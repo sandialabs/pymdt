@@ -316,7 +316,18 @@
         <span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
             <span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;Notes&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;notes&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)),</span> <span class="o">**</span><span class="n">kwargs</span>
             <span class="p">)</span>
-
+        
+    <span class="nd">@staticmethod</span>    
+    <span class="k">def</span> <span class="nf">_extract_failure_modes</span><span class="p">(</span><span class="n">unrel</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">fms</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;failure_modes&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">fms</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="k">return</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">details</span><span class="o">.</span><span class="n">_is_collection</span><span class="p">(</span><span class="n">fms</span><span class="p">):</span> <span class="n">fms</span> <span class="o">=</span> <span class="p">[</span><span class="n">fms</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">fm</span> <span class="ow">in</span> <span class="n">fms</span><span class="p">:</span>
+            <span class="n">details</span><span class="o">.</span><span class="n">_execute_1_arg_add_with_undo</span><span class="p">(</span>
+                <span class="n">unrel</span><span class="p">,</span> <span class="s2">&quot;AddFailureModeCanceled&quot;</span><span class="p">,</span> <span class="s2">&quot;get_FailureModes&quot;</span><span class="p">,</span> <span class="n">fm</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">kwargs</span>
+                <span class="p">)</span> 
+            
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_extract_distribution</span><span class="p">(</span>
         <span class="n">paramName</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
@@ -334,29 +345,6 @@
             <span class="n">dist</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">CustomDistributionWrapper</span><span class="p">(</span><span class="n">dist</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">dist</span>
 
-    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_extract_failure_distributions</span><span class="p">(</span><span class="n">fm</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">FailureMode</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
-            <span class="n">fm</span><span class="p">,</span> <span class="s2">&quot;MTBF&quot;</span><span class="p">,</span> <span class="n">details</span><span class="o">.</span><span class="n">_extract_distribution</span><span class="p">(</span><span class="s2">&quot;mtbf&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">),</span>
-            <span class="o">**</span><span class="n">kwargs</span>
-            <span class="p">)</span>
-        
-        <span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
-            <span class="n">fm</span><span class="p">,</span> <span class="s2">&quot;MTTR&quot;</span><span class="p">,</span> <span class="n">details</span><span class="o">.</span><span class="n">_extract_distribution</span><span class="p">(</span><span class="s2">&quot;mttr&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">),</span>
-            <span class="o">**</span><span class="n">kwargs</span>
-            <span class="p">)</span>
-            
-    <span class="nd">@staticmethod</span>    
-    <span class="k">def</span> <span class="nf">_extract_failure_modes</span><span class="p">(</span><span class="n">unrel</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">fms</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;failure_modes&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">fms</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="k">return</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">details</span><span class="o">.</span><span class="n">_is_collection</span><span class="p">(</span><span class="n">fms</span><span class="p">):</span> <span class="n">fms</span> <span class="o">=</span> <span class="p">[</span><span class="n">fms</span><span class="p">]</span>
-        <span class="k">for</span> <span class="n">fm</span> <span class="ow">in</span> <span class="n">fms</span><span class="p">:</span>
-            <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_execute_1_arg_add_with_undo</span><span class="p">(</span>
-                <span class="n">unrel</span><span class="p">,</span> <span class="s2">&quot;AddFailureModeCanceled&quot;</span><span class="p">,</span> <span class="s2">&quot;get_FailureModes&quot;</span><span class="p">,</span> <span class="n">fm</span><span class="p">,</span>
-                <span class="o">**</span><span class="n">kwargs</span>
-                <span class="p">)</span> 
-            
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_extract_impedance</span><span class="p">(</span><span class="n">impedes</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">imp</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;impedance&quot;</span><span class="p">)</span>
@@ -403,30 +391,6 @@
     <span class="k">def</span> <span class="nf">_extract_text_alignment</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">NodeGroup</span><span class="o">.</span><span class="n">TextAlignEnum</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;text_alignment&quot;</span><span class="p">,</span> <span class="n">text_alignment</span><span class="o">.</span><span class="n">top_left</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
         
-    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">build_failure_mode</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">FailureMode</span><span class="p">:</span>
-        <span class="n">fm</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">FailureMode</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-        <span class="n">details</span><span class="o">.</span><span class="n">_extract_guid</span><span class="p">(</span><span class="n">fm</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="n">details</span><span class="o">.</span><span class="n">_extract_failure_distributions</span><span class="p">(</span><span class="n">fm</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="n">details</span><span class="o">.</span><span class="n">_extract_notes</span><span class="p">(</span><span class="n">fm</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">fm</span>
- 
-    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">build_fragility_curve</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">FragilityCurve</span><span class="p">:</span>
-        <span class="n">fc</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">FragilityCurve</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-        <span class="n">details</span><span class="o">.</span><span class="n">_extract_guid</span><span class="p">(</span><span class="n">fc</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
-            <span class="n">fc</span><span class="p">,</span> <span class="s2">&quot;MTTR&quot;</span><span class="p">,</span> <span class="n">details</span><span class="o">.</span><span class="n">_extract_distribution</span><span class="p">(</span><span class="s2">&quot;mttr&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">),</span>
-            <span class="o">**</span><span class="n">kwargs</span>
-            <span class="p">)</span>
-        <span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
-            <span class="n">fc</span><span class="p">,</span> <span class="s2">&quot;ProbabilityGenerator&quot;</span><span class="p">,</span> 
-            <span class="n">details</span><span class="o">.</span><span class="n">_extract_distribution</span><span class="p">(</span><span class="s2">&quot;probability_generator&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">),</span>
-            <span class="o">**</span><span class="n">kwargs</span>
-            <span class="p">)</span>
-        <span class="n">details</span><span class="o">.</span><span class="n">_extract_notes</span><span class="p">(</span><span class="n">fc</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">fc</span>
- 
 <div class="viewcode-block" id="FindEntityByName">
 <a class="viewcode-back" href="../../pymdt.html#pymdt.utils.FindEntityByName">[docs]</a>
 <span class="k">def</span> <span class="nf">FindEntityByName</span><span class="p">(</span><span class="n">all_ents</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -527,144 +491,6 @@
                 <span class="n">strt</span> <span class="o">+=</span> <span class="mi">1</span>
 
     <span class="k">return</span> <span class="n">name</span></div>
-
-
-<div class="viewcode-block" id="MakeFailureMode">
-<a class="viewcode-back" href="../../pymdt.html#pymdt.utils.MakeFailureMode">[docs]</a>
-<span class="k">def</span> <span class="nf">MakeFailureMode</span><span class="p">(</span><span class="n">u</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">IUnreliable</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">FailureMode</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; This helper function creates a new failure mode, extracts any</span>
-<span class="sd">    provided properties, loads it into its owner (u), and returns it.</span>
-<span class="sd">        </span>
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    u: MDT.IUnreliable</span>
-<span class="sd">        The unreliable entity for which this failure mode is being built.  This</span>
-<span class="sd">        argument can be None and if no owner is provided or the owner provided</span>
-<span class="sd">        is None, then the returned mode will not be added to any owner.  It</span>
-<span class="sd">        should thus be added to an owner at some later time.</span>
-<span class="sd">    name: str</span>
-<span class="sd">        The name to be given to the new failure mode.  Names of failure modes</span>
-<span class="sd">        within an unreliable entity must be unique.</span>
-<span class="sd">    kwargs: dict</span>
-<span class="sd">        A dictionary of all the variable arguments provided to this function.</span>
-<span class="sd">        The arguments used by this method include:</span>
-<span class="sd">        </span>
-<span class="sd">        mtbf: Common.Distributions.IDistribution</span>
-<span class="sd">            The probability distribution describing the mean time between</span>
-<span class="sd">            failures for this failure mode.  This could also be a float in which</span>
-<span class="sd">            case a fixed distribution will be used.</span>
-<span class="sd">        mttr: Common.Distributions.IDistribution</span>
-<span class="sd">            The probability distribution describing the mean time to repair for</span>
-<span class="sd">            this failure mode.  This could also be a float in which case a fixed</span>
-<span class="sd">            distribution will be used.</span>
-<span class="sd">        owner:</span>
-<span class="sd">            An optional parameter to serve as the owner of the new failure mode.</span>
-<span class="sd">            This is typically used if one does not want the failure mode added</span>
-<span class="sd">            to the unreliable asset as part of this call in which case None is</span>
-<span class="sd">            specified as the owner.  If no owner is provided, then the supplied</span>
-<span class="sd">            unreliable (u) is used.</span>
-<span class="sd">        err_log: Common.Logging.Log</span>
-<span class="sd">            The log into which to record any errors encountered during the</span>
-<span class="sd">            building, loading, or saving of the new item.  If this argument is</span>
-<span class="sd">            not provided, messages will be recorded into the</span>
-<span class="sd">            pymdt.GlobalErrorLog instance.</span>
-<span class="sd">        undos: Common.Undoing.IUndoPack</span>
-<span class="sd">            An optional undo pack into which to load the undoable objects</span>
-<span class="sd">            generated during this operation (if any).</span>
-<span class="sd">        notes: str</span>
-<span class="sd">            Any notes to assign to the resulting failure mode.</span>
-<span class="sd">        guid:</span>
-<span class="sd">            The unique identifier to use for this new asset.  This can be</span>
-<span class="sd">            a string formatted as described in:</span>
-<span class="sd">            https://learn.microsoft.com/en-us/dotnet/api/system.guid.-ctor?view=net-8.0#system-guid-ctor(system-string)</span>
-<span class="sd">            or a System.Guid instance.  If not provided, a newly created,</span>
-<span class="sd">            random Guid is used.</span>
-<span class="sd">            </span>
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    MDT.FailureMode:</span>
-<span class="sd">        The newly created and loaded failure mode.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">fm</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">build_failure_mode</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="n">owner</span> <span class="o">=</span> <span class="n">pymdt</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_extract_owner</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">owner</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">details</span><span class="o">.</span><span class="n">_execute_1_arg_add_with_undo</span><span class="p">(</span>
-            <span class="n">owner</span><span class="p">,</span> <span class="s2">&quot;AddFailureModeCanceled&quot;</span><span class="p">,</span> <span class="s2">&quot;get_FailureModes&quot;</span><span class="p">,</span> <span class="n">fm</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-            <span class="p">)</span>
-    <span class="k">return</span> <span class="n">fm</span></div>
-
-    
-<div class="viewcode-block" id="MakeFragilityCurve">
-<a class="viewcode-back" href="../../pymdt.html#pymdt.utils.MakeFragilityCurve">[docs]</a>
-<span class="k">def</span> <span class="nf">MakeFragilityCurve</span><span class="p">(</span>
-    <span class="n">f</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">IFragile</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">haz</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Hazard</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">FragilityCurve</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; This helper function creates a new fragility curve, extracts any</span>
-<span class="sd">    provided properties, loads it into its owner (f) mapped to the supplied</span>
-<span class="sd">    hazard, and returns it.</span>
-<span class="sd">        </span>
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    f: MDT.IFragile</span>
-<span class="sd">        The fragile entity for which this fragility curve is being built. This</span>
-<span class="sd">        parameter can be None and if so, and if no explicit non-None owner is</span>
-<span class="sd">        provided, the fragility curve will be built and returned but no mapping</span>
-<span class="sd">        to haz will take place.  At some later time, the newly created fragility</span>
-<span class="sd">        curve should be added to an asset mapped to a hazard.</span>
-<span class="sd">    name: str</span>
-<span class="sd">        The name to be given to the new fragility curve.  Names of fragility</span>
-<span class="sd">        curves within an unreliable entity must be unique.</span>
-<span class="sd">    haz: MDT.Hazard</span>
-<span class="sd">        The hazard to which this fragility curve applies in the given fragile</span>
-<span class="sd">        entity.  If the parameter f is None, or if an explicit owner=None is</span>
-<span class="sd">        provided, this parameter can also be None. Otherwise, it cannot.</span>
-<span class="sd">    kwargs: dict</span>
-<span class="sd">        A dictionary of all the variable arguments provided to this function.</span>
-<span class="sd">        The arguments used by this method include:</span>
-<span class="sd">        </span>
-<span class="sd">        mttr: Common.Distributions.IDistribution</span>
-<span class="sd">            The probability distribution describing the mean time to repair for</span>
-<span class="sd">            this fragility curve.  This could also be a float in which case a</span>
-<span class="sd">            fixed distribution will be used.</span>
-<span class="sd">        probability_generator: Common.Distributions.IDistribution</span>
-<span class="sd">            The distribution that determines the likelihood of failure in terms</span>
-<span class="sd">            of the hazard intensity units for this fragility.</span>
-<span class="sd">        owner:</span>
-<span class="sd">            An optional parameter to serve as the owner of the new fragility</span>
-<span class="sd">            curve. This is typically used if one does not want the fragility</span>
-<span class="sd">            curve added to the fragile asset as part of this call in which case</span>
-<span class="sd">            None is specified as the owner.  If no owner is provided, then the</span>
-<span class="sd">            supplied fragile asset (f) is used.</span>
-<span class="sd">        err_log: Common.Logging.Log</span>
-<span class="sd">            The log into which to record any errors encountered during the</span>
-<span class="sd">            building, loading, or saving of the new item.  If this argument is</span>
-<span class="sd">            not provided, messages will be recorded into the</span>
-<span class="sd">            pymdt.GlobalErrorLog instance.</span>
-<span class="sd">        undos: Common.Undoing.IUndoPack</span>
-<span class="sd">            An optional undo pack into which to load the undoable objects</span>
-<span class="sd">            generated during this operation (if any).</span>
-<span class="sd">        notes: str</span>
-<span class="sd">            Any notes to assign to the resulting fragility curve.</span>
-<span class="sd">        guid:</span>
-<span class="sd">            The unique identifier to use for this new asset.  This can be</span>
-<span class="sd">            a string formatted as described in:</span>
-<span class="sd">            https://learn.microsoft.com/en-us/dotnet/api/system.guid.-ctor?view=net-8.0#system-guid-ctor(system-string)</span>
-<span class="sd">            or a System.Guid instance.  If not provided, a newly created,</span>
-<span class="sd">            random Guid is used.</span>
-<span class="sd">            </span>
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    MDT.FragilityCurve:</span>
-<span class="sd">        The newly created and loaded fragility curve.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">fc</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">build_fragility_curve</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="n">owner</span> <span class="o">=</span> <span class="n">pymdt</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_extract_owner</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">owner</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">details</span><span class="o">.</span><span class="n">_execute_2_arg_add_with_undo</span><span class="p">(</span>
-            <span class="n">owner</span><span class="p">,</span> <span class="s2">&quot;AddFragilityCurveCanceled&quot;</span><span class="p">,</span> <span class="s2">&quot;get_FragilityCurves&quot;</span><span class="p">,</span> <span class="n">haz</span><span class="p">,</span> <span class="n">fc</span><span class="p">,</span>
-            <span class="o">**</span><span class="n">kwargs</span>
-            <span class="p">)</span>
-    <span class="k">return</span> <span class="n">fc</span></div>
 
 
 <div class="viewcode-block" id="ExecutePropertySet">
