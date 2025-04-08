@@ -12,7 +12,7 @@ os.environ["__PYMDT_DOC_BUILD__"] = "1"
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'PyMDT'
-copyright = '2025 National Technology & Engineering Solutions of Sandia, LLC (NTESS).'
+copyright = '2025 National Technology & Engineering Solutions of Sandia, LLC (NTESS)'
 author = 'Sandia National Laboratories'
 release = '1.4.2520'
 
