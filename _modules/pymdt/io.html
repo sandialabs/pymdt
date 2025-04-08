@@ -89,30 +89,25 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A class used to organize the import file formats that can be used to read</span>
 <span class="sd">       files from other applications.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    
-    <span class="k">if</span> <span class="s2">&quot;__PYMDT_DOC_BUILD__&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
-        <span class="n">Windmill</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">WindmillTextImporter</span><span class="o">.</span><span class="n">TXT_FORMAT</span>
-        <span class="n">ReNCAT</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">ReNCATResultsImporter</span><span class="o">.</span><span class="n">JSON_FORMAT</span>
-        <span class="n">OpenDSS</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">OpenDSSImporter</span><span class="o">.</span><span class="n">DSS_FORMAT</span>
-        <span class="n">MDTProject</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">MDTProjectImporterExporter</span><span class="o">.</span><span class="n">PROJ_FORMAT</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">Windmill</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot; The text format exported from a Windmill model. (*.txt)</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-    
-        <span class="n">ReNCAT</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot; The JSON format exported from a ReNCAT model. (*.json)</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-    
-        <span class="n">OpenDSS</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot; The OpenDSS file format. (*.dss)</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-    
-        <span class="n">MDTProject</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot; The project files created by the MDT that include any external data</span>
-<span class="sd">        packaged in. (*.mpf)</span>
-<span class="sd">        &quot;&quot;&quot;</span></div>
+   
+    <span class="n">Windmill</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">WindmillTextImporter</span><span class="o">.</span><span class="n">TXT_FORMAT</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; The text format exported from a Windmill model. (*.txt)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
+    <span class="n">ReNCAT</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">ReNCATResultsImporter</span><span class="o">.</span><span class="n">JSON_FORMAT</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; The JSON format exported from a ReNCAT model. (*.json)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">OpenDSS</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">OpenDSSImporter</span><span class="o">.</span><span class="n">DSS_FORMAT</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; The OpenDSS file format. (*.dss)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">MDTProject</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">MDTProjectImporterExporter</span><span class="o">.</span><span class="n">PROJ_FORMAT</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; The project files created by the MDT that include any external data</span>
+<span class="sd">    packaged in. (*.mpf)</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+   
     
 <span class="k">class</span> <span class="nc">details</span><span class="p">:</span>
     
@@ -255,10 +250,9 @@
     <span class="k">if</span> <span class="n">errLog</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">errLog</span> <span class="o">=</span> <span class="n">Common</span><span class="o">.</span><span class="n">Logging</span><span class="o">.</span><span class="n">Log</span><span class="p">()</span>
     
     <span class="k">try</span><span class="p">:</span>
-        <span class="k">if</span> <span class="s2">&quot;__PYMDT_DOC_BUILD__&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">serializer</span><span class="o">.</span><span class="n">Load</span><span class="p">(</span>
-                <span class="n">SUF</span><span class="o">.</span><span class="n">INPUT_TYPE_TAG</span><span class="p">,</span> <span class="n">pymdt</span><span class="o">.</span><span class="n">DriverProxy</span><span class="o">.</span><span class="n">INSTANCE</span><span class="p">,</span> <span class="n">binder</span><span class="p">,</span> <span class="n">errLog</span>
-                <span class="p">)</span>
+        <span class="k">return</span> <span class="n">serializer</span><span class="o">.</span><span class="n">Load</span><span class="p">(</span>
+            <span class="n">SUF</span><span class="o">.</span><span class="n">INPUT_TYPE_TAG</span><span class="p">,</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Driver</span><span class="o">.</span><span class="n">INSTANCE</span><span class="p">,</span> <span class="n">binder</span><span class="p">,</span> <span class="n">errLog</span>
+            <span class="p">)</span>
     <span class="k">except</span> <span class="n">SYSEX</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="n">errLog</span><span class="o">.</span><span class="n">AddEntry</span><span class="p">(</span><span class="n">Common</span><span class="o">.</span><span class="n">Logging</span><span class="o">.</span><span class="n">LogCategories</span><span class="o">.</span><span class="n">Error</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
     <span class="k">except</span> <span class="ne">BaseException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
@@ -300,10 +294,9 @@
     <span class="n">slog</span> <span class="o">=</span> <span class="n">Common</span><span class="o">.</span><span class="n">Logging</span><span class="o">.</span><span class="n">Log</span><span class="p">()</span>
     
     <span class="k">try</span><span class="p">:</span>
-        <span class="k">if</span> <span class="s2">&quot;__PYMDT_DOC_BUILD__&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
-            <span class="n">slog</span> <span class="o">=</span> <span class="n">serializer</span><span class="o">.</span><span class="n">Save</span><span class="p">(</span>
-                <span class="n">SUF</span><span class="o">.</span><span class="n">INPUT_TYPE_TAG</span><span class="p">,</span> <span class="n">pymdt</span><span class="o">.</span><span class="n">DriverProxy</span><span class="o">.</span><span class="n">INSTANCE</span><span class="p">,</span> <span class="n">pymdt</span><span class="o">.</span><span class="n">MDT_VERSION</span>
-                <span class="p">)</span>
+        <span class="n">slog</span> <span class="o">=</span> <span class="n">serializer</span><span class="o">.</span><span class="n">Save</span><span class="p">(</span>
+            <span class="n">SUF</span><span class="o">.</span><span class="n">INPUT_TYPE_TAG</span><span class="p">,</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Driver</span><span class="o">.</span><span class="n">INSTANCE</span><span class="p">,</span> <span class="n">pymdt</span><span class="o">.</span><span class="n">MDT_VERSION</span>
+            <span class="p">)</span>
     <span class="k">except</span> <span class="n">SYSEX</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="n">slog</span><span class="o">.</span><span class="n">AddEntry</span><span class="p">(</span><span class="n">Common</span><span class="o">.</span><span class="n">Logging</span><span class="o">.</span><span class="n">LogCategories</span><span class="o">.</span><span class="n">Error</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
     <span class="k">except</span> <span class="ne">BaseException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
@@ -348,20 +341,19 @@
     <span class="n">slog</span> <span class="o">=</span> <span class="n">Common</span><span class="o">.</span><span class="n">Logging</span><span class="o">.</span><span class="n">Log</span><span class="p">()</span>
     
     <span class="k">try</span><span class="p">:</span>
-        <span class="k">if</span> <span class="s2">&quot;__PYMDT_DOC_BUILD__&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
-            <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">file_name</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-            <span class="n">fileFmt</span> <span class="o">=</span> <span class="n">SUF</span><span class="o">.</span><span class="n">FindFileFormat</span><span class="p">(</span><span class="n">SUF</span><span class="o">.</span><span class="n">SAVE_OUTPUT_TYPE_TAG</span><span class="p">,</span> <span class="n">ext</span><span class="p">)</span>
-            <span class="n">serializer</span> <span class="o">=</span> <span class="n">SUF</span><span class="o">.</span><span class="n">GetSerializer</span><span class="p">(</span><span class="n">SUF</span><span class="o">.</span><span class="n">SAVE_OUTPUT_TYPE_TAG</span><span class="p">,</span> <span class="n">fileFmt</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
-            <span class="n">drv</span> <span class="o">=</span> <span class="n">pymdt</span><span class="o">.</span><span class="n">DriverProxy</span><span class="o">.</span><span class="n">INSTANCE</span>
-            <span class="n">drv</span><span class="o">.</span><span class="n">OutputDataToSave</span><span class="o">.</span><span class="n">Clear</span><span class="p">()</span>
-            <span class="n">rvm</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">ResultViewManager</span><span class="p">()</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_is_collection</span><span class="p">(</span><span class="n">sri</span><span class="p">):</span> <span class="n">sri</span> <span class="o">=</span> <span class="p">[</span><span class="n">sri</span><span class="p">]</span>
-            <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">sri</span><span class="p">:</span> <span class="n">rvm</span><span class="o">.</span><span class="n">get_SolverRunInfos</span><span class="p">()</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
-            <span class="n">drv</span><span class="o">.</span><span class="n">get_ResultViewManagers</span><span class="p">()</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">rvm</span><span class="p">)</span>
-            <span class="n">drv</span><span class="o">.</span><span class="n">get_OutputDataToSave</span><span class="p">()</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">rvm</span><span class="p">)</span>
-            <span class="n">slog</span> <span class="o">=</span> <span class="n">serializer</span><span class="o">.</span><span class="n">Save</span><span class="p">(</span><span class="n">SUF</span><span class="o">.</span><span class="n">OUTPUT_TYPE_TAG</span><span class="p">,</span> <span class="n">drv</span><span class="p">,</span> <span class="n">pymdt</span><span class="o">.</span><span class="n">MDT_VERSION</span><span class="p">)</span>
-            <span class="n">drv</span><span class="o">.</span><span class="n">get_ResultViewManagers</span><span class="p">()</span><span class="o">.</span><span class="n">Remove</span><span class="p">(</span><span class="n">rvm</span><span class="p">)</span>
-            <span class="n">drv</span><span class="o">.</span><span class="n">OutputDataToSave</span><span class="o">.</span><span class="n">Clear</span><span class="p">()</span>
+        <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">file_name</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">fileFmt</span> <span class="o">=</span> <span class="n">SUF</span><span class="o">.</span><span class="n">FindFileFormat</span><span class="p">(</span><span class="n">SUF</span><span class="o">.</span><span class="n">SAVE_OUTPUT_TYPE_TAG</span><span class="p">,</span> <span class="n">ext</span><span class="p">)</span>
+        <span class="n">serializer</span> <span class="o">=</span> <span class="n">SUF</span><span class="o">.</span><span class="n">GetSerializer</span><span class="p">(</span><span class="n">SUF</span><span class="o">.</span><span class="n">SAVE_OUTPUT_TYPE_TAG</span><span class="p">,</span> <span class="n">fileFmt</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
+        <span class="n">drv</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Driver</span><span class="o">.</span><span class="n">INSTANCE</span>
+        <span class="n">drv</span><span class="o">.</span><span class="n">OutputDataToSave</span><span class="o">.</span><span class="n">Clear</span><span class="p">()</span>
+        <span class="n">rvm</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">ResultViewManager</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_is_collection</span><span class="p">(</span><span class="n">sri</span><span class="p">):</span> <span class="n">sri</span> <span class="o">=</span> <span class="p">[</span><span class="n">sri</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">sri</span><span class="p">:</span> <span class="n">rvm</span><span class="o">.</span><span class="n">get_SolverRunInfos</span><span class="p">()</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+        <span class="n">drv</span><span class="o">.</span><span class="n">get_ResultViewManagers</span><span class="p">()</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">rvm</span><span class="p">)</span>
+        <span class="n">drv</span><span class="o">.</span><span class="n">get_OutputDataToSave</span><span class="p">()</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">rvm</span><span class="p">)</span>
+        <span class="n">slog</span> <span class="o">=</span> <span class="n">serializer</span><span class="o">.</span><span class="n">Save</span><span class="p">(</span><span class="n">SUF</span><span class="o">.</span><span class="n">OUTPUT_TYPE_TAG</span><span class="p">,</span> <span class="n">drv</span><span class="p">,</span> <span class="n">pymdt</span><span class="o">.</span><span class="n">MDT_VERSION</span><span class="p">)</span>
+        <span class="n">drv</span><span class="o">.</span><span class="n">get_ResultViewManagers</span><span class="p">()</span><span class="o">.</span><span class="n">Remove</span><span class="p">(</span><span class="n">rvm</span><span class="p">)</span>
+        <span class="n">drv</span><span class="o">.</span><span class="n">OutputDataToSave</span><span class="o">.</span><span class="n">Clear</span><span class="p">()</span>
     <span class="k">except</span> <span class="n">SYSEX</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="n">slog</span><span class="o">.</span><span class="n">AddEntry</span><span class="p">(</span><span class="n">Common</span><span class="o">.</span><span class="n">Logging</span><span class="o">.</span><span class="n">LogCategories</span><span class="o">.</span><span class="n">Error</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
     <span class="k">except</span> <span class="ne">BaseException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
