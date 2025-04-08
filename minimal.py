@@ -9,7 +9,7 @@ import random
 #sys.argv.append("MDT_VERSION=1.4.2518.0")
 
 # This line is only necessary if you want to reference MDT in a non-standard location.
-sys.argv.append("MDT_BIN_DIR=C:/Users/jpeddy/Documents/dev/MDT/trunk/MDT-GUI/bin/x64/Debug")
+#sys.argv.append("MDT_BIN_DIR=C:/Users/jpeddy/Documents/dev/MDT/trunk/MDT-GUI/bin/x64/Debug")
 
 import pymdt
 import pymdt.io
@@ -41,7 +41,7 @@ def main():
 
 
     #===========================================================================
-    # The driver is a singleton that provided access to all MDT input and
+    # The driver is a singleton that provides access to all MDT input and
     # output.  Extract it and store it for use below.
     #===========================================================================
     drv = MDT.Driver.INSTANCE
@@ -67,8 +67,8 @@ def main():
     #===========================================================================
     # Next for this model we will configure the design basis threats.
     #===========================================================================
-    # They are created as specialized failure modes of the power utility that in
-    # addition to having failure characteristics, can have Hazard definitions.
+    # They are created as specialized failure modes of the power utility that,
+    # in addition to having failure characteristics, can have Hazards.
     
     # Create a DBT and call it DBT 1.  The mean time between failures will be
     # exponential with a mean of 10 years (87,600 hrs) and a fixed duration of
@@ -88,7 +88,8 @@ def main():
     #===========================================================================
     # In the example below, the data is added as a separate call to the creation
     # of the solar resource.  Alternatively, it could have been provided as a
-    # data=[] argument to the Make function.
+    # data=[] argument to the Make function.  Note that the data is 1 year of
+    # hourly data samples or an "8760" dataset.
     sr1 = MakeSolarResource(
         s, "Solar Resource 1", period=1, period_units=time_units.hours,
         interval=1, interval_units=time_units.years
@@ -396,11 +397,11 @@ def main():
     #===========================================================================
     # Define all the diesel tanks in the model.
     #===========================================================================
-    # They will later be assigned to generators when they get built.  Note that
+    # Tanks will later be assigned to generators when they get built.  Note that
     # the specifications DB can be accessed via the Driver as shown.
     #
     # This is the first example of defining a specified type.  Note the
-    # stipulation of "base_spec" and "specs".  "base_spec" is a singular spec
+    # provision of "base_spec" and "specs".  "base_spec" is a singular spec
     # but "specs" can be singular or a list of specs (or names of specs).
     #
     # Also note the inclusion of a loc argument.  Components that appear on the
@@ -420,7 +421,7 @@ def main():
     #===========================================================================
     # Create all busses and add them to the Microgrid.
     #===========================================================================
-    # The MakeBus function will add the new busses into the MDT.
+    # The MakeBus function will add the new busses into the provided microgrid.
     bus4 = MakeBus(mg, "4", loc=(241.3, 342.6))
     #===========================================================================
 
@@ -430,7 +431,8 @@ def main():
 
     #===========================================================================
     # Create a solar generator and add it to busFA.  Note in this case we
-    # specify the names of the specs rather than finding instances.
+    # specify the names of the specs rather than finding instances.  Also note
+    # that we are using Solar Resource 1 which we defined above.
     #===========================================================================
     sGen = MakeSolarGenerator(
         bus4, "SGen1", base_spec="PV_VC_250kw", specs="PV_VC_250kw",
@@ -514,9 +516,12 @@ def main():
 
     
     #===========================================================================
-    # If desired, save the inputs to an input file that can be loaded by MDT.
+    # If desired, save the inputs to an input file that can be loaded by the
+    # regular MDT application (GUI or Command Line).  Pay attention to any
+    # messages that result from trying to save the file.
     #===========================================================================
-    pymdt.io.WriteInputFile("C:/temp/pythonrun.mbf")
+    wlog = pymdt.io.WriteInputFile("C:/temp/pythonrun.mbf")
+    if not wlog.IsEmpty: pymdt.utils.PrintLog(wlog, True)
     #===========================================================================
 
 
@@ -539,26 +544,28 @@ def main():
     # captured in the global error log.  For now, print the results.  Better
     # would be to take some action if there are errors.
     #===========================================================================
-    print("===========================================================================")
-    print("Messages produced during data input...")
-    pymdt.utils.PrintLog(pymdt.GlobalErrorLog, True)
-    print("===========================================================================")
+    if not pymdt.GlobalErrorLog.IsEmpty:
+        print("===========================================================================")
+        print("Messages produced during data input...")
+        pymdt.utils.PrintLog(pymdt.GlobalErrorLog, True)
+        print("===========================================================================")
     #===========================================================================
 
 
 
 
-        
+ 
     #===========================================================================
-    # Test the inputs that were not rejected to be sure that they are usable.
-    # For now, print the results.  Better would be to take some action if there
-    # are errors.
+    # Test the inputs that were not rejected to be sure that overall, they are
+    # usable. For now, print the results.  Better would be to take some action
+    # if there are errors.
     #===========================================================================
     errLog = s.VerifyUsability()
-    print("===========================================================================")
-    print("Messages produced by testing the current input set...")
-    pymdt.utils.PrintLog(errLog, True)
-    print("===========================================================================")
+    if not errLog.IsEmpty:
+        print("===========================================================================")
+        print("Messages produced by testing the current input set...")
+        pymdt.utils.PrintLog(errLog, True)
+        print("===========================================================================")
     #===========================================================================
    
 
@@ -566,21 +573,36 @@ def main():
     
 
     #===========================================================================
-    # Go ahead and run the default solver.
+    # Go ahead and run the default solver.  The results that come back are a
+    # 2-tuple.  The first item is a data structure of all the results.  The
+    # 2nd is a log with any messages generated during the solve.  For now, just
+    # print the log.  Better would be to take some action if there are errors.
     #===========================================================================
     results = pymdt.solving.RunIslandedSolver()
-    if results[1].IsEmpty: print(results[1].ToString())
+    if not results[1].IsEmpty: print(results[1].ToString())
     #===========================================================================
 
 
 
 
-
-    wlog = pymdt.io.WriteOutputFile("C:/temp/pythonrun.mof", results[0])
-    pymdt.utils.PrintLog(wlog, True)
     
-    # The following will open the MDT graphical user interface with the
-    # file "pythonrun.mof" opened, assuming it exists (see a few lines up).
+    #===========================================================================
+    # Rather than analyze any results in this minimal file, we'll just write
+    # them out to a file that can be opened in the MDT GUI application.
+    #===========================================================================
+    wlog = pymdt.io.WriteOutputFile("C:/temp/pythonrun.mof", results[0])
+    if not wlog.IsEmpty: pymdt.utils.PrintLog(wlog, True)
+    #===========================================================================
+    
+
+
+
+    
+    #===========================================================================
+    # Finally, the following will open the MDT graphical user interface with the
+    # file "pythonrun.mof" opened, assuming it exists (see a few lines up).  You
+    # could certainly check before issuing this call if desired.
+    #===========================================================================
     pymdt.core.RunMDTGUI("C:/temp/pythonrun.mof")
 
 
