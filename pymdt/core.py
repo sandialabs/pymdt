@@ -908,6 +908,13 @@ def MakeStoredLoadConfiguration(name: str, **kwargs) -> MDT.StoredTierLoadConfig
             https://learn.microsoft.com/en-us/dotnet/api/system.guid.-ctor?view=net-8.0#system-guid-ctor(system-string)
             or a System.Guid instance.  If not provided, a newly created,
             random Guid is used.
+        undos: Common.Undoing.IUndoPack
+            An optional undo pack into which to load the undoable objects
+            generated during this operation (if any).
+        err_log: Common.Logging.Log
+            A Log object into which to capture any messages generated during
+            this operation.  If not provided, messages will be added into
+            the pymdt.GlobalErrorLog.
         
     Returns
     -------
@@ -956,6 +963,13 @@ def MakeStoredSolarDataConfiguration(name: str, **kwargs) -> MDT.StoredTierLoadC
             https://learn.microsoft.com/en-us/dotnet/api/system.guid.-ctor?view=net-8.0#system-guid-ctor(system-string)
             or a System.Guid instance.  If not provided, a newly created,
             random Guid is used.
+        undos: Common.Undoing.IUndoPack
+            An optional undo pack into which to load the undoable objects
+            generated during this operation (if any).
+        err_log: Common.Logging.Log
+            A Log object into which to capture any messages generated during
+            this operation.  If not provided, messages will be added into
+            the pymdt.GlobalErrorLog.
         
     Returns
     -------
@@ -1004,6 +1018,13 @@ def MakeStoredWindDataConfiguration(name: str, **kwargs) -> MDT.StoredTierLoadCo
             https://learn.microsoft.com/en-us/dotnet/api/system.guid.-ctor?view=net-8.0#system-guid-ctor(system-string)
             or a System.Guid instance.  If not provided, a newly created,
             random Guid is used.
+        undos: Common.Undoing.IUndoPack
+            An optional undo pack into which to load the undoable objects
+            generated during this operation (if any).
+        err_log: Common.Logging.Log
+            A Log object into which to capture any messages generated during
+            this operation.  If not provided, messages will be added into
+            the pymdt.GlobalErrorLog.
         
     Returns
     -------
@@ -1052,6 +1073,13 @@ def MakeStoredHydroDataConfiguration(name: str, **kwargs) -> MDT.StoredTierLoadC
             https://learn.microsoft.com/en-us/dotnet/api/system.guid.-ctor?view=net-8.0#system-guid-ctor(system-string)
             or a System.Guid instance.  If not provided, a newly created,
             random Guid is used.
+        undos: Common.Undoing.IUndoPack
+            An optional undo pack into which to load the undoable objects
+            generated during this operation (if any).
+        err_log: Common.Logging.Log
+            A Log object into which to capture any messages generated during
+            this operation.  If not provided, messages will be added into
+            the pymdt.GlobalErrorLog.
         
     Returns
     -------
@@ -1100,6 +1128,13 @@ def MakeStoredThermalDataConfiguration(name: str, **kwargs) -> MDT.StoredTierLoa
             https://learn.microsoft.com/en-us/dotnet/api/system.guid.-ctor?view=net-8.0#system-guid-ctor(system-string)
             or a System.Guid instance.  If not provided, a newly created,
             random Guid is used.
+        undos: Common.Undoing.IUndoPack
+            An optional undo pack into which to load the undoable objects
+            generated during this operation (if any).
+        err_log: Common.Logging.Log
+            A Log object into which to capture any messages generated during
+            this operation.  If not provided, messages will be added into
+            the pymdt.GlobalErrorLog.
         
     Returns
     -------
@@ -3099,7 +3134,8 @@ def MakeBusDesignOption(mdo: MDT.MicrogridDesignOption, b: MDT.Bus, name: str, *
     ----------
     mdo: MDT.MicrogridDesignOption
         The microgrid design option into which the new bus design option will be
-        installed.
+        installed.  If an mdo is not provided (None), then an orphan bus design
+        option is returned and should be added to an mdo at some later point.
     b: MDT.Bus
         The bus for which this bus design option is being built.  If this option
         is being built for a bus that is not part of the microgrid but instead
@@ -3192,7 +3228,7 @@ def MakeLoadTier(name: str, priority: int, **kwargs) -> MDT.LoadTier:
         The newly created load tier instance.
     """
     lt = details.build_load_tier(name, priority, **kwargs)
-    owner = details._extract_owner(MDTDVR, **kwargs)
+    owner = details._extract_owner(MDT.Driver.INSTANCE, **kwargs)
     if owner is not None:
         pymdt.utils.details._execute_1_arg_add_with_undo(
             owner, "AddLoadTierCanceled", "get_LoadTiers", lt, **kwargs
@@ -3310,9 +3346,20 @@ def SetDieselInfiniteFuel(tank: MDT.DieselTank, infinite: bool = True, **kwargs)
         The tank to assign to have infinite fuel capacity or not.
     infinite: bool
         Whether or not the supplied tank should have infinite fuel capacity.
+    kwargs: dict
+        A dictionary of all the variable arguments provided to this function.
+        The arguments used by this method include:
+        
+        err_log: Common.Logging.Log
+            A Log object into which to capture any messages generated during
+            this operation.  If not provided, messages will be added into
+            the pymdt.GlobalErrorLog.
+        undos: Common.Undoing.IUndoPack
+            An optional undo pack into which to load the undoable objects
+            generated during this operation (if any).
     """
     mgSets = details._extract_prm_microgrid_settings(tank.Microgrid)
-    pymdt.utils.details._execute_loggable_indexed_property_set(
+    pymdt.utils.details._execute_loggable_indexed_property_set_with_undo(
         mgSets, "UseInfiniteDieselFuel", tank, infinite, **kwargs
         )
     
@@ -3326,9 +3373,20 @@ def SetPropaneInfiniteFuel(tank: MDT.PropaneTank, infinite: bool = True, **kwarg
         The tank to assign to have infinite fuel capacity or not.
     infinite: bool
         Whether or not the supplied tank should have infinite fuel capacity.
+    kwargs: dict
+        A dictionary of all the variable arguments provided to this function.
+        The arguments used by this method include:
+        
+        err_log: Common.Logging.Log
+            A Log object into which to capture any messages generated during
+            this operation.  If not provided, messages will be added into
+            the pymdt.GlobalErrorLog.
+        undos: Common.Undoing.IUndoPack
+            An optional undo pack into which to load the undoable objects
+            generated during this operation (if any).
     """
     mgSets = details._extract_prm_microgrid_settings(tank.Microgrid)
-    pymdt.utils.details._execute_loggable_indexed_property_set(
+    pymdt.utils.details._execute_loggable_indexed_property_set_with_undo(
         mgSets, "UseInfinitePropaneFuel", tank, infinite, **kwargs
         )
 
@@ -3344,6 +3402,17 @@ def ResetRegularPeriodData(rpd: MDT.IRegularPeriodData, dataset, **kwargs):
         A collection of the values that should be pushed into the MDT data
         construct.  The items in this list must be float or convertible to
         float.
+    kwargs: dict
+        A dictionary of all the variable arguments provided to this function.
+        The arguments used by this method include:
+        
+        err_log: Common.Logging.Log
+            A Log object into which to capture any messages generated during
+            this operation.  If not provided, messages will be added into
+            the pymdt.GlobalErrorLog.
+        undos: Common.Undoing.IUndoPack
+            An optional undo pack into which to load the undoable objects
+            generated during this operation (if any).
     """
     dat = Common.Databinding.ObservableBindingListWithUndo[float]()
     if not pymdt.utils.details._is_collection(dataset): dataset = [dataset]
@@ -3386,6 +3455,14 @@ def ConfigureMicrogridController(mg: MDT.Microgrid, **kwargs):
         forecast_duration: float
             The number of hours over which to do load, solar, etc. forecasting
             for the purposes of generator dispatch.  The default is 1 hour.
+        err_log: Common.Logging.Log
+            The log into which to record any errors encountered during the
+            building, loading, or saving of the new item.  If this argument is
+            not provided, messages will be recorded into the
+            pymdt.GlobalErrorLog instance.
+        undos: Common.Undoing.IUndoPack
+            An optional undo pack into which to load the undoable objects
+            generated during this operation (if any).
         """
     mgSets = details._extract_prm_microgrid_settings(mg)
     mgCSets = mgSets.MicrogridControllerSettings
@@ -3461,6 +3538,14 @@ def ConfigureStartupController(mg: MDT.Microgrid, **kwargs):
             The number of seconds of delay between the end of the startup
             procedure and the reconnection of any non-ride-through inverter
             controlled renewable assets.  The default is 300 seconds.
+        err_log: Common.Logging.Log
+            The log into which to record any errors encountered during the
+            building, loading, or saving of the new item.  If this argument is
+            not provided, messages will be recorded into the
+            pymdt.GlobalErrorLog instance.
+        undos: Common.Undoing.IUndoPack
+            An optional undo pack into which to load the undoable objects
+            generated during this operation (if any).
         """
     mgSets = details._extract_prm_microgrid_settings(mg)
     stCSets = mgSets.StartupControllerSettings
@@ -3551,6 +3636,14 @@ def ConfigureGridTiedController(mg: MDT.Microgrid, **kwargs):
         track_inverter_failures: bool
             Whether or not to execute failures and repairs of inverters during
             the grid-tied operations.
+        err_log: Common.Logging.Log
+            The log into which to record any errors encountered during the
+            building, loading, or saving of the new item.  If this argument is
+            not provided, messages will be recorded into the
+            pymdt.GlobalErrorLog instance.
+        undos: Common.Undoing.IUndoPack
+            An optional undo pack into which to load the undoable objects
+            generated during this operation (if any).
     """
     mgSets = details._extract_prm_microgrid_settings(mg)
     gtCSets = mgSets.GridTiedControllerSettings
@@ -3615,6 +3708,14 @@ def ConfigureDieselRefueller(mg: MDT.Microgrid, **kwargs):
             The maximum amount of fuel that can be delivered in any refuelling
             action.  A value of -1 allows for the delivery of any amount of fuel
             (infinite).
+        err_log: Common.Logging.Log
+            The log into which to record any errors encountered during the
+            building, loading, or saving of the new item.  If this argument is
+            not provided, messages will be recorded into the
+            pymdt.GlobalErrorLog instance.
+        undos: Common.Undoing.IUndoPack
+            An optional undo pack into which to load the undoable objects
+            generated during this operation (if any).
     """
     mgSets = details._extract_prm_microgrid_settings(mg)
     rfSets = mgSets.DieselRefuelingStrategySettings
@@ -3642,6 +3743,14 @@ def ConfigurePropaneRefueller(mg: MDT.Microgrid, **kwargs):
             The maximum amount of fuel that can be delivered in any refuelling
             action.  A value of -1 allows for the delivery of any amount of fuel
             (infinite).
+        err_log: Common.Logging.Log
+            The log into which to record any errors encountered during the
+            building, loading, or saving of the new item.  If this argument is
+            not provided, messages will be recorded into the
+            pymdt.GlobalErrorLog instance.
+        undos: Common.Undoing.IUndoPack
+            An optional undo pack into which to load the undoable objects
+            generated during this operation (if any).
     """
     mgSets = details._extract_prm_microgrid_settings(mg)
     rfSets = mgSets.PropaneRefuelingStrategySettings
@@ -3659,6 +3768,19 @@ def ExtractPRMSettings() -> MDT.PRMSettings:
     return details._extract_prm_settings()
 
 def RunMDTGUI(filename: str = "") -> subprocess.CompletedProcess:
+    """ Executes the MDT GUI.
+    
+    Parameters
+    ----------
+    filename: str
+        An MDT input or output file to be opened in the MDT GUI if desired.  If
+        not provided, the MDT is opened with no current file.
+
+    Returns
+    -------
+    subprocess.CompletedProcess:
+        The CompletedProcess object that results from a call to subprocess.run.
+    """
     return subprocess.run(
        [os.path.join(pymdt.MDT_BIN_DIR, "MDT-GUI.exe"), " " + filename]
        )
@@ -3691,6 +3813,14 @@ def ConfigurePRM(**kwargs):
             This serves as a means of telling the simulation to ignore fragility
             inputs which can be useful for comparison trials. The default is
             True.
+        err_log: Common.Logging.Log
+            The log into which to record any errors encountered during the
+            building, loading, or saving of the new item.  If this argument is
+            not provided, messages will be recorded into the
+            pymdt.GlobalErrorLog instance.
+        undos: Common.Undoing.IUndoPack
+            An optional undo pack into which to load the undoable objects
+            generated during this operation (if any).
     """
     prmsets = ExtractPRMSettings()
 

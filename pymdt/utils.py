@@ -9,14 +9,41 @@ from enum import Enum
 import pymdt.distributions
 
 class time_units(Enum):
+    """ An enumeration of the possible time units for various inputs.  These are
+    commonly used for data sets for example.
+    """
+
     milliseconds = Common.Time.TimeAccumulation.Units.Milliseconds
+    """ Indicates that a given time value is given in milliseconds.
+    """
+
     seconds = Common.Time.TimeAccumulation.Units.Seconds
+    """ Indicates that a given time value is given in seconds.
+    """
+
     minutes = Common.Time.TimeAccumulation.Units.Minutes
+    """ Indicates that a given time value is given in minutes.
+    """
+
     hours = Common.Time.TimeAccumulation.Units.Hours
+    """ Indicates that a given time value is given in hours.
+    """
+
     days = Common.Time.TimeAccumulation.Units.Days
+    """ Indicates that a given time value is given in days.
+    """
+
     weeks = Common.Time.TimeAccumulation.Units.Weeks
+    """ Indicates that a given time value is given in weeks.
+    """
+
     months = Common.Time.TimeAccumulation.Units.Months
+    """ Indicates that a given time value is given in months.
+    """
+
     years = Common.Time.TimeAccumulation.Units.Years
+    """ Indicates that a given time value is given in years.
+    """
 
 class find_fail_behavior(Enum):
     """ An enumeration of the possible responses to a failed attempt to find
@@ -34,15 +61,56 @@ class find_fail_behavior(Enum):
     """
 
 class text_alignment(Enum):
+    """ An enumeration of the possible text alignment settings.  These are used
+    for example by the node groups to place their text.
+    """
+
     top_left = MDT.NodeGroup.TextAlignEnum.TopLeft
+    """ Indicates that the text should be aligned to the top left of its parent.
+    """
+
     top_center = MDT.NodeGroup.TextAlignEnum.TopCenter
+    """ Indicates that the text should be aligned to the top center of its
+    parent.
+    """
+
     top_right = MDT.NodeGroup.TextAlignEnum.TopRight
+    """ Indicates that the text should be aligned to the top right of its
+    parent.
+    """
+
     middle_left = MDT.NodeGroup.TextAlignEnum.MiddleLeft
+    """ Indicates that the text should be aligned to the middle left of its
+    parent.  This typically means centered vertically and aligned left
+    horizontally.
+    """
+
     middle_center = MDT.NodeGroup.TextAlignEnum.MiddleCenter
+    """ Indicates that the text should be aligned to the middle center of its
+    parent.  This typically means centered vertically and horizontally.
+    """
+
     middle_right = MDT.NodeGroup.TextAlignEnum.MiddleRight
+    """ Indicates that the text should be aligned to the middle right of its
+    parent.  This typically means centered vertically and aligned right
+    horizontally.
+    """
+
     bottom_left = MDT.NodeGroup.TextAlignEnum.BottomLeft
+    """ Indicates that the text should be aligned to the bottom left of its
+    parent.
+    """
+
     bottom_center = MDT.NodeGroup.TextAlignEnum.BottomCenter
+    """ Indicates that the text should be aligned to the bottom center of its
+    parent.
+    """
+
     bottom_right = MDT.NodeGroup.TextAlignEnum.BottomRight
+    """ Indicates that the text should be aligned to the bottom right of its
+    parent.
+    """
+
   
 class details:
             
@@ -408,7 +476,35 @@ def MakeUsableName(all_ents, name: str, **kwargs) -> str:
 def ExecutePropertySet(
     obj, propName, value, custom_cancel_evt_name=None, **kwargs
     ) -> Common.Logging.Log:
-
+    """ A helper function for setting properties on MDT (or associated library)
+    class objects.  This helps with management of messages that may occur when
+    setting a property that should be processed (error messages for example).
+    
+    Parameters
+    ----------
+    obj:
+        The object on which a property set should occur.
+    propName: str
+        The name of the property to set.
+    value:
+        The value to assign to the property (as in obj.propName = value).
+    custom_cancel_evt_name: str
+        The name of a function that should be called if the property set is
+        rejected by the library.  If not provided, the default handler is used
+        which will push the cancellation message into a log (either a provided
+        one or the GlobalErrorLog).
+    kwargs: dict
+        A dictionary of all the variable arguments provided to this function.
+        The arguments used by this method include:
+        
+        undos: Common.Undoing.IUndoPack
+            An optional undo pack into which to load the undoable objects
+            generated during this operation (if any).
+        err_log: Common.Logging.Log
+            A Log object into which to capture any messages generated during
+            this operation.  If not provided, messages will be added into
+            the pymdt.GlobalErrorLog.
+    """
     return details._execute_loggable_property_set_with_undo(
         obj, propName, value, custom_cancel_evt_name, **kwargs
         )

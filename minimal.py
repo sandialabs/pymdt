@@ -66,14 +66,15 @@ def main():
     
     #===========================================================================
     # Next for this model we will configure the design basis threats.
-    #===========================================================================
+    #
     # They are created as specialized failure modes of the power utility that,
     # in addition to having failure characteristics, can have Hazards.
-    
+    #
     # Create a DBT and call it DBT 1.  The mean time between failures will be
     # exponential with a mean of 10 years (87,600 hrs) and a fixed duration of
     # 72 hours.  The 72 hours can be provided as a number or by using the
     # MakeFixed function.
+    #===========================================================================
     dbt = MakeDesignBasisThreat(
         s.PowerUtility, "DBT 1", mtbf=MakeExponential(10*8760), mttr=72
         )
@@ -90,6 +91,7 @@ def main():
     # of the solar resource.  Alternatively, it could have been provided as a
     # data=[] argument to the Make function.  Note that the data is 1 year of
     # hourly data samples or an "8760" dataset.
+    #===========================================================================
     sr1 = MakeSolarResource(
         s, "Solar Resource 1", period=1, period_units=time_units.hours,
         interval=1, interval_units=time_units.years
@@ -396,7 +398,7 @@ def main():
     
     #===========================================================================
     # Define all the diesel tanks in the model.
-    #===========================================================================
+    #
     # Tanks will later be assigned to generators when they get built.  Note that
     # the specifications DB can be accessed via the Driver as shown.
     #
@@ -407,6 +409,7 @@ def main():
     # Also note the inclusion of a loc argument.  Components that appear on the
     # diagram may be given locations.  It is only useful if you intend to save
     # the input or output to a file and open it in the MDT GUI at some point.
+    #===========================================================================
     dtSpec = pymdt.utils.FindEntityByName(drv.DieselTankSpecifications, "DT1000")
     tankGT5 = MakeDieselTank(
         mg, "GT5", base_spec=dtSpec, specs=dtSpec, infinite_fuel=True,
@@ -430,9 +433,11 @@ def main():
 
 
     #===========================================================================
-    # Create a solar generator and add it to busFA.  Note in this case we
-    # specify the names of the specs rather than finding instances.  Also note
-    # that we are using Solar Resource 1 which we defined above.
+    # Create a solar generator and add it to busFA.
+    #
+    # Note in this case we specify the names of the specs rather than finding
+    # instances.  Also note that we are using Solar Resource 1 which we defined
+    # above.
     #===========================================================================
     sGen = MakeSolarGenerator(
         bus4, "SGen1", base_spec="PV_VC_250kw", specs="PV_VC_250kw",
@@ -446,9 +451,10 @@ def main():
     
     #===========================================================================
     # Create all diesel generators and add them to their busses.
-    #===========================================================================
+    #
     # Also pair all diesel generators with diesel tanks which can be done in
     # the Make function as shown or separately after if desired.
+    #===========================================================================
     dg5 = MakeDieselGenerator(
         bus4, "G5", tanks=tankGT5, base_spec="DG5000-12470V",
         specs="DG5000-12470V", loc=(374.2, 560.7)
@@ -461,9 +467,10 @@ def main():
 
     #===========================================================================
     # Create loads.
-    #===========================================================================
+    #
     # Load sections can have multiple data sets of different tiers.  So they are
     # created and then load data is added subsequently.
+    #===========================================================================
     ls4 = MakeLoadSection(
         bus4, "L4", period=1, period_units=time_units.hours, interval=1,
         interval_units=time_units.years, loc=(110.7, 342.6)
@@ -492,10 +499,11 @@ def main():
 
     #===========================================================================
     # Edit and/or Define Metrics for the Optimization
-    #===========================================================================
+    #
     # The purchase cost constraint is added to the MDT automatically and so will
     # be there unless previously, explicitly removed.  We can access it as below
     # and configure it the way we want.
+    #===========================================================================
     costCon = mg.get_CostConstraint()
     costCon.SingleValueLimit = 1000000
     costCon.SingleValueObjective = 800000
@@ -515,6 +523,7 @@ def main():
 
 
     
+
     #===========================================================================
     # If desired, save the inputs to an input file that can be loaded by the
     # regular MDT application (GUI or Command Line).  Pay attention to any
@@ -604,6 +613,7 @@ def main():
     # could certainly check before issuing this call if desired.
     #===========================================================================
     pymdt.core.RunMDTGUI("C:/temp/pythonrun.mof")
+    #===========================================================================
 
 
 if __name__ == "__main__":
