@@ -84,14 +84,41 @@
 <div class="viewcode-block" id="time_units">
 <a class="viewcode-back" href="../../pymdt.html#pymdt.utils.time_units">[docs]</a>
 <span class="k">class</span> <span class="nc">time_units</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; An enumeration of the possible time units for various inputs.  These are</span>
+<span class="sd">    commonly used for data sets for example.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">milliseconds</span> <span class="o">=</span> <span class="n">Common</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">TimeAccumulation</span><span class="o">.</span><span class="n">Units</span><span class="o">.</span><span class="n">Milliseconds</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Indicates that a given time value is given in milliseconds.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">seconds</span> <span class="o">=</span> <span class="n">Common</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">TimeAccumulation</span><span class="o">.</span><span class="n">Units</span><span class="o">.</span><span class="n">Seconds</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Indicates that a given time value is given in seconds.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">minutes</span> <span class="o">=</span> <span class="n">Common</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">TimeAccumulation</span><span class="o">.</span><span class="n">Units</span><span class="o">.</span><span class="n">Minutes</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Indicates that a given time value is given in minutes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">hours</span> <span class="o">=</span> <span class="n">Common</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">TimeAccumulation</span><span class="o">.</span><span class="n">Units</span><span class="o">.</span><span class="n">Hours</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Indicates that a given time value is given in hours.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">days</span> <span class="o">=</span> <span class="n">Common</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">TimeAccumulation</span><span class="o">.</span><span class="n">Units</span><span class="o">.</span><span class="n">Days</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Indicates that a given time value is given in days.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">weeks</span> <span class="o">=</span> <span class="n">Common</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">TimeAccumulation</span><span class="o">.</span><span class="n">Units</span><span class="o">.</span><span class="n">Weeks</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Indicates that a given time value is given in weeks.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">months</span> <span class="o">=</span> <span class="n">Common</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">TimeAccumulation</span><span class="o">.</span><span class="n">Units</span><span class="o">.</span><span class="n">Months</span>
-    <span class="n">years</span> <span class="o">=</span> <span class="n">Common</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">TimeAccumulation</span><span class="o">.</span><span class="n">Units</span><span class="o">.</span><span class="n">Years</span></div>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Indicates that a given time value is given in months.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">years</span> <span class="o">=</span> <span class="n">Common</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">TimeAccumulation</span><span class="o">.</span><span class="n">Units</span><span class="o">.</span><span class="n">Years</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Indicates that a given time value is given in years.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
 
 
 <div class="viewcode-block" id="find_fail_behavior">
@@ -115,15 +142,56 @@
 <div class="viewcode-block" id="text_alignment">
 <a class="viewcode-back" href="../../pymdt.html#pymdt.utils.text_alignment">[docs]</a>
 <span class="k">class</span> <span class="nc">text_alignment</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; An enumeration of the possible text alignment settings.  These are used</span>
+<span class="sd">    for example by the node groups to place their text.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">top_left</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">NodeGroup</span><span class="o">.</span><span class="n">TextAlignEnum</span><span class="o">.</span><span class="n">TopLeft</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Indicates that the text should be aligned to the top left of its parent.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">top_center</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">NodeGroup</span><span class="o">.</span><span class="n">TextAlignEnum</span><span class="o">.</span><span class="n">TopCenter</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Indicates that the text should be aligned to the top center of its</span>
+<span class="sd">    parent.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">top_right</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">NodeGroup</span><span class="o">.</span><span class="n">TextAlignEnum</span><span class="o">.</span><span class="n">TopRight</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Indicates that the text should be aligned to the top right of its</span>
+<span class="sd">    parent.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">middle_left</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">NodeGroup</span><span class="o">.</span><span class="n">TextAlignEnum</span><span class="o">.</span><span class="n">MiddleLeft</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Indicates that the text should be aligned to the middle left of its</span>
+<span class="sd">    parent.  This typically means centered vertically and aligned left</span>
+<span class="sd">    horizontally.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">middle_center</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">NodeGroup</span><span class="o">.</span><span class="n">TextAlignEnum</span><span class="o">.</span><span class="n">MiddleCenter</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Indicates that the text should be aligned to the middle center of its</span>
+<span class="sd">    parent.  This typically means centered vertically and horizontally.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">middle_right</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">NodeGroup</span><span class="o">.</span><span class="n">TextAlignEnum</span><span class="o">.</span><span class="n">MiddleRight</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Indicates that the text should be aligned to the middle right of its</span>
+<span class="sd">    parent.  This typically means centered vertically and aligned right</span>
+<span class="sd">    horizontally.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">bottom_left</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">NodeGroup</span><span class="o">.</span><span class="n">TextAlignEnum</span><span class="o">.</span><span class="n">BottomLeft</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Indicates that the text should be aligned to the bottom left of its</span>
+<span class="sd">    parent.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">bottom_center</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">NodeGroup</span><span class="o">.</span><span class="n">TextAlignEnum</span><span class="o">.</span><span class="n">BottomCenter</span>
-    <span class="n">bottom_right</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">NodeGroup</span><span class="o">.</span><span class="n">TextAlignEnum</span><span class="o">.</span><span class="n">BottomRight</span></div>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Indicates that the text should be aligned to the bottom center of its</span>
+<span class="sd">    parent.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">bottom_right</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">NodeGroup</span><span class="o">.</span><span class="n">TextAlignEnum</span><span class="o">.</span><span class="n">BottomRight</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Indicates that the text should be aligned to the bottom right of its</span>
+<span class="sd">    parent.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
 
   
 <span class="k">class</span> <span class="nc">details</span><span class="p">:</span>
@@ -498,7 +566,35 @@
 <span class="k">def</span> <span class="nf">ExecutePropertySet</span><span class="p">(</span>
     <span class="n">obj</span><span class="p">,</span> <span class="n">propName</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">custom_cancel_evt_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Common</span><span class="o">.</span><span class="n">Logging</span><span class="o">.</span><span class="n">Log</span><span class="p">:</span>
-
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; A helper function for setting properties on MDT (or associated library)</span>
+<span class="sd">    class objects.  This helps with management of messages that may occur when</span>
+<span class="sd">    setting a property that should be processed (error messages for example).</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    obj:</span>
+<span class="sd">        The object on which a property set should occur.</span>
+<span class="sd">    propName: str</span>
+<span class="sd">        The name of the property to set.</span>
+<span class="sd">    value:</span>
+<span class="sd">        The value to assign to the property (as in obj.propName = value).</span>
+<span class="sd">    custom_cancel_evt_name: str</span>
+<span class="sd">        The name of a function that should be called if the property set is</span>
+<span class="sd">        rejected by the library.  If not provided, the default handler is used</span>
+<span class="sd">        which will push the cancellation message into a log (either a provided</span>
+<span class="sd">        one or the GlobalErrorLog).</span>
+<span class="sd">    kwargs: dict</span>
+<span class="sd">        A dictionary of all the variable arguments provided to this function.</span>
+<span class="sd">        The arguments used by this method include:</span>
+<span class="sd">        </span>
+<span class="sd">        undos: Common.Undoing.IUndoPack</span>
+<span class="sd">            An optional undo pack into which to load the undoable objects</span>
+<span class="sd">            generated during this operation (if any).</span>
+<span class="sd">        err_log: Common.Logging.Log</span>
+<span class="sd">            A Log object into which to capture any messages generated during</span>
+<span class="sd">            this operation.  If not provided, messages will be added into</span>
+<span class="sd">            the pymdt.GlobalErrorLog.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
         <span class="n">obj</span><span class="p">,</span> <span class="n">propName</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">custom_cancel_evt_name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
         <span class="p">)</span></div>
@@ -531,7 +627,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2025 National Technology &amp; Engineering Solutions of Sandia, LLC (NTESS)..</p>
+    <p>&#169; Copyright 2025 National Technology &amp; Engineering Solutions of Sandia, LLC (NTESS).</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

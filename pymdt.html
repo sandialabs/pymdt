@@ -288,6 +288,14 @@ real valued number of hours from midnight [0-24].</p>
 action.  A value of -1 allows for the delivery of any amount of fuel
 (infinite).</p>
 </dd>
+<dt>err_log: Common.Logging.Log</dt><dd><p>The log into which to record any errors encountered during the
+building, loading, or saving of the new item.  If this argument is
+not provided, messages will be recorded into the
+pymdt.GlobalErrorLog instance.</p>
+</dd>
+<dt>undos: Common.Undoing.IUndoPack</dt><dd><p>An optional undo pack into which to load the undoable objects
+generated during this operation (if any).</p>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -347,6 +355,14 @@ during the grid-tied operations.</p>
 <dt>track_inverter_failures: bool</dt><dd><p>Whether or not to execute failures and repairs of inverters during
 the grid-tied operations.</p>
 </dd>
+<dt>err_log: Common.Logging.Log</dt><dd><p>The log into which to record any errors encountered during the
+building, loading, or saving of the new item.  If this argument is
+not provided, messages will be recorded into the
+pymdt.GlobalErrorLog instance.</p>
+</dd>
+<dt>undos: Common.Undoing.IUndoPack</dt><dd><p>An optional undo pack into which to load the undoable objects
+generated during this operation (if any).</p>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -387,6 +403,14 @@ choose to shut some generation down.  The default is 0.4 (40%).</p>
 <dt>forecast_duration: float</dt><dd><p>The number of hours over which to do load, solar, etc. forecasting
 for the purposes of generator dispatch.  The default is 1 hour.</p>
 </dd>
+<dt>err_log: Common.Logging.Log</dt><dd><p>The log into which to record any errors encountered during the
+building, loading, or saving of the new item.  If this argument is
+not provided, messages will be recorded into the
+pymdt.GlobalErrorLog instance.</p>
+</dd>
+<dt>undos: Common.Undoing.IUndoPack</dt><dd><p>An optional undo pack into which to load the undoable objects
+generated during this operation (if any).</p>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -422,6 +446,14 @@ This serves as a means of telling the simulation to ignore fragility
 inputs which can be useful for comparison trials. The default is
 True.</p>
 </dd>
+<dt>err_log: Common.Logging.Log</dt><dd><p>The log into which to record any errors encountered during the
+building, loading, or saving of the new item.  If this argument is
+not provided, messages will be recorded into the
+pymdt.GlobalErrorLog instance.</p>
+</dd>
+<dt>undos: Common.Undoing.IUndoPack</dt><dd><p>An optional undo pack into which to load the undoable objects
+generated during this operation (if any).</p>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -450,6 +482,14 @@ real valued number of hours from midnight [0-24].</p>
 <dt>quantity: float</dt><dd><p>The maximum amount of fuel that can be delivered in any refuelling
 action.  A value of -1 allows for the delivery of any amount of fuel
 (infinite).</p>
+</dd>
+<dt>err_log: Common.Logging.Log</dt><dd><p>The log into which to record any errors encountered during the
+building, loading, or saving of the new item.  If this argument is
+not provided, messages will be recorded into the
+pymdt.GlobalErrorLog instance.</p>
+</dd>
+<dt>undos: Common.Undoing.IUndoPack</dt><dd><p>An optional undo pack into which to load the undoable objects
+generated during this operation (if any).</p>
 </dd>
 </dl>
 </dd>
@@ -495,6 +535,14 @@ This allows a ride-through for short duration DBTs. The default is
 <dt>renewable_start_delay: float</dt><dd><p>The number of seconds of delay between the end of the startup
 procedure and the reconnection of any non-ride-through inverter
 controlled renewable assets.  The default is 300 seconds.</p>
+</dd>
+<dt>err_log: Common.Logging.Log</dt><dd><p>The log into which to record any errors encountered during the
+building, loading, or saving of the new item.  If this argument is
+not provided, messages will be recorded into the
+pymdt.GlobalErrorLog instance.</p>
+</dd>
+<dt>undos: Common.Undoing.IUndoPack</dt><dd><p>An optional undo pack into which to load the undoable objects
+generated during this operation (if any).</p>
 </dd>
 </dl>
 </dd>
@@ -778,7 +826,8 @@ provided properties, loads it into its owner (mdo), and returns it.</p>
 <h3>Parameters<a class="headerlink" href="#id20" title="Link to this heading"></a></h3>
 <dl>
 <dt>mdo: MDT.MicrogridDesignOption</dt><dd><p>The microgrid design option into which the new bus design option will be
-installed.</p>
+installed.  If an mdo is not provided (None), then an orphan bus design
+option is returned and should be added to an mdo at some later point.</p>
 </dd>
 <dt>b: MDT.Bus</dt><dd><p>The bus for which this bus design option is being built.  If this option
 is being built for a bus that is not part of the microgrid but instead
@@ -2433,6 +2482,13 @@ a string formatted as described in:
 or a System.Guid instance.  If not provided, a newly created,
 random Guid is used.</p>
 </dd>
+<dt>undos: Common.Undoing.IUndoPack</dt><dd><p>An optional undo pack into which to load the undoable objects
+generated during this operation (if any).</p>
+</dd>
+<dt>err_log: Common.Logging.Log</dt><dd><p>A Log object into which to capture any messages generated during
+this operation.  If not provided, messages will be added into
+the pymdt.GlobalErrorLog.</p>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -2484,6 +2540,13 @@ a string formatted as described in:
 <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/system.guid.-ctor?view=net-8.0#system-guid-ctor(system-string">https://learn.microsoft.com/en-us/dotnet/api/system.guid.-ctor?view=net-8.0#system-guid-ctor(system-string</a>)
 or a System.Guid instance.  If not provided, a newly created,
 random Guid is used.</p>
+</dd>
+<dt>undos: Common.Undoing.IUndoPack</dt><dd><p>An optional undo pack into which to load the undoable objects
+generated during this operation (if any).</p>
+</dd>
+<dt>err_log: Common.Logging.Log</dt><dd><p>A Log object into which to capture any messages generated during
+this operation.  If not provided, messages will be added into
+the pymdt.GlobalErrorLog.</p>
 </dd>
 </dl>
 </dd>
@@ -2537,6 +2600,13 @@ a string formatted as described in:
 or a System.Guid instance.  If not provided, a newly created,
 random Guid is used.</p>
 </dd>
+<dt>undos: Common.Undoing.IUndoPack</dt><dd><p>An optional undo pack into which to load the undoable objects
+generated during this operation (if any).</p>
+</dd>
+<dt>err_log: Common.Logging.Log</dt><dd><p>A Log object into which to capture any messages generated during
+this operation.  If not provided, messages will be added into
+the pymdt.GlobalErrorLog.</p>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -2589,6 +2659,13 @@ a string formatted as described in:
 or a System.Guid instance.  If not provided, a newly created,
 random Guid is used.</p>
 </dd>
+<dt>undos: Common.Undoing.IUndoPack</dt><dd><p>An optional undo pack into which to load the undoable objects
+generated during this operation (if any).</p>
+</dd>
+<dt>err_log: Common.Logging.Log</dt><dd><p>A Log object into which to capture any messages generated during
+this operation.  If not provided, messages will be added into
+the pymdt.GlobalErrorLog.</p>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -2640,6 +2717,13 @@ a string formatted as described in:
 <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/system.guid.-ctor?view=net-8.0#system-guid-ctor(system-string">https://learn.microsoft.com/en-us/dotnet/api/system.guid.-ctor?view=net-8.0#system-guid-ctor(system-string</a>)
 or a System.Guid instance.  If not provided, a newly created,
 random Guid is used.</p>
+</dd>
+<dt>undos: Common.Undoing.IUndoPack</dt><dd><p>An optional undo pack into which to load the undoable objects
+generated during this operation (if any).</p>
+</dd>
+<dt>err_log: Common.Logging.Log</dt><dd><p>A Log object into which to capture any messages generated during
+this operation.  If not provided, messages will be added into
+the pymdt.GlobalErrorLog.</p>
 </dd>
 </dl>
 </dd>
@@ -3059,12 +3143,24 @@ random Guid is used.</p>
 period data instance.</p>
 <section id="id88">
 <h3>Parameters<a class="headerlink" href="#id88" title="Link to this heading"></a></h3>
-<dl class="simple">
+<dl>
 <dt>rpd: MDT.IRegularPeriodData</dt><dd><p>The MDT data structure to load using the items in the second argument.</p>
 </dd>
 <dt>data: iterable</dt><dd><p>A collection of the values that should be pushed into the MDT data
 construct.  The items in this list must be float or convertible to
 float.</p>
+</dd>
+<dt>kwargs: dict</dt><dd><p>A dictionary of all the variable arguments provided to this function.
+The arguments used by this method include:</p>
+<dl class="simple">
+<dt>err_log: Common.Logging.Log</dt><dd><p>A Log object into which to capture any messages generated during
+this operation.  If not provided, messages will be added into
+the pymdt.GlobalErrorLog.</p>
+</dd>
+<dt>undos: Common.Undoing.IUndoPack</dt><dd><p>An optional undo pack into which to load the undoable objects
+generated during this operation (if any).</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </section>
@@ -3077,10 +3173,22 @@ float.</p>
 of the infinite parameter.</p>
 <section id="id89">
 <h3>Parameters<a class="headerlink" href="#id89" title="Link to this heading"></a></h3>
-<dl class="simple">
+<dl>
 <dt>tank: MDT.DieselTank</dt><dd><p>The tank to assign to have infinite fuel capacity or not.</p>
 </dd>
 <dt>infinite: bool</dt><dd><p>Whether or not the supplied tank should have infinite fuel capacity.</p>
+</dd>
+<dt>kwargs: dict</dt><dd><p>A dictionary of all the variable arguments provided to this function.
+The arguments used by this method include:</p>
+<dl class="simple">
+<dt>err_log: Common.Logging.Log</dt><dd><p>A Log object into which to capture any messages generated during
+this operation.  If not provided, messages will be added into
+the pymdt.GlobalErrorLog.</p>
+</dd>
+<dt>undos: Common.Undoing.IUndoPack</dt><dd><p>An optional undo pack into which to load the undoable objects
+generated during this operation (if any).</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </section>
@@ -3093,10 +3201,22 @@ of the infinite parameter.</p>
 of the infinite parameter.</p>
 <section id="id90">
 <h3>Parameters<a class="headerlink" href="#id90" title="Link to this heading"></a></h3>
-<dl class="simple">
+<dl>
 <dt>tank: MDT.PropaneTank</dt><dd><p>The tank to assign to have infinite fuel capacity or not.</p>
 </dd>
 <dt>infinite: bool</dt><dd><p>Whether or not the supplied tank should have infinite fuel capacity.</p>
+</dd>
+<dt>kwargs: dict</dt><dd><p>A dictionary of all the variable arguments provided to this function.
+The arguments used by this method include:</p>
+<dl class="simple">
+<dt>err_log: Common.Logging.Log</dt><dd><p>A Log object into which to capture any messages generated during
+this operation.  If not provided, messages will be added into
+the pymdt.GlobalErrorLog.</p>
+</dd>
+<dt>undos: Common.Undoing.IUndoPack</dt><dd><p>An optional undo pack into which to load the undoable objects
+generated during this operation (if any).</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </section>
@@ -6964,7 +7084,38 @@ pymdt.GlobalErrorLog will be used and returned.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pymdt.utils.ExecutePropertySet">
 <span class="sig-prename descclassname"><span class="pre">pymdt.utils.</span></span><span class="sig-name descname"><span class="pre">ExecutePropertySet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">propName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_cancel_evt_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Log</span></span></span><a class="reference internal" href="_modules/pymdt/utils.html#ExecutePropertySet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pymdt.utils.ExecutePropertySet" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>A helper function for setting properties on MDT (or associated library)
+class objects.  This helps with management of messages that may occur when
+setting a property that should be processed (error messages for example).</p>
+<section id="id203">
+<h3>Parameters<a class="headerlink" href="#id203" title="Link to this heading"></a></h3>
+<dl>
+<dt>obj:</dt><dd><p>The object on which a property set should occur.</p>
+</dd>
+<dt>propName: str</dt><dd><p>The name of the property to set.</p>
+</dd>
+<dt>value:</dt><dd><p>The value to assign to the property (as in obj.propName = value).</p>
+</dd>
+<dt>custom_cancel_evt_name: str</dt><dd><p>The name of a function that should be called if the property set is
+rejected by the library.  If not provided, the default handler is used
+which will push the cancellation message into a log (either a provided
+one or the GlobalErrorLog).</p>
+</dd>
+<dt>kwargs: dict</dt><dd><p>A dictionary of all the variable arguments provided to this function.
+The arguments used by this method include:</p>
+<dl class="simple">
+<dt>undos: Common.Undoing.IUndoPack</dt><dd><p>An optional undo pack into which to load the undoable objects
+generated during this operation (if any).</p>
+</dd>
+<dt>err_log: Common.Logging.Log</dt><dd><p>A Log object into which to capture any messages generated during
+this operation.  If not provided, messages will be added into
+the pymdt.GlobalErrorLog.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pymdt.utils.FindEntityByName">
@@ -6972,8 +7123,8 @@ pymdt.GlobalErrorLog will be used and returned.</p>
 <dd><p>Searches through a collection to find an item with the given name.</p>
 <p>In the case of the MDT interface, the name is indicated by the value of
 the StringID property of an entry in all_ents.</p>
-<section id="id203">
-<h3>Parameters<a class="headerlink" href="#id203" title="Link to this heading"></a></h3>
+<section id="id204">
+<h3>Parameters<a class="headerlink" href="#id204" title="Link to this heading"></a></h3>
 <dl>
 <dt>all_ents:</dt><dd><p>Something that can be iterated to search for an item with the supplied
 name.  Then entities in this list must have a property named StringID
@@ -7002,8 +7153,8 @@ the failed search.</p>
 </dd>
 </dl>
 </section>
-<section id="id204">
-<h3>Returns<a class="headerlink" href="#id204" title="Link to this heading"></a></h3>
+<section id="id205">
+<h3>Returns<a class="headerlink" href="#id205" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>Found Item:</dt><dd><p>The item that was found or None if no matching item is found.</p>
 </dd>
@@ -7018,8 +7169,8 @@ the failed search.</p>
 names in the collection all_ents by adding digits to the end.</p>
 <p>In the case of the MDT interface, the name is indicated by the value of
 the StringID property of an entry in all_ents.</p>
-<section id="id205">
-<h3>Parameters<a class="headerlink" href="#id205" title="Link to this heading"></a></h3>
+<section id="id206">
+<h3>Parameters<a class="headerlink" href="#id206" title="Link to this heading"></a></h3>
 <dl>
 <dt>all_ents:</dt><dd><p>Something that can be iterated to search for an item with the supplied
 name.  Then entities in this list must have a property named StringID
@@ -7037,8 +7188,8 @@ them to get a unique name.</p>
 </dd>
 </dl>
 </section>
-<section id="id206">
-<h3>Returns<a class="headerlink" href="#id206" title="Link to this heading"></a></h3>
+<section id="id207">
+<h3>Returns<a class="headerlink" href="#id207" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>str:</dt><dd><p>The name that is unique to the supplied collection which may be the
 supplied name if it was already unique.</p>
@@ -7051,8 +7202,8 @@ supplied name if it was already unique.</p>
 <dt class="sig sig-object py" id="pymdt.utils.PrintLog">
 <span class="sig-prename descclassname"><span class="pre">pymdt.utils.</span></span><span class="sig-name descname"><span class="pre">PrintLog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">log</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Log</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">writeTags</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxEntries</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymdt/utils.html#PrintLog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pymdt.utils.PrintLog" title="Link to this definition"></a></dt>
 <dd><p>A simple helper function to print out the contents of a Log.</p>
-<section id="id207">
-<h3>Parameters<a class="headerlink" href="#id207" title="Link to this heading"></a></h3>
+<section id="id208">
+<h3>Parameters<a class="headerlink" href="#id208" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>log: Common.Logging.Log</dt><dd><p>The log to print using the print() function.</p>
 </dd>
@@ -7092,50 +7243,71 @@ message will say.</p>
 <dt class="sig sig-object py" id="pymdt.utils.text_alignment">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pymdt.utils.</span></span><span class="sig-name descname"><span class="pre">text_alignment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymdt/utils.html#text_alignment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pymdt.utils.text_alignment" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>An enumeration of the possible text alignment settings.  These are used
+for example by the node groups to place their text.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pymdt.utils.text_alignment.bottom_center">
 <span class="sig-name descname"><span class="pre">bottom_center</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;TextAlignEnum.BottomCenter:</span> <span class="pre">7&gt;</span></em><a class="headerlink" href="#pymdt.utils.text_alignment.bottom_center" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Indicates that the text should be aligned to the bottom center of its
+parent.</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pymdt.utils.text_alignment.bottom_left">
 <span class="sig-name descname"><span class="pre">bottom_left</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;TextAlignEnum.BottomLeft:</span> <span class="pre">6&gt;</span></em><a class="headerlink" href="#pymdt.utils.text_alignment.bottom_left" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Indicates that the text should be aligned to the bottom left of its
+parent.</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pymdt.utils.text_alignment.bottom_right">
 <span class="sig-name descname"><span class="pre">bottom_right</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;TextAlignEnum.BottomRight:</span> <span class="pre">8&gt;</span></em><a class="headerlink" href="#pymdt.utils.text_alignment.bottom_right" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Indicates that the text should be aligned to the bottom right of its
+parent.</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pymdt.utils.text_alignment.middle_center">
 <span class="sig-name descname"><span class="pre">middle_center</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;TextAlignEnum.MiddleCenter:</span> <span class="pre">4&gt;</span></em><a class="headerlink" href="#pymdt.utils.text_alignment.middle_center" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Indicates that the text should be aligned to the middle center of its
+parent.  This typically means centered vertically and horizontally.</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pymdt.utils.text_alignment.middle_left">
 <span class="sig-name descname"><span class="pre">middle_left</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;TextAlignEnum.MiddleLeft:</span> <span class="pre">3&gt;</span></em><a class="headerlink" href="#pymdt.utils.text_alignment.middle_left" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Indicates that the text should be aligned to the middle left of its
+parent.  This typically means centered vertically and aligned left
+horizontally.</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pymdt.utils.text_alignment.middle_right">
 <span class="sig-name descname"><span class="pre">middle_right</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;TextAlignEnum.MiddleRight:</span> <span class="pre">5&gt;</span></em><a class="headerlink" href="#pymdt.utils.text_alignment.middle_right" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Indicates that the text should be aligned to the middle right of its
+parent.  This typically means centered vertically and aligned right
+horizontally.</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pymdt.utils.text_alignment.top_center">
 <span class="sig-name descname"><span class="pre">top_center</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;TextAlignEnum.TopCenter:</span> <span class="pre">1&gt;</span></em><a class="headerlink" href="#pymdt.utils.text_alignment.top_center" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Indicates that the text should be aligned to the top center of its
+parent.</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pymdt.utils.text_alignment.top_left">
 <span class="sig-name descname"><span class="pre">top_left</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;TextAlignEnum.TopLeft:</span> <span class="pre">0&gt;</span></em><a class="headerlink" href="#pymdt.utils.text_alignment.top_left" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Indicates that the text should be aligned to the top left of its parent.</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pymdt.utils.text_alignment.top_right">
 <span class="sig-name descname"><span class="pre">top_right</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;TextAlignEnum.TopRight:</span> <span class="pre">2&gt;</span></em><a class="headerlink" href="#pymdt.utils.text_alignment.top_right" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Indicates that the text should be aligned to the top right of its
+parent.</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -7143,45 +7315,55 @@ message will say.</p>
 <dt class="sig sig-object py" id="pymdt.utils.time_units">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pymdt.utils.</span></span><span class="sig-name descname"><span class="pre">time_units</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymdt/utils.html#time_units"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pymdt.utils.time_units" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>An enumeration of the possible time units for various inputs.  These are
+commonly used for data sets for example.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pymdt.utils.time_units.days">
 <span class="sig-name descname"><span class="pre">days</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Units.Days:</span> <span class="pre">4&gt;</span></em><a class="headerlink" href="#pymdt.utils.time_units.days" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Indicates that a given time value is given in days.</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pymdt.utils.time_units.hours">
 <span class="sig-name descname"><span class="pre">hours</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Units.Hours:</span> <span class="pre">3&gt;</span></em><a class="headerlink" href="#pymdt.utils.time_units.hours" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Indicates that a given time value is given in hours.</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pymdt.utils.time_units.milliseconds">
 <span class="sig-name descname"><span class="pre">milliseconds</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Units.Milliseconds:</span> <span class="pre">0&gt;</span></em><a class="headerlink" href="#pymdt.utils.time_units.milliseconds" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Indicates that a given time value is given in milliseconds.</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pymdt.utils.time_units.minutes">
 <span class="sig-name descname"><span class="pre">minutes</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Units.Minutes:</span> <span class="pre">2&gt;</span></em><a class="headerlink" href="#pymdt.utils.time_units.minutes" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Indicates that a given time value is given in minutes.</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pymdt.utils.time_units.months">
 <span class="sig-name descname"><span class="pre">months</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Units.Months:</span> <span class="pre">6&gt;</span></em><a class="headerlink" href="#pymdt.utils.time_units.months" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Indicates that a given time value is given in months.</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pymdt.utils.time_units.seconds">
 <span class="sig-name descname"><span class="pre">seconds</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Units.Seconds:</span> <span class="pre">1&gt;</span></em><a class="headerlink" href="#pymdt.utils.time_units.seconds" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Indicates that a given time value is given in seconds.</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pymdt.utils.time_units.weeks">
 <span class="sig-name descname"><span class="pre">weeks</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Units.Weeks:</span> <span class="pre">5&gt;</span></em><a class="headerlink" href="#pymdt.utils.time_units.weeks" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Indicates that a given time value is given in weeks.</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pymdt.utils.time_units.years">
 <span class="sig-name descname"><span class="pre">years</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Units.Years:</span> <span class="pre">7&gt;</span></em><a class="headerlink" href="#pymdt.utils.time_units.years" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Indicates that a given time value is given in years.</p>
+</dd></dl>
 
 </dd></dl>
 

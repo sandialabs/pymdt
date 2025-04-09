@@ -1004,6 +1004,13 @@
 <span class="sd">            https://learn.microsoft.com/en-us/dotnet/api/system.guid.-ctor?view=net-8.0#system-guid-ctor(system-string)</span>
 <span class="sd">            or a System.Guid instance.  If not provided, a newly created,</span>
 <span class="sd">            random Guid is used.</span>
+<span class="sd">        undos: Common.Undoing.IUndoPack</span>
+<span class="sd">            An optional undo pack into which to load the undoable objects</span>
+<span class="sd">            generated during this operation (if any).</span>
+<span class="sd">        err_log: Common.Logging.Log</span>
+<span class="sd">            A Log object into which to capture any messages generated during</span>
+<span class="sd">            this operation.  If not provided, messages will be added into</span>
+<span class="sd">            the pymdt.GlobalErrorLog.</span>
 <span class="sd">        </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -1055,6 +1062,13 @@
 <span class="sd">            https://learn.microsoft.com/en-us/dotnet/api/system.guid.-ctor?view=net-8.0#system-guid-ctor(system-string)</span>
 <span class="sd">            or a System.Guid instance.  If not provided, a newly created,</span>
 <span class="sd">            random Guid is used.</span>
+<span class="sd">        undos: Common.Undoing.IUndoPack</span>
+<span class="sd">            An optional undo pack into which to load the undoable objects</span>
+<span class="sd">            generated during this operation (if any).</span>
+<span class="sd">        err_log: Common.Logging.Log</span>
+<span class="sd">            A Log object into which to capture any messages generated during</span>
+<span class="sd">            this operation.  If not provided, messages will be added into</span>
+<span class="sd">            the pymdt.GlobalErrorLog.</span>
 <span class="sd">        </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -1106,6 +1120,13 @@
 <span class="sd">            https://learn.microsoft.com/en-us/dotnet/api/system.guid.-ctor?view=net-8.0#system-guid-ctor(system-string)</span>
 <span class="sd">            or a System.Guid instance.  If not provided, a newly created,</span>
 <span class="sd">            random Guid is used.</span>
+<span class="sd">        undos: Common.Undoing.IUndoPack</span>
+<span class="sd">            An optional undo pack into which to load the undoable objects</span>
+<span class="sd">            generated during this operation (if any).</span>
+<span class="sd">        err_log: Common.Logging.Log</span>
+<span class="sd">            A Log object into which to capture any messages generated during</span>
+<span class="sd">            this operation.  If not provided, messages will be added into</span>
+<span class="sd">            the pymdt.GlobalErrorLog.</span>
 <span class="sd">        </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -1157,6 +1178,13 @@
 <span class="sd">            https://learn.microsoft.com/en-us/dotnet/api/system.guid.-ctor?view=net-8.0#system-guid-ctor(system-string)</span>
 <span class="sd">            or a System.Guid instance.  If not provided, a newly created,</span>
 <span class="sd">            random Guid is used.</span>
+<span class="sd">        undos: Common.Undoing.IUndoPack</span>
+<span class="sd">            An optional undo pack into which to load the undoable objects</span>
+<span class="sd">            generated during this operation (if any).</span>
+<span class="sd">        err_log: Common.Logging.Log</span>
+<span class="sd">            A Log object into which to capture any messages generated during</span>
+<span class="sd">            this operation.  If not provided, messages will be added into</span>
+<span class="sd">            the pymdt.GlobalErrorLog.</span>
 <span class="sd">        </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -1208,6 +1236,13 @@
 <span class="sd">            https://learn.microsoft.com/en-us/dotnet/api/system.guid.-ctor?view=net-8.0#system-guid-ctor(system-string)</span>
 <span class="sd">            or a System.Guid instance.  If not provided, a newly created,</span>
 <span class="sd">            random Guid is used.</span>
+<span class="sd">        undos: Common.Undoing.IUndoPack</span>
+<span class="sd">            An optional undo pack into which to load the undoable objects</span>
+<span class="sd">            generated during this operation (if any).</span>
+<span class="sd">        err_log: Common.Logging.Log</span>
+<span class="sd">            A Log object into which to capture any messages generated during</span>
+<span class="sd">            this operation.  If not provided, messages will be added into</span>
+<span class="sd">            the pymdt.GlobalErrorLog.</span>
 <span class="sd">        </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -3291,7 +3326,8 @@
 <span class="sd">    ----------</span>
 <span class="sd">    mdo: MDT.MicrogridDesignOption</span>
 <span class="sd">        The microgrid design option into which the new bus design option will be</span>
-<span class="sd">        installed.</span>
+<span class="sd">        installed.  If an mdo is not provided (None), then an orphan bus design</span>
+<span class="sd">        option is returned and should be added to an mdo at some later point.</span>
 <span class="sd">    b: MDT.Bus</span>
 <span class="sd">        The bus for which this bus design option is being built.  If this option</span>
 <span class="sd">        is being built for a bus that is not part of the microgrid but instead</span>
@@ -3387,7 +3423,7 @@
 <span class="sd">        The newly created load tier instance.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">lt</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">build_load_tier</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">priority</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="n">owner</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">_extract_owner</span><span class="p">(</span><span class="n">MDTDVR</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">owner</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">_extract_owner</span><span class="p">(</span><span class="n">MDT</span><span class="o">.</span><span class="n">Driver</span><span class="o">.</span><span class="n">INSTANCE</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">owner</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_execute_1_arg_add_with_undo</span><span class="p">(</span>
             <span class="n">owner</span><span class="p">,</span> <span class="s2">&quot;AddLoadTierCanceled&quot;</span><span class="p">,</span> <span class="s2">&quot;get_LoadTiers&quot;</span><span class="p">,</span> <span class="n">lt</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
@@ -3514,9 +3550,20 @@
 <span class="sd">        The tank to assign to have infinite fuel capacity or not.</span>
 <span class="sd">    infinite: bool</span>
 <span class="sd">        Whether or not the supplied tank should have infinite fuel capacity.</span>
+<span class="sd">    kwargs: dict</span>
+<span class="sd">        A dictionary of all the variable arguments provided to this function.</span>
+<span class="sd">        The arguments used by this method include:</span>
+<span class="sd">        </span>
+<span class="sd">        err_log: Common.Logging.Log</span>
+<span class="sd">            A Log object into which to capture any messages generated during</span>
+<span class="sd">            this operation.  If not provided, messages will be added into</span>
+<span class="sd">            the pymdt.GlobalErrorLog.</span>
+<span class="sd">        undos: Common.Undoing.IUndoPack</span>
+<span class="sd">            An optional undo pack into which to load the undoable objects</span>
+<span class="sd">            generated during this operation (if any).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">mgSets</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">_extract_prm_microgrid_settings</span><span class="p">(</span><span class="n">tank</span><span class="o">.</span><span class="n">Microgrid</span><span class="p">)</span>
-    <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_indexed_property_set</span><span class="p">(</span>
+    <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_indexed_property_set_with_undo</span><span class="p">(</span>
         <span class="n">mgSets</span><span class="p">,</span> <span class="s2">&quot;UseInfiniteDieselFuel&quot;</span><span class="p">,</span> <span class="n">tank</span><span class="p">,</span> <span class="n">infinite</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
         <span class="p">)</span></div>
 
@@ -3533,9 +3580,20 @@
 <span class="sd">        The tank to assign to have infinite fuel capacity or not.</span>
 <span class="sd">    infinite: bool</span>
 <span class="sd">        Whether or not the supplied tank should have infinite fuel capacity.</span>
+<span class="sd">    kwargs: dict</span>
+<span class="sd">        A dictionary of all the variable arguments provided to this function.</span>
+<span class="sd">        The arguments used by this method include:</span>
+<span class="sd">        </span>
+<span class="sd">        err_log: Common.Logging.Log</span>
+<span class="sd">            A Log object into which to capture any messages generated during</span>
+<span class="sd">            this operation.  If not provided, messages will be added into</span>
+<span class="sd">            the pymdt.GlobalErrorLog.</span>
+<span class="sd">        undos: Common.Undoing.IUndoPack</span>
+<span class="sd">            An optional undo pack into which to load the undoable objects</span>
+<span class="sd">            generated during this operation (if any).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">mgSets</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">_extract_prm_microgrid_settings</span><span class="p">(</span><span class="n">tank</span><span class="o">.</span><span class="n">Microgrid</span><span class="p">)</span>
-    <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_indexed_property_set</span><span class="p">(</span>
+    <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_indexed_property_set_with_undo</span><span class="p">(</span>
         <span class="n">mgSets</span><span class="p">,</span> <span class="s2">&quot;UseInfinitePropaneFuel&quot;</span><span class="p">,</span> <span class="n">tank</span><span class="p">,</span> <span class="n">infinite</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
         <span class="p">)</span></div>
 
@@ -3554,6 +3612,17 @@
 <span class="sd">        A collection of the values that should be pushed into the MDT data</span>
 <span class="sd">        construct.  The items in this list must be float or convertible to</span>
 <span class="sd">        float.</span>
+<span class="sd">    kwargs: dict</span>
+<span class="sd">        A dictionary of all the variable arguments provided to this function.</span>
+<span class="sd">        The arguments used by this method include:</span>
+<span class="sd">        </span>
+<span class="sd">        err_log: Common.Logging.Log</span>
+<span class="sd">            A Log object into which to capture any messages generated during</span>
+<span class="sd">            this operation.  If not provided, messages will be added into</span>
+<span class="sd">            the pymdt.GlobalErrorLog.</span>
+<span class="sd">        undos: Common.Undoing.IUndoPack</span>
+<span class="sd">            An optional undo pack into which to load the undoable objects</span>
+<span class="sd">            generated during this operation (if any).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">dat</span> <span class="o">=</span> <span class="n">Common</span><span class="o">.</span><span class="n">Databinding</span><span class="o">.</span><span class="n">ObservableBindingListWithUndo</span><span class="p">[</span><span class="nb">float</span><span class="p">]()</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_is_collection</span><span class="p">(</span><span class="n">dataset</span><span class="p">):</span> <span class="n">dataset</span> <span class="o">=</span> <span class="p">[</span><span class="n">dataset</span><span class="p">]</span>
@@ -3599,6 +3668,14 @@
 <span class="sd">        forecast_duration: float</span>
 <span class="sd">            The number of hours over which to do load, solar, etc. forecasting</span>
 <span class="sd">            for the purposes of generator dispatch.  The default is 1 hour.</span>
+<span class="sd">        err_log: Common.Logging.Log</span>
+<span class="sd">            The log into which to record any errors encountered during the</span>
+<span class="sd">            building, loading, or saving of the new item.  If this argument is</span>
+<span class="sd">            not provided, messages will be recorded into the</span>
+<span class="sd">            pymdt.GlobalErrorLog instance.</span>
+<span class="sd">        undos: Common.Undoing.IUndoPack</span>
+<span class="sd">            An optional undo pack into which to load the undoable objects</span>
+<span class="sd">            generated during this operation (if any).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
     <span class="n">mgSets</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">_extract_prm_microgrid_settings</span><span class="p">(</span><span class="n">mg</span><span class="p">)</span>
     <span class="n">mgCSets</span> <span class="o">=</span> <span class="n">mgSets</span><span class="o">.</span><span class="n">MicrogridControllerSettings</span>
@@ -3677,6 +3754,14 @@
 <span class="sd">            The number of seconds of delay between the end of the startup</span>
 <span class="sd">            procedure and the reconnection of any non-ride-through inverter</span>
 <span class="sd">            controlled renewable assets.  The default is 300 seconds.</span>
+<span class="sd">        err_log: Common.Logging.Log</span>
+<span class="sd">            The log into which to record any errors encountered during the</span>
+<span class="sd">            building, loading, or saving of the new item.  If this argument is</span>
+<span class="sd">            not provided, messages will be recorded into the</span>
+<span class="sd">            pymdt.GlobalErrorLog instance.</span>
+<span class="sd">        undos: Common.Undoing.IUndoPack</span>
+<span class="sd">            An optional undo pack into which to load the undoable objects</span>
+<span class="sd">            generated during this operation (if any).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
     <span class="n">mgSets</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">_extract_prm_microgrid_settings</span><span class="p">(</span><span class="n">mg</span><span class="p">)</span>
     <span class="n">stCSets</span> <span class="o">=</span> <span class="n">mgSets</span><span class="o">.</span><span class="n">StartupControllerSettings</span>
@@ -3770,6 +3855,14 @@
 <span class="sd">        track_inverter_failures: bool</span>
 <span class="sd">            Whether or not to execute failures and repairs of inverters during</span>
 <span class="sd">            the grid-tied operations.</span>
+<span class="sd">        err_log: Common.Logging.Log</span>
+<span class="sd">            The log into which to record any errors encountered during the</span>
+<span class="sd">            building, loading, or saving of the new item.  If this argument is</span>
+<span class="sd">            not provided, messages will be recorded into the</span>
+<span class="sd">            pymdt.GlobalErrorLog instance.</span>
+<span class="sd">        undos: Common.Undoing.IUndoPack</span>
+<span class="sd">            An optional undo pack into which to load the undoable objects</span>
+<span class="sd">            generated during this operation (if any).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">mgSets</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">_extract_prm_microgrid_settings</span><span class="p">(</span><span class="n">mg</span><span class="p">)</span>
     <span class="n">gtCSets</span> <span class="o">=</span> <span class="n">mgSets</span><span class="o">.</span><span class="n">GridTiedControllerSettings</span>
@@ -3837,6 +3930,14 @@
 <span class="sd">            The maximum amount of fuel that can be delivered in any refuelling</span>
 <span class="sd">            action.  A value of -1 allows for the delivery of any amount of fuel</span>
 <span class="sd">            (infinite).</span>
+<span class="sd">        err_log: Common.Logging.Log</span>
+<span class="sd">            The log into which to record any errors encountered during the</span>
+<span class="sd">            building, loading, or saving of the new item.  If this argument is</span>
+<span class="sd">            not provided, messages will be recorded into the</span>
+<span class="sd">            pymdt.GlobalErrorLog instance.</span>
+<span class="sd">        undos: Common.Undoing.IUndoPack</span>
+<span class="sd">            An optional undo pack into which to load the undoable objects</span>
+<span class="sd">            generated during this operation (if any).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">mgSets</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">_extract_prm_microgrid_settings</span><span class="p">(</span><span class="n">mg</span><span class="p">)</span>
     <span class="n">rfSets</span> <span class="o">=</span> <span class="n">mgSets</span><span class="o">.</span><span class="n">DieselRefuelingStrategySettings</span>
@@ -3867,6 +3968,14 @@
 <span class="sd">            The maximum amount of fuel that can be delivered in any refuelling</span>
 <span class="sd">            action.  A value of -1 allows for the delivery of any amount of fuel</span>
 <span class="sd">            (infinite).</span>
+<span class="sd">        err_log: Common.Logging.Log</span>
+<span class="sd">            The log into which to record any errors encountered during the</span>
+<span class="sd">            building, loading, or saving of the new item.  If this argument is</span>
+<span class="sd">            not provided, messages will be recorded into the</span>
+<span class="sd">            pymdt.GlobalErrorLog instance.</span>
+<span class="sd">        undos: Common.Undoing.IUndoPack</span>
+<span class="sd">            An optional undo pack into which to load the undoable objects</span>
+<span class="sd">            generated during this operation (if any).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">mgSets</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">_extract_prm_microgrid_settings</span><span class="p">(</span><span class="n">mg</span><span class="p">)</span>
     <span class="n">rfSets</span> <span class="o">=</span> <span class="n">mgSets</span><span class="o">.</span><span class="n">PropaneRefuelingStrategySettings</span>
@@ -3888,6 +3997,19 @@
 
 
 <span class="k">def</span> <span class="nf">RunMDTGUI</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">CompletedProcess</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Executes the MDT GUI.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename: str</span>
+<span class="sd">        An MDT input or output file to be opened in the MDT GUI if desired.  If</span>
+<span class="sd">        not provided, the MDT is opened with no current file.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    subprocess.CompletedProcess:</span>
+<span class="sd">        The CompletedProcess object that results from a call to subprocess.run.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
        <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pymdt</span><span class="o">.</span><span class="n">MDT_BIN_DIR</span><span class="p">,</span> <span class="s2">&quot;MDT-GUI.exe&quot;</span><span class="p">),</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">filename</span><span class="p">]</span>
        <span class="p">)</span>
@@ -3922,6 +4044,14 @@
 <span class="sd">            This serves as a means of telling the simulation to ignore fragility</span>
 <span class="sd">            inputs which can be useful for comparison trials. The default is</span>
 <span class="sd">            True.</span>
+<span class="sd">        err_log: Common.Logging.Log</span>
+<span class="sd">            The log into which to record any errors encountered during the</span>
+<span class="sd">            building, loading, or saving of the new item.  If this argument is</span>
+<span class="sd">            not provided, messages will be recorded into the</span>
+<span class="sd">            pymdt.GlobalErrorLog instance.</span>
+<span class="sd">        undos: Common.Undoing.IUndoPack</span>
+<span class="sd">            An optional undo pack into which to load the undoable objects</span>
+<span class="sd">            generated during this operation (if any).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">prmsets</span> <span class="o">=</span> <span class="n">ExtractPRMSettings</span><span class="p">()</span>
 
@@ -3954,7 +4084,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2025 National Technology &amp; Engineering Solutions of Sandia, LLC (NTESS)..</p>
+    <p>&#169; Copyright 2025 National Technology &amp; Engineering Solutions of Sandia, LLC (NTESS).</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
