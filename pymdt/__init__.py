@@ -20,6 +20,8 @@ for px in sys.argv:
         MDT_BIN_DIR = value
     elif key == "MDT_DATA_DIR":
         MDT_DATA_DIR = value
+    elif key == "MDT_SPEC_DB_DIR":
+        MDT_SPEC_DB_DIR = value
                 
 if MDT_BIN_DIR is None:    
     if "__PYMDT_DOC_BUILD__" in os.environ:

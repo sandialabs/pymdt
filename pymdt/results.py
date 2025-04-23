@@ -191,6 +191,21 @@ def GetMicrogridRealization(mg: MDT.Microgrid, config: MDT.SiteUpgradeConfigurat
     return config.RealizedSite.get_MicrogridRealization(mg)
 
 def GetResponseFunctionGroups(sri: TMO.SolverRunInfo) -> Common.Databinding.IKeyedCollectionWithUndo[System.Guid, TMO.ResponseFunctionGroup]:
+    """ Extracts and returns the collection of TMO.ResponseFunctionGroup objects
+    used in the creation of the results in sri.
+
+    Parameters
+    ----------
+    sri: TMO.SolverRunInfo
+        The solver run information object that contains results.  These results
+        were generated for a set of response function groups.  Those groups
+        are extracted from this object.
+        
+    Returns
+    -------
+    Common.Databinding.IKeyedCollectionWithUndo[System.Guid, TMO.ResponseFunctionGroup]:
+        The collection of response function groups found.  None otherwise.
+    """
     if sri is None: return None
     solver = sri.Solver
     if solver is None: return None
