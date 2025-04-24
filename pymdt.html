@@ -47,6 +47,13 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">pymdt</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">pymdt package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#configuration-arguments">Configuration Arguments</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#mdt-version">MDT_VERSION</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mdt-bin-dir">MDT_BIN_DIR</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mdt-data-dir">MDT_DATA_DIR</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mdt-spec-db-dir">MDT_SPEC_DB_DIR</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#module-pymdt.core">pymdt.core module</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#pymdt.core.ConfigureDieselRefueller"><code class="docutils literal notranslate"><span class="pre">ConfigureDieselRefueller()</span></code></a></li>
@@ -260,6 +267,74 @@
              
   <section id="pymdt-package">
 <h1>pymdt package<a class="headerlink" href="#pymdt-package" title="Link to this heading"></a></h1>
+<section id="configuration-arguments">
+<h2>Configuration Arguments<a class="headerlink" href="#configuration-arguments" title="Link to this heading"></a></h2>
+<p>There are several arguments that can be used to control the MDT from within your
+python script.  They are extracted from the list of system arguments.  Examples
+are provided for each as are details of when you may want to use them.  Often
+it is not necessary to use any of them.</p>
+<p>These arguments should be defined near the top of your python script file and
+<strong>must be provided before importing anything from pymdt</strong>.</p>
+<div class="literal-block-wrapper docutils container" id="id211">
+<div class="code-block-caption"><span class="caption-text"><strong>INCORRECT</strong></span><a class="headerlink" href="#id211" title="Link to this code"></a></div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="kn">import</span> <span class="nn">pymdt</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;MDT_VERSION=1.4.2520.0&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id212">
+<div class="code-block-caption"><span class="caption-text"><strong>CORRECT</strong></span><a class="headerlink" href="#id212" title="Link to this code"></a></div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;MDT_VERSION=1.4.2520.0&quot;</span><span class="p">)</span>
+    <span class="kn">import</span> <span class="nn">pymdt</span>
+</pre></div>
+</div>
+</div>
+<p>They are:</p>
+<section id="mdt-version">
+<h3>MDT_VERSION<a class="headerlink" href="#mdt-version" title="Link to this heading"></a></h3>
+<p>The default for this is defined in pymdt\__init__.py.  This is important because
+it tells pymdt where to find the MDT binaries as well as other things.  If the
+version listed in pymdt\__init__.py does not match with your installed version
+of MDT, you will need to provide this. The format is major.minor[.build[.revision]]
+where each component is an integer value.  For example:</p>
+<p>sys.argv.append(“MDT_VERSION=1.4.2520.0”)</p>
+<p>Given this and absent an explicitly provided MDT_BIN_DIR (see below), the MDT
+will look for MDT binaries in an installation folder that looks like:</p>
+<p>C:\Program Files\Sandia National Laboratories\Microgrid Design Toolkit v1.4.2520.0</p>
+</section>
+<section id="mdt-bin-dir">
+<h3>MDT_BIN_DIR<a class="headerlink" href="#mdt-bin-dir" title="Link to this heading"></a></h3>
+<p>The location in which pymdt will look for MDT binaries to use.  This should be
+a folder into which the MDT has been installed on your computer.  It is typically
+something like:</p>
+<p>C:\Program Files\Sandia National Laboratories\Microgrid Design Toolkit v1.4.2520.0</p>
+<p>Where the version listed at the end is either the default version defined in
+pymdt\__init__.py or was provided as the MDT_VERSION (see above).  You should use this
+value when your MDT installation is in a folder that does not follow the pattern.
+For instance, if it was installed on a drive other than the C drive or if there
+are any other path differences from what’s shown above (other than the version number).</p>
+<p>sys.argv.append(“MDT_BIN_DIR=&lt;path to MDT binaries&gt;”)</p>
+</section>
+<section id="mdt-data-dir">
+<h3>MDT_DATA_DIR<a class="headerlink" href="#mdt-data-dir" title="Link to this heading"></a></h3>
+<p>The location in which pymdt will look for the file (been.invoked) whose presence
+tells the MDT whether or not this is the first invocation of the software.  The
+location provided will have the version number appended.  This is typically</p>
+<p>C:\ProgramData\Sandia National Laboratories\Microgrid Design Toolkit\1.4.2520.0</p>
+<p>Of course, the version number at the end will align with your current version.
+It should be rare that you need to provide this input.</p>
+<p>sys.argv.append(“MDT_DATA_DIR=&lt;path to MDT data directory&gt;”)</p>
+</section>
+<section id="mdt-spec-db-dir">
+<h3>MDT_SPEC_DB_DIR<a class="headerlink" href="#mdt-spec-db-dir" title="Link to this heading"></a></h3>
+<p>The directory in which the specification DB is located.  The default for this is</p>
+<p>C:\Users\Public\Documents\Microgrid Design Toolkit v1.4.2520.0</p>
+<p>Where the version number is the current version of the MDT you have installed.
+If you keep your database in a non-standard location, you can provide that path
+in this input.</p>
+<p>sys.argv.append(“MDT_SPEC_DB_DIR=&lt;path to MDT spec DB&gt;”)</p>
+</section>
+</section>
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
 </section>
@@ -5941,7 +6016,25 @@ for the supplied Microgrid.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pymdt.results.GetResponseFunctionGroups">
 <span class="sig-prename descclassname"><span class="pre">pymdt.results.</span></span><span class="sig-name descname"><span class="pre">GetResponseFunctionGroups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sri</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SolverRunInfo</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">IKeyedCollectionWithUndo</span><span class="p"><span class="pre">[</span></span><span class="pre">Guid</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ResponseFunctionGroup</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pymdt/results.html#GetResponseFunctionGroups"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pymdt.results.GetResponseFunctionGroups" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Extracts and returns the collection of TMO.ResponseFunctionGroup objects
+used in the creation of the results in sri.</p>
+<section id="id173">
+<h3>Parameters<a class="headerlink" href="#id173" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>sri: TMO.SolverRunInfo</dt><dd><p>The solver run information object that contains results.  These results
+were generated for a set of response function groups.  Those groups
+are extracted from this object.</p>
+</dd>
+</dl>
+</section>
+<section id="id174">
+<h3>Returns<a class="headerlink" href="#id174" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>Common.Databinding.IKeyedCollectionWithUndo[System.Guid, TMO.ResponseFunctionGroup]:</dt><dd><p>The collection of response function groups found.  None otherwise.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pymdt.results.GetResultManagers">
@@ -5980,8 +6073,8 @@ for the supplied Microgrid.</p>
 <dd><p>This helper function creates a new BatterySpec, extracts any
 provided properties, loads it into the master list of specifications,
 and returns it.</p>
-<section id="id173">
-<h3>Parameters<a class="headerlink" href="#id173" title="Link to this heading"></a></h3>
+<section id="id175">
+<h3>Parameters<a class="headerlink" href="#id175" title="Link to this heading"></a></h3>
 <dl>
 <dt>name: str</dt><dd><p>The name to be given to the new specification.  Names of like-type
 specifications must be unique.</p>
@@ -6057,8 +6150,8 @@ random Guid is used.</p>
 </dd>
 </dl>
 </section>
-<section id="id174">
-<h3>Returns<a class="headerlink" href="#id174" title="Link to this heading"></a></h3>
+<section id="id176">
+<h3>Returns<a class="headerlink" href="#id176" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>MDT.BatterySpec:</dt><dd><p>The newly created specification instance.</p>
 </dd>
@@ -6072,8 +6165,8 @@ random Guid is used.</p>
 <dd><p>This helper function creates a new DieselGeneratorSpec, extracts any
 provided properties, loads it into the master list of specifications,
 and returns it.</p>
-<section id="id175">
-<h3>Parameters<a class="headerlink" href="#id175" title="Link to this heading"></a></h3>
+<section id="id177">
+<h3>Parameters<a class="headerlink" href="#id177" title="Link to this heading"></a></h3>
 <dl>
 <dt>name: str</dt><dd><p>The name to be given to the new specification.  Names of like-type
 specifications must be unique.</p>
@@ -6155,8 +6248,8 @@ random Guid is used.</p>
 </dd>
 </dl>
 </section>
-<section id="id176">
-<h3>Returns<a class="headerlink" href="#id176" title="Link to this heading"></a></h3>
+<section id="id178">
+<h3>Returns<a class="headerlink" href="#id178" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>MDT.DieselGeneratorSpec:</dt><dd><p>The newly created specification instance.</p>
 </dd>
@@ -6170,8 +6263,8 @@ random Guid is used.</p>
 <dd><p>This helper function creates a new DieselTankSpec, extracts any
 provided properties, loads it into the master list of specifications,
 and returns it.</p>
-<section id="id177">
-<h3>Parameters<a class="headerlink" href="#id177" title="Link to this heading"></a></h3>
+<section id="id179">
+<h3>Parameters<a class="headerlink" href="#id179" title="Link to this heading"></a></h3>
 <dl>
 <dt>name: str</dt><dd><p>The name to be given to the new specification.  Names of like-type
 specifications must be unique.</p>
@@ -6214,8 +6307,8 @@ random Guid is used.</p>
 </dd>
 </dl>
 </section>
-<section id="id178">
-<h3>Returns<a class="headerlink" href="#id178" title="Link to this heading"></a></h3>
+<section id="id180">
+<h3>Returns<a class="headerlink" href="#id180" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>MDT.DieselTankSpec:</dt><dd><p>The newly created specification instance.</p>
 </dd>
@@ -6229,8 +6322,8 @@ random Guid is used.</p>
 <dd><p>This helper function creates a new HydroGeneratorSpec, extracts any
 provided properties, loads it into the master list of specifications,
 and returns it.</p>
-<section id="id179">
-<h3>Parameters<a class="headerlink" href="#id179" title="Link to this heading"></a></h3>
+<section id="id181">
+<h3>Parameters<a class="headerlink" href="#id181" title="Link to this heading"></a></h3>
 <dl>
 <dt>name: str</dt><dd><p>The name to be given to the new specification.  Names of like-type
 specifications must be unique.</p>
@@ -6285,8 +6378,8 @@ random Guid is used.</p>
 </dd>
 </dl>
 </section>
-<section id="id180">
-<h3>Returns<a class="headerlink" href="#id180" title="Link to this heading"></a></h3>
+<section id="id182">
+<h3>Returns<a class="headerlink" href="#id182" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>MDT.HydroGeneratorSpec:</dt><dd><p>The newly created specification instance.</p>
 </dd>
@@ -6300,8 +6393,8 @@ random Guid is used.</p>
 <dd><p>This helper function creates a new InverterSpec, extracts any
 provided properties, loads it into the master list of specifications,
 and returns it.</p>
-<section id="id181">
-<h3>Parameters<a class="headerlink" href="#id181" title="Link to this heading"></a></h3>
+<section id="id183">
+<h3>Parameters<a class="headerlink" href="#id183" title="Link to this heading"></a></h3>
 <dl>
 <dt>name: str</dt><dd><p>The name to be given to the new specification.  Names of like-type
 specifications must be unique.</p>
@@ -6345,8 +6438,8 @@ random Guid is used.</p>
 </dd>
 </dl>
 </section>
-<section id="id182">
-<h3>Returns<a class="headerlink" href="#id182" title="Link to this heading"></a></h3>
+<section id="id184">
+<h3>Returns<a class="headerlink" href="#id184" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>MDT.InverterSpec:</dt><dd><p>The newly created specification instance.</p>
 </dd>
@@ -6360,8 +6453,8 @@ random Guid is used.</p>
 <dd><p>This helper function creates a new LineSpec, extracts any
 provided properties, loads it into the master list of specifications,
 and returns it.</p>
-<section id="id183">
-<h3>Parameters<a class="headerlink" href="#id183" title="Link to this heading"></a></h3>
+<section id="id185">
+<h3>Parameters<a class="headerlink" href="#id185" title="Link to this heading"></a></h3>
 <dl>
 <dt>name: str</dt><dd><p>The name to be given to the new specification.  Names of like-type
 specifications must be unique.</p>
@@ -6416,8 +6509,8 @@ random Guid is used.</p>
 </dd>
 </dl>
 </section>
-<section id="id184">
-<h3>Returns<a class="headerlink" href="#id184" title="Link to this heading"></a></h3>
+<section id="id186">
+<h3>Returns<a class="headerlink" href="#id186" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>MDT.LineSpec:</dt><dd><p>The newly created specification instance.</p>
 </dd>
@@ -6431,8 +6524,8 @@ random Guid is used.</p>
 <dd><p>This helper function creates a new NaturalGasGeneratorSpec, extracts any
 provided properties, loads it into the master list of specifications,
 and returns it.</p>
-<section id="id185">
-<h3>Parameters<a class="headerlink" href="#id185" title="Link to this heading"></a></h3>
+<section id="id187">
+<h3>Parameters<a class="headerlink" href="#id187" title="Link to this heading"></a></h3>
 <dl>
 <dt>name: str</dt><dd><p>The name to be given to the new specification.  Names of like-type
 specifications must be unique.</p>
@@ -6514,8 +6607,8 @@ random Guid is used.</p>
 </dd>
 </dl>
 </section>
-<section id="id186">
-<h3>Returns<a class="headerlink" href="#id186" title="Link to this heading"></a></h3>
+<section id="id188">
+<h3>Returns<a class="headerlink" href="#id188" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>MDT.NaturalGasGeneratorSpec:</dt><dd><p>The newly created specification instance.</p>
 </dd>
@@ -6529,8 +6622,8 @@ random Guid is used.</p>
 <dd><p>This helper function creates a new PropaneGeneratorSpec, extracts any
 provided properties, loads it into the master list of specifications,
 and returns it.</p>
-<section id="id187">
-<h3>Parameters<a class="headerlink" href="#id187" title="Link to this heading"></a></h3>
+<section id="id189">
+<h3>Parameters<a class="headerlink" href="#id189" title="Link to this heading"></a></h3>
 <dl>
 <dt>name: str</dt><dd><p>The name to be given to the new specification.  Names of like-type
 specifications must be unique.</p>
@@ -6612,8 +6705,8 @@ random Guid is used.</p>
 </dd>
 </dl>
 </section>
-<section id="id188">
-<h3>Returns<a class="headerlink" href="#id188" title="Link to this heading"></a></h3>
+<section id="id190">
+<h3>Returns<a class="headerlink" href="#id190" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>MDT.PropaneGeneratorSpec:</dt><dd><p>The newly created specification instance.</p>
 </dd>
@@ -6627,8 +6720,8 @@ random Guid is used.</p>
 <dd><p>This helper function creates a new PropaneTankSpec, extracts any
 provided properties, loads it into the master list of specifications,
 and returns it.</p>
-<section id="id189">
-<h3>Parameters<a class="headerlink" href="#id189" title="Link to this heading"></a></h3>
+<section id="id191">
+<h3>Parameters<a class="headerlink" href="#id191" title="Link to this heading"></a></h3>
 <dl>
 <dt>name: str</dt><dd><p>The name to be given to the new specification.  Names of like-type
 specifications must be unique.</p>
@@ -6671,8 +6764,8 @@ random Guid is used.</p>
 </dd>
 </dl>
 </section>
-<section id="id190">
-<h3>Returns<a class="headerlink" href="#id190" title="Link to this heading"></a></h3>
+<section id="id192">
+<h3>Returns<a class="headerlink" href="#id192" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>MDT.PropaneTankSpec:</dt><dd><p>The newly created specification instance.</p>
 </dd>
@@ -6686,8 +6779,8 @@ random Guid is used.</p>
 <dd><p>This helper function creates a new SolarGeneratorSpec, extracts any
 provided properties, loads it into the master list of specifications,
 and returns it.</p>
-<section id="id191">
-<h3>Parameters<a class="headerlink" href="#id191" title="Link to this heading"></a></h3>
+<section id="id193">
+<h3>Parameters<a class="headerlink" href="#id193" title="Link to this heading"></a></h3>
 <dl>
 <dt>name: str</dt><dd><p>The name to be given to the new specification.  Names of like-type
 specifications must be unique.</p>
@@ -6742,8 +6835,8 @@ random Guid is used.</p>
 </dd>
 </dl>
 </section>
-<section id="id192">
-<h3>Returns<a class="headerlink" href="#id192" title="Link to this heading"></a></h3>
+<section id="id194">
+<h3>Returns<a class="headerlink" href="#id194" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>MDT.SolarGeneratorSpec:</dt><dd><p>The newly created specification instance.</p>
 </dd>
@@ -6757,8 +6850,8 @@ random Guid is used.</p>
 <dd><p>This helper function creates a new SwitchSpec, extracts any
 provided properties, loads it into the master list of specifications,
 and returns it.</p>
-<section id="id193">
-<h3>Parameters<a class="headerlink" href="#id193" title="Link to this heading"></a></h3>
+<section id="id195">
+<h3>Parameters<a class="headerlink" href="#id195" title="Link to this heading"></a></h3>
 <dl>
 <dt>name: str</dt><dd><p>The name to be given to the new specification.  Names of like-type
 specifications must be unique.</p>
@@ -6811,8 +6904,8 @@ random Guid is used.</p>
 </dd>
 </dl>
 </section>
-<section id="id194">
-<h3>Returns<a class="headerlink" href="#id194" title="Link to this heading"></a></h3>
+<section id="id196">
+<h3>Returns<a class="headerlink" href="#id196" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>MDT.SwitchSpec:</dt><dd><p>The newly created specification instance.</p>
 </dd>
@@ -6826,8 +6919,8 @@ random Guid is used.</p>
 <dd><p>This helper function creates a new TransformerSpec, extracts any
 provided properties, loads it into the master list of specifications,
 and returns it.</p>
-<section id="id195">
-<h3>Parameters<a class="headerlink" href="#id195" title="Link to this heading"></a></h3>
+<section id="id197">
+<h3>Parameters<a class="headerlink" href="#id197" title="Link to this heading"></a></h3>
 <dl>
 <dt>name: str</dt><dd><p>The name to be given to the new specification.  Names of like-type
 specifications must be unique.</p>
@@ -6882,8 +6975,8 @@ random Guid is used.</p>
 </dd>
 </dl>
 </section>
-<section id="id196">
-<h3>Returns<a class="headerlink" href="#id196" title="Link to this heading"></a></h3>
+<section id="id198">
+<h3>Returns<a class="headerlink" href="#id198" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>MDT.TransformerSpec:</dt><dd><p>The newly created specification instance.</p>
 </dd>
@@ -6897,8 +6990,8 @@ random Guid is used.</p>
 <dd><p>This helper function creates a new UPSSpec, extracts any
 provided properties, loads it into the master list of specifications,
 and returns it.</p>
-<section id="id197">
-<h3>Parameters<a class="headerlink" href="#id197" title="Link to this heading"></a></h3>
+<section id="id199">
+<h3>Parameters<a class="headerlink" href="#id199" title="Link to this heading"></a></h3>
 <dl>
 <dt>name: str</dt><dd><p>The name to be given to the new specification.  Names of like-type
 specifications must be unique.</p>
@@ -6971,8 +7064,8 @@ random Guid is used.</p>
 </dd>
 </dl>
 </section>
-<section id="id198">
-<h3>Returns<a class="headerlink" href="#id198" title="Link to this heading"></a></h3>
+<section id="id200">
+<h3>Returns<a class="headerlink" href="#id200" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>MDT.UPSSpec:</dt><dd><p>The newly created specification instance.</p>
 </dd>
@@ -6986,8 +7079,8 @@ random Guid is used.</p>
 <dd><p>This helper function creates a new WindGeneratorSpec, extracts any
 provided properties, loads it into the master list of specifications,
 and returns it.</p>
-<section id="id199">
-<h3>Parameters<a class="headerlink" href="#id199" title="Link to this heading"></a></h3>
+<section id="id201">
+<h3>Parameters<a class="headerlink" href="#id201" title="Link to this heading"></a></h3>
 <dl>
 <dt>name: str</dt><dd><p>The name to be given to the new specification.  Names of like-type
 specifications must be unique.</p>
@@ -7042,8 +7135,8 @@ random Guid is used.</p>
 </dd>
 </dl>
 </section>
-<section id="id200">
-<h3>Returns<a class="headerlink" href="#id200" title="Link to this heading"></a></h3>
+<section id="id202">
+<h3>Returns<a class="headerlink" href="#id202" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>MDT.WindGeneratorSpec:</dt><dd><p>The newly created specification instance.</p>
 </dd>
@@ -7058,8 +7151,8 @@ random Guid is used.</p>
 to the underlying database.</p>
 <p>Without calling this function, any changes made will not be saved for
 use in the future.</p>
-<section id="id201">
-<h3>Parameters<a class="headerlink" href="#id201" title="Link to this heading"></a></h3>
+<section id="id203">
+<h3>Parameters<a class="headerlink" href="#id203" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>errLog: Common.Logging.Log</dt><dd><p>A log that will receive any messages produced while saving the database
 changes and additions. If this parameter is None, then the
@@ -7067,8 +7160,8 @@ pymdt.GlobalErrorLog will be used.</p>
 </dd>
 </dl>
 </section>
-<section id="id202">
-<h3>Returns<a class="headerlink" href="#id202" title="Link to this heading"></a></h3>
+<section id="id204">
+<h3>Returns<a class="headerlink" href="#id204" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>Common.Logging.Log:</dt><dd><p>A log containing any errors or messages creating during the
 synchronization operation.  If the errLog parameter is None, then the
@@ -7087,8 +7180,8 @@ pymdt.GlobalErrorLog will be used and returned.</p>
 <dd><p>A helper function for setting properties on MDT (or associated library)
 class objects.  This helps with management of messages that may occur when
 setting a property that should be processed (error messages for example).</p>
-<section id="id203">
-<h3>Parameters<a class="headerlink" href="#id203" title="Link to this heading"></a></h3>
+<section id="id205">
+<h3>Parameters<a class="headerlink" href="#id205" title="Link to this heading"></a></h3>
 <dl>
 <dt>obj:</dt><dd><p>The object on which a property set should occur.</p>
 </dd>
@@ -7123,8 +7216,8 @@ the pymdt.GlobalErrorLog.</p>
 <dd><p>Searches through a collection to find an item with the given name.</p>
 <p>In the case of the MDT interface, the name is indicated by the value of
 the StringID property of an entry in all_ents.</p>
-<section id="id204">
-<h3>Parameters<a class="headerlink" href="#id204" title="Link to this heading"></a></h3>
+<section id="id206">
+<h3>Parameters<a class="headerlink" href="#id206" title="Link to this heading"></a></h3>
 <dl>
 <dt>all_ents:</dt><dd><p>Something that can be iterated to search for an item with the supplied
 name.  Then entities in this list must have a property named StringID
@@ -7153,8 +7246,8 @@ the failed search.</p>
 </dd>
 </dl>
 </section>
-<section id="id205">
-<h3>Returns<a class="headerlink" href="#id205" title="Link to this heading"></a></h3>
+<section id="id207">
+<h3>Returns<a class="headerlink" href="#id207" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>Found Item:</dt><dd><p>The item that was found or None if no matching item is found.</p>
 </dd>
@@ -7169,8 +7262,8 @@ the failed search.</p>
 names in the collection all_ents by adding digits to the end.</p>
 <p>In the case of the MDT interface, the name is indicated by the value of
 the StringID property of an entry in all_ents.</p>
-<section id="id206">
-<h3>Parameters<a class="headerlink" href="#id206" title="Link to this heading"></a></h3>
+<section id="id208">
+<h3>Parameters<a class="headerlink" href="#id208" title="Link to this heading"></a></h3>
 <dl>
 <dt>all_ents:</dt><dd><p>Something that can be iterated to search for an item with the supplied
 name.  Then entities in this list must have a property named StringID
@@ -7188,8 +7281,8 @@ them to get a unique name.</p>
 </dd>
 </dl>
 </section>
-<section id="id207">
-<h3>Returns<a class="headerlink" href="#id207" title="Link to this heading"></a></h3>
+<section id="id209">
+<h3>Returns<a class="headerlink" href="#id209" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>str:</dt><dd><p>The name that is unique to the supplied collection which may be the
 supplied name if it was already unique.</p>
@@ -7202,8 +7295,8 @@ supplied name if it was already unique.</p>
 <dt class="sig sig-object py" id="pymdt.utils.PrintLog">
 <span class="sig-prename descclassname"><span class="pre">pymdt.utils.</span></span><span class="sig-name descname"><span class="pre">PrintLog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">log</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Log</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">writeTags</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxEntries</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymdt/utils.html#PrintLog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pymdt.utils.PrintLog" title="Link to this definition"></a></dt>
 <dd><p>A simple helper function to print out the contents of a Log.</p>
-<section id="id208">
-<h3>Parameters<a class="headerlink" href="#id208" title="Link to this heading"></a></h3>
+<section id="id210">
+<h3>Parameters<a class="headerlink" href="#id210" title="Link to this heading"></a></h3>
 <dl class="simple">
 <dt>log: Common.Logging.Log</dt><dd><p>The log to print using the print() function.</p>
 </dd>

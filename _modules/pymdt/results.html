@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pymdt.results &mdash; sandia-pymdt 1.4.2520 documentation</title>
+  <title>pymdt.results &mdash; PyMDT 1.4.2520 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
 
@@ -31,7 +31,7 @@
           
           
           <a href="../../index.html" class="icon icon-home">
-            sandia-pymdt
+            PyMDT
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -52,7 +52,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">sandia-pymdt</a>
+          <a href="../../index.html">PyMDT</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -275,6 +275,21 @@
 <div class="viewcode-block" id="GetResponseFunctionGroups">
 <a class="viewcode-back" href="../../pymdt.html#pymdt.results.GetResponseFunctionGroups">[docs]</a>
 <span class="k">def</span> <span class="nf">GetResponseFunctionGroups</span><span class="p">(</span><span class="n">sri</span><span class="p">:</span> <span class="n">TMO</span><span class="o">.</span><span class="n">SolverRunInfo</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Common</span><span class="o">.</span><span class="n">Databinding</span><span class="o">.</span><span class="n">IKeyedCollectionWithUndo</span><span class="p">[</span><span class="n">System</span><span class="o">.</span><span class="n">Guid</span><span class="p">,</span> <span class="n">TMO</span><span class="o">.</span><span class="n">ResponseFunctionGroup</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Extracts and returns the collection of TMO.ResponseFunctionGroup objects</span>
+<span class="sd">    used in the creation of the results in sri.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    sri: TMO.SolverRunInfo</span>
+<span class="sd">        The solver run information object that contains results.  These results</span>
+<span class="sd">        were generated for a set of response function groups.  Those groups</span>
+<span class="sd">        are extracted from this object.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Common.Databinding.IKeyedCollectionWithUndo[System.Guid, TMO.ResponseFunctionGroup]:</span>
+<span class="sd">        The collection of response function groups found.  None otherwise.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">sri</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="k">return</span> <span class="kc">None</span>
     <span class="n">solver</span> <span class="o">=</span> <span class="n">sri</span><span class="o">.</span><span class="n">Solver</span>
     <span class="k">if</span> <span class="n">solver</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="k">return</span> <span class="kc">None</span>
@@ -492,7 +507,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2025, John Eddy.</p>
+    <p>&#169; Copyright 2025 National Technology &amp; Engineering Solutions of Sandia, LLC (NTESS).</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
