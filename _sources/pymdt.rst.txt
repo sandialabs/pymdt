@@ -90,7 +90,7 @@ Submodules
 ----------
 
 pymdt.core module
------------------
+^^^^^^^^^^^^^^^^^
 
 .. automodule:: pymdt.core
    :members:
@@ -98,7 +98,7 @@ pymdt.core module
    :show-inheritance:
 
 pymdt.distributions module
---------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. automodule:: pymdt.distributions
    :members:
@@ -106,7 +106,7 @@ pymdt.distributions module
    :show-inheritance:
 
 pymdt.io module
----------------
+^^^^^^^^^^^^^^^
 
 .. automodule:: pymdt.io
    :members:
@@ -114,7 +114,7 @@ pymdt.io module
    :show-inheritance:
 
 pymdt.metrics module
---------------------
+^^^^^^^^^^^^^^^^^^^^
 
 .. automodule:: pymdt.metrics
    :members:
@@ -122,7 +122,7 @@ pymdt.metrics module
    :show-inheritance:
 
 pymdt.missions module
----------------------
+^^^^^^^^^^^^^^^^^^^^^
 
 .. automodule:: pymdt.missions
    :members:
@@ -130,7 +130,7 @@ pymdt.missions module
    :show-inheritance:
 
 pymdt.results module
---------------------
+^^^^^^^^^^^^^^^^^^^^
 
 .. automodule:: pymdt.results
    :members:
@@ -138,7 +138,7 @@ pymdt.results module
    :show-inheritance:
 
 pymdt.solving module
---------------------
+^^^^^^^^^^^^^^^^^^^^
 
 .. automodule:: pymdt.solving
    :members:
@@ -146,7 +146,7 @@ pymdt.solving module
    :show-inheritance:
 
 pymdt.specs module
-------------------
+^^^^^^^^^^^^^^^^^^
 
 .. automodule:: pymdt.specs
    :members:
@@ -154,7 +154,7 @@ pymdt.specs module
    :show-inheritance:
 
 pymdt.utils module
-------------------
+^^^^^^^^^^^^^^^^^^
 
 .. automodule:: pymdt.utils
    :members:
