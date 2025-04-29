@@ -3593,13 +3593,14 @@ def ConfigureGridTiedController(mg: MDT.Microgrid, **kwargs):
     note are:
 
     1 - Even if tracking, statistics for failures and repairs are not kept
-        during this phase.  The only real effect of doing so is that it is
-        possible (or more possible) for an asset to be broken at the start
-        of the next DBT.
+    during this phase.  The only real effect of doing so is that it is
+    possible (or more possible) for an asset to be broken at the start
+    of the next DBT.
+
     2 - Even if not tracking, a repair for an asset that failed during the
-        DBT still may occur during the grid tied period and the full time
-        of the repair will be tallied in statistics.
-        
+    DBT still may occur during the grid tied period and the full time
+    of the repair will be tallied in statistics.
+            
     Parameters
     ----------
     mg: MDT.Microgrid
@@ -3611,31 +3612,31 @@ def ConfigureGridTiedController(mg: MDT.Microgrid, **kwargs):
         
         track_line_failures: bool
             Whether or not to execute failures and repairs of lines during the
-            grid-tied operations.
+            grid-tied operations. Default = True.
         track_transformer_failures: bool
             Whether or not to execute failures and repairs of transformers
-            during the grid-tied operations.
+            during the grid-tied operations. Default = True.
         track_switch_failures: bool
             Whether or not to execute failures and repairs of switches
-            during the grid-tied operations.
+            during the grid-tied operations. Default = True.
         track_ups_failures: bool
             Whether or not to execute failures and repairs of UPSs
-            during the grid-tied operations.
+            during the grid-tied operations. Default = True.
         track_battery_failures: bool
             Whether or not to execute failures and repairs of Batteries
-            during the grid-tied operations.
+            during the grid-tied operations. Default = True.
         track_wind_failures: bool
             Whether or not to execute failures and repairs of Wind generators
-            during the grid-tied operations.
+            during the grid-tied operations. Default = True.
         track_hydro_failures: bool
             Whether or not to execute failures and repairs of Hydro generators
-            during the grid-tied operations.
+            during the grid-tied operations. Default = True.
         track_solar_failures: bool
             Whether or not to execute failures and repairs of Solar generators
-            during the grid-tied operations.
+            during the grid-tied operations. Default = True.
         track_inverter_failures: bool
             Whether or not to execute failures and repairs of inverters during
-            the grid-tied operations.
+            the grid-tied operations. Default = True.
         err_log: Common.Logging.Log
             The log into which to record any errors encountered during the
             building, loading, or saving of the new item.  If this argument is

@@ -20,7 +20,14 @@ release = '1.4.2520'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ['sphinx.ext.todo', 'sphinx.ext.viewcode', 'sphinx.ext.autodoc']
+extensions = [
+    'sphinx.ext.todo',
+    'sphinx.ext.viewcode',
+    'sphinx.ext.autodoc',
+    'sphinx.ext.autosectionlabel'
+    ]
+
+autosectionlabel_maxdepth = 5
 todo_include_todos = True
 
 templates_path = ['_templates']

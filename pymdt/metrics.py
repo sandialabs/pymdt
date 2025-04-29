@@ -174,7 +174,18 @@ class details:
     @staticmethod
     def _set_def_imp_type(defType, kwargs):
         if "improvement_type" not in kwargs: kwargs["improvement_type"] = defType
-
+        
+    @staticmethod
+    def build_maximum_load_drop_duration_metric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM.MaximumLoadDropDurationConstraint:
+        details._set_def_imp_type(improvement_types.minimize, kwargs)
+        m = MDT.PRM.MaximumLoadDropDurationConstraint(mg, name)
+        pymdt.utils.details._extract_guid(m, **kwargs)
+        details._extract_metric_params(m, **kwargs)
+        details._extract_load_tier(m, **kwargs)
+        details._extract_sim_phase(m, **kwargs)
+        pymdt.utils.details._extract_notes(m, **kwargs)
+        return m
+    
     @staticmethod
     def build_energy_availability_metric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM.EnergyAvailabilityConstraint:
         details._set_def_imp_type(improvement_types.maximize, kwargs)
@@ -403,6 +414,87 @@ class details:
         pymdt.utils.details._extract_notes(rfg, **kwargs)
         return rfg
     
+def MakeMaximumLoadDropDurationMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM.MaximumLoadDropDurationConstraint:
+    """ Builds an instance of the MDT.MaximumLoadDropDurationConstraint class, loads
+    its properties, adds it to the microgrid (if provided), and returns it.
+        
+    Parameters
+    ----------
+    mg: MDT.Microgrid
+        The microgrid to which to add the new metric.  If this argument is None,
+        then the metric is created and loaded but not added to any entities
+        metric list.  That will have to happen later.        
+    kwargs: dict
+        A dictionary of all the variable arguments provided to this function.
+        The arguments used by this method include:
+        
+        tier:
+            The tier for this newly created metric.  This can be an
+            MDT.LoadTier or the name of a tier in which case the actual load
+            tier will be found in the master list and assigned.
+        improvement_type: pymdt.metrics.improvement_types
+            A member of the pymdt.metrics.improvement_types enumeration
+            indicating the desired improvement direction of the new metric.  The
+            default improvement type for this metric type is minimize.
+        limit: float
+            The worst acceptable value for this metric.  This defines the
+            boundary between acceptable and not acceptable. This is required.
+        objective: float
+            The desired value for this metric.  This is a value that, if
+            achieved, provides full satisfaction.  Achieving values better than
+            the objective may still provide benefit but at a diminishing rate of
+            return.  This is required.
+        limit_stiffness: pymdt.metrics.limit_stiffnesses
+            A member of the pymdt.metrics.limit_stiffnesses enumeration
+            indicating the desired strength of the limit for the new metric.
+            The default stiffness for this metric type is medium.
+        relative_importance: float
+            The desired weight of this metric in trade-offs that occur.  It is
+            advised that you not use this parameter unless absolutely necessary.
+            Instead, the limit and objective values should be the primary means
+            by which a metric is valued.  Using the relative_importance may not
+            provide the results expected.  The default value for this is 1.0.
+        value_beyond_objective: pymdt.metrics.value_beyond_objective
+            A member of the pymdt.metrics.value_beyond_objective enumeration,
+            this parameter controls the rate of diminishing returns for
+            exceeding (doing better than) the objective for a configuration.
+            the lower the VBO, the faster the rate of diminishing returns.
+            The default for this is medium.
+        phase: pymdt.metrics.sim_phases
+            This parameter should be a member of the pymdt.metrics.sim_phases
+            enumeration.  This indicates what phase of the simulation the new
+            metric should be applied to.  See the enumeration for details.
+        owner:
+            An optional parameter to serve as the owner of the new metric.  This
+            is typically used if one does not want the metric added to the
+            microgrid as part of this call in which case None is specified as
+            the owner.  If no owner is provided, then the supplied microgrid
+            (mg) is used.
+        err_log: Common.Logging.Log
+            The log into which to record any errors encountered during the
+            building, loading, or saving of the new specification.  If this
+            argument is not provided, messages will be recorded into the
+            pymdt.GlobalErrorLog instance.
+        undos: Common.Undoing.IUndoPack
+            An optional undo pack into which to load the undoable objects
+            generated during this operation (if any).
+        notes: str
+            Any notes to assign to the resulting metric. Not required.
+        guid:
+            The unique identifier to use for this new asset.  This can be
+            a string formatted as described in:
+            https://learn.microsoft.com/en-us/dotnet/api/system.guid.-ctor?view=net-8.0#system-guid-ctor(system-string)
+            or a System.Guid instance.  If not provided, a newly created,
+            random Guid is used.
+    """
+    m = details.build_maximum_load_drop_duration_metric(mg, name, **kwargs)
+    owner = pymdt.core.details._extract_owner(mg, **kwargs)
+    if owner is not None:
+        pymdt.utils.details._execute_1_arg_add_with_undo(
+            owner, "AddConstraintCanceled", "get_Constraints", m, **kwargs
+            )
+    return m
+
 def MakeEnergyAvailabilityMetric(mg: MDT.Microgrid, name: str, **kwargs) -> MDT.PRM.EnergyAvailabilityConstraint:
     """ Builds an instance of the MDT.EnergyAvailabilityConstraint class, loads
     its properties, adds it to the microgrid (if provided), and returns it.

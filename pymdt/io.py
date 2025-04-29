@@ -16,20 +16,20 @@ class ImportFormats:
     """
    
     Windmill = MDT.WindmillTextImporter.TXT_FORMAT
-    """ The text format exported from a Windmill model. (*.txt)
+    """ The text format exported from a Windmill model. (\*.txt)
     """
 
     ReNCAT = MDT.ReNCATResultsImporter.JSON_FORMAT
-    """ The JSON format exported from a ReNCAT model. (*.json)
+    """ The JSON format exported from a ReNCAT model. (\*.json)
     """
 
     OpenDSS = MDT.OpenDSSImporter.DSS_FORMAT
-    """ The OpenDSS file format. (*.dss)
+    """ The OpenDSS file format. (\*.dss)
     """
 
     MDTProject = MDT.MDTProjectImporterExporter.PROJ_FORMAT
     """ The project files created by the MDT that include any external data
-    packaged in. (*.mpf)
+    packaged in. (\*.mpf)
     """
    
     
@@ -80,11 +80,11 @@ def ImportInputFile(file_name, format=None, errLog: Common.Logging.Log=None) -> 
     files with a .json extension.  To disambiguate, you can provide an instance
     of one of the constants in the ImportFormats class as the format argument.
     
-    There are a few file types that the MDT is able to import.  Examples include
-        MDT Project Files (*.mpf)
-        OpenDSS Files (*.dss)
-        ReNCAT JSON Files (*.json)
-        Windmill Export Files (*.txt)
+    There are a few file types that the MDT is able to import.  Examples include:
+        * MDT Project Files (\*.mpf)
+        * OpenDSS Files (\*.dss)
+        * ReNCAT JSON Files (\*.json)
+        * Windmill Export Files (\*.txt)
     
     Parameters
     ----------
