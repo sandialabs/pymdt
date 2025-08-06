@@ -221,7 +221,7 @@ def MakeDiscrete(entries) -> MDT.Discrete:
         entries = {entries(0): entries(1)}
     elif type(entries) is not dict:
         entries = {entries}
-    for ent in entries:
+    for ent in entries.items():
         ents.Add(MDT.DiscreteEntry(ent[0], ent[1]), undos)
     return d
          
