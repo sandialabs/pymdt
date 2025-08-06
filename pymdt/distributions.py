@@ -216,7 +216,7 @@ def MakeDiscrete(entries) -> MDT.Discrete:
     """
     d = MDT.Discrete()
     ents = d.get_Entries()
-    undos = Common.Undoing.UndoPack()
+    undos = Common.Undoing.NullUndoPack()
     if type(entries) is tuple:
         entries = {entries(0): entries(1)}
     elif type(entries) is not dict:
