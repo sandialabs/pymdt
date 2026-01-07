@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pymdt.metrics &mdash; sandia-pymdt 1.4.2520 documentation</title>
+  <title>pymdt.metrics &mdash; PyMDT 1.4.2520 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
 
@@ -31,7 +31,7 @@
           
           
           <a href="../../index.html" class="icon icon-home">
-            sandia-pymdt
+            PyMDT
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -52,7 +52,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">sandia-pymdt</a>
+          <a href="../../index.html">PyMDT</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -259,7 +259,18 @@
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_set_def_imp_type</span><span class="p">(</span><span class="n">defType</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">):</span>
         <span class="k">if</span> <span class="s2">&quot;improvement_type&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;improvement_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">defType</span>
-
+        
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">build_maximum_load_drop_duration_metric</span><span class="p">(</span><span class="n">mg</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Microgrid</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">PRM</span><span class="o">.</span><span class="n">MaximumLoadDropDurationConstraint</span><span class="p">:</span>
+        <span class="n">details</span><span class="o">.</span><span class="n">_set_def_imp_type</span><span class="p">(</span><span class="n">improvement_types</span><span class="o">.</span><span class="n">minimize</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">PRM</span><span class="o">.</span><span class="n">MaximumLoadDropDurationConstraint</span><span class="p">(</span><span class="n">mg</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_extract_guid</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">details</span><span class="o">.</span><span class="n">_extract_metric_params</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">details</span><span class="o">.</span><span class="n">_extract_load_tier</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">details</span><span class="o">.</span><span class="n">_extract_sim_phase</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_extract_notes</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">m</span>
+    
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">build_energy_availability_metric</span><span class="p">(</span><span class="n">mg</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Microgrid</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">PRM</span><span class="o">.</span><span class="n">EnergyAvailabilityConstraint</span><span class="p">:</span>
         <span class="n">details</span><span class="o">.</span><span class="n">_set_def_imp_type</span><span class="p">(</span><span class="n">improvement_types</span><span class="o">.</span><span class="n">maximize</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
@@ -488,6 +499,90 @@
         <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_extract_notes</span><span class="p">(</span><span class="n">rfg</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">rfg</span>
     
+<div class="viewcode-block" id="MakeMaximumLoadDropDurationMetric">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.metrics.MakeMaximumLoadDropDurationMetric">[docs]</a>
+<span class="k">def</span> <span class="nf">MakeMaximumLoadDropDurationMetric</span><span class="p">(</span><span class="n">mg</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Microgrid</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">PRM</span><span class="o">.</span><span class="n">MaximumLoadDropDurationConstraint</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Builds an instance of the MDT.MaximumLoadDropDurationConstraint class, loads</span>
+<span class="sd">    its properties, adds it to the microgrid (if provided), and returns it.</span>
+<span class="sd">        </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    mg: MDT.Microgrid</span>
+<span class="sd">        The microgrid to which to add the new metric.  If this argument is None,</span>
+<span class="sd">        then the metric is created and loaded but not added to any entities</span>
+<span class="sd">        metric list.  That will have to happen later.        </span>
+<span class="sd">    kwargs: dict</span>
+<span class="sd">        A dictionary of all the variable arguments provided to this function.</span>
+<span class="sd">        The arguments used by this method include:</span>
+<span class="sd">        </span>
+<span class="sd">        tier:</span>
+<span class="sd">            The tier for this newly created metric.  This can be an</span>
+<span class="sd">            MDT.LoadTier or the name of a tier in which case the actual load</span>
+<span class="sd">            tier will be found in the master list and assigned.</span>
+<span class="sd">        improvement_type: pymdt.metrics.improvement_types</span>
+<span class="sd">            A member of the pymdt.metrics.improvement_types enumeration</span>
+<span class="sd">            indicating the desired improvement direction of the new metric.  The</span>
+<span class="sd">            default improvement type for this metric type is minimize.</span>
+<span class="sd">        limit: float</span>
+<span class="sd">            The worst acceptable value for this metric.  This defines the</span>
+<span class="sd">            boundary between acceptable and not acceptable. This is required.</span>
+<span class="sd">        objective: float</span>
+<span class="sd">            The desired value for this metric.  This is a value that, if</span>
+<span class="sd">            achieved, provides full satisfaction.  Achieving values better than</span>
+<span class="sd">            the objective may still provide benefit but at a diminishing rate of</span>
+<span class="sd">            return.  This is required.</span>
+<span class="sd">        limit_stiffness: pymdt.metrics.limit_stiffnesses</span>
+<span class="sd">            A member of the pymdt.metrics.limit_stiffnesses enumeration</span>
+<span class="sd">            indicating the desired strength of the limit for the new metric.</span>
+<span class="sd">            The default stiffness for this metric type is medium.</span>
+<span class="sd">        relative_importance: float</span>
+<span class="sd">            The desired weight of this metric in trade-offs that occur.  It is</span>
+<span class="sd">            advised that you not use this parameter unless absolutely necessary.</span>
+<span class="sd">            Instead, the limit and objective values should be the primary means</span>
+<span class="sd">            by which a metric is valued.  Using the relative_importance may not</span>
+<span class="sd">            provide the results expected.  The default value for this is 1.0.</span>
+<span class="sd">        value_beyond_objective: pymdt.metrics.value_beyond_objective</span>
+<span class="sd">            A member of the pymdt.metrics.value_beyond_objective enumeration,</span>
+<span class="sd">            this parameter controls the rate of diminishing returns for</span>
+<span class="sd">            exceeding (doing better than) the objective for a configuration.</span>
+<span class="sd">            the lower the VBO, the faster the rate of diminishing returns.</span>
+<span class="sd">            The default for this is medium.</span>
+<span class="sd">        phase: pymdt.metrics.sim_phases</span>
+<span class="sd">            This parameter should be a member of the pymdt.metrics.sim_phases</span>
+<span class="sd">            enumeration.  This indicates what phase of the simulation the new</span>
+<span class="sd">            metric should be applied to.  See the enumeration for details.</span>
+<span class="sd">        owner:</span>
+<span class="sd">            An optional parameter to serve as the owner of the new metric.  This</span>
+<span class="sd">            is typically used if one does not want the metric added to the</span>
+<span class="sd">            microgrid as part of this call in which case None is specified as</span>
+<span class="sd">            the owner.  If no owner is provided, then the supplied microgrid</span>
+<span class="sd">            (mg) is used.</span>
+<span class="sd">        err_log: Common.Logging.Log</span>
+<span class="sd">            The log into which to record any errors encountered during the</span>
+<span class="sd">            building, loading, or saving of the new specification.  If this</span>
+<span class="sd">            argument is not provided, messages will be recorded into the</span>
+<span class="sd">            pymdt.GlobalErrorLog instance.</span>
+<span class="sd">        undos: Common.Undoing.IUndoPack</span>
+<span class="sd">            An optional undo pack into which to load the undoable objects</span>
+<span class="sd">            generated during this operation (if any).</span>
+<span class="sd">        notes: str</span>
+<span class="sd">            Any notes to assign to the resulting metric. Not required.</span>
+<span class="sd">        guid:</span>
+<span class="sd">            The unique identifier to use for this new asset.  This can be</span>
+<span class="sd">            a string formatted as described in:</span>
+<span class="sd">            https://learn.microsoft.com/en-us/dotnet/api/system.guid.-ctor?view=net-8.0#system-guid-ctor(system-string)</span>
+<span class="sd">            or a System.Guid instance.  If not provided, a newly created,</span>
+<span class="sd">            random Guid is used.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">build_maximum_load_drop_duration_metric</span><span class="p">(</span><span class="n">mg</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">owner</span> <span class="o">=</span> <span class="n">pymdt</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_extract_owner</span><span class="p">(</span><span class="n">mg</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">owner</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_execute_1_arg_add_with_undo</span><span class="p">(</span>
+            <span class="n">owner</span><span class="p">,</span> <span class="s2">&quot;AddConstraintCanceled&quot;</span><span class="p">,</span> <span class="s2">&quot;get_Constraints&quot;</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+    <span class="k">return</span> <span class="n">m</span></div>
+
+
 <div class="viewcode-block" id="MakeEnergyAvailabilityMetric">
 <a class="viewcode-back" href="../../pymdt.html#pymdt.metrics.MakeEnergyAvailabilityMetric">[docs]</a>
 <span class="k">def</span> <span class="nf">MakeEnergyAvailabilityMetric</span><span class="p">(</span><span class="n">mg</span><span class="p">:</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Microgrid</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">PRM</span><span class="o">.</span><span class="n">EnergyAvailabilityConstraint</span><span class="p">:</span>
@@ -2333,7 +2428,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2025, John Eddy.</p>
+    <p>&#169; Copyright 2025 National Technology &amp; Engineering Solutions of Sandia, LLC (NTESS).</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

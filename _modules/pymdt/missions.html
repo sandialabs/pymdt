@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pymdt.missions &mdash; sandia-pymdt 1.4.2520 documentation</title>
+  <title>pymdt.missions &mdash; PyMDT 1.4.2520 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
 
@@ -31,7 +31,7 @@
           
           
           <a href="../../index.html" class="icon icon-home">
-            sandia-pymdt
+            PyMDT
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -52,7 +52,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">sandia-pymdt</a>
+          <a href="../../index.html">PyMDT</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -237,7 +237,13 @@
 <span class="sd">        empty collection if desired as children can be added subsequently.</span>
 <span class="sd">    kwargs: dict</span>
 <span class="sd">        A dictionary of all the variable arguments provided to this function.</span>
-<span class="sd">        This function does not use any keyword arguments.</span>
+<span class="sd">        The arguments used by this method include:</span>
+
+<span class="sd">        err_log: Common.Logging.Log</span>
+<span class="sd">            The log into which to record any errors encountered during the</span>
+<span class="sd">            building, loading, or saving of the new item.  If this argument is</span>
+<span class="sd">            not provided, messages will be recorded into the</span>
+<span class="sd">            pymdt.GlobalErrorLog instance.</span>
 <span class="sd">        </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -266,7 +272,13 @@
 <span class="sd">        empty collection if desired as children can be added subsequently.</span>
 <span class="sd">    kwargs: dict</span>
 <span class="sd">        A dictionary of all the variable arguments provided to this function.</span>
-<span class="sd">        This function does not use any keyword arguments.</span>
+<span class="sd">        The arguments used by this method include:</span>
+
+<span class="sd">        err_log: Common.Logging.Log</span>
+<span class="sd">            The log into which to record any errors encountered during the</span>
+<span class="sd">            building, loading, or saving of the new item.  If this argument is</span>
+<span class="sd">            not provided, messages will be recorded into the</span>
+<span class="sd">            pymdt.GlobalErrorLog instance.</span>
 <span class="sd">        </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -295,7 +307,16 @@
 <span class="sd">        an empty collection if desired as children can be added subsequently.</span>
 <span class="sd">    kwargs: dict</span>
 <span class="sd">        A dictionary of all the variable arguments provided to this function.</span>
-<span class="sd">        This function does not use any keyword arguments.</span>
+<span class="sd">        The arguments used by this method include:</span>
+
+<span class="sd">        err_log: Common.Logging.Log</span>
+<span class="sd">            The log into which to record any errors encountered during the</span>
+<span class="sd">            building, loading, or saving of the new item.  If this argument is</span>
+<span class="sd">            not provided, messages will be recorded into the</span>
+<span class="sd">            pymdt.GlobalErrorLog instance.</span>
+<span class="sd">        undos: Common.Undoing.IUndoPack</span>
+<span class="sd">            An optional undo pack into which to load the undoable objects</span>
+<span class="sd">            generated during this operation (if any).</span>
 <span class="sd">        </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -315,8 +336,8 @@
 <div class="viewcode-block" id="MakeNotNode">
 <a class="viewcode-back" href="../../pymdt.html#pymdt.missions.MakeNotNode">[docs]</a>
 <span class="k">def</span> <span class="nf">MakeNotNode</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">child</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TMO</span><span class="o">.</span><span class="n">NotNode</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; This helper function creates a new not node, extracts any</span>
-<span class="sd">    provided properties, loads it into its parent, and returns it.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; This helper function creates a new not node, extracts any provided</span>
+<span class="sd">    properties, loads it into its parent, and returns it.</span>
 <span class="sd">        </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -328,7 +349,13 @@
 <span class="sd">        none if desired as the child can be added subsequently.</span>
 <span class="sd">    kwargs: dict</span>
 <span class="sd">        A dictionary of all the variable arguments provided to this function.</span>
-<span class="sd">        This function does not use any keyword arguments.</span>
+<span class="sd">        The arguments used by this method include:</span>
+
+<span class="sd">        err_log: Common.Logging.Log</span>
+<span class="sd">            The log into which to record any errors encountered during the</span>
+<span class="sd">            building, loading, or saving of the new item.  If this argument is</span>
+<span class="sd">            not provided, messages will be recorded into the</span>
+<span class="sd">            pymdt.GlobalErrorLog instance.</span>
 <span class="sd">        </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -349,7 +376,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2025, John Eddy.</p>
+    <p>&#169; Copyright 2025 National Technology &amp; Engineering Solutions of Sandia, LLC (NTESS).</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

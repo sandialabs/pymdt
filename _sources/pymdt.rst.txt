@@ -11,14 +11,14 @@ it is not necessary to use any of them.
 These arguments should be defined near the top of your python script file and 
 **must be provided before importing anything from pymdt**.
 
-.. code-block::
+.. code-block:: python
    :caption: **INCORRECT**
 
        import pymdt
        sys.argv.append("MDT_VERSION=1.4.2520.0")
 
 
-.. code-block::
+.. code-block:: python
    :caption: **CORRECT**
 
        sys.argv.append("MDT_VERSION=1.4.2520.0")
@@ -35,12 +35,16 @@ version listed in pymdt\\__init__.py does not match with your installed version
 of MDT, you will need to provide this. The format is major.minor[.build[.revision]]
 where each component is an integer value.  For example:
 
-sys.argv.append("MDT_VERSION=1.4.2520.0")
 
-Given this and absent an explicitly provided MDT_BIN_DIR (see below), the MDT
+.. code-block:: python
+
+    sys.argv.append("MDT_VERSION=1.4.2520.0")
+
+Given this and absent an explicitly provided :ref:`MDT_BIN_DIR` (see below), the MDT
 will look for MDT binaries in an installation folder that looks like:
 
 C:\\Program Files\\Sandia National Laboratories\\Microgrid Design Toolkit v1.4.2520.0
+
 
 MDT_BIN_DIR
 ^^^^^^^^^^^
@@ -51,13 +55,20 @@ something like:
 C:\\Program Files\\Sandia National Laboratories\\Microgrid Design Toolkit v1.4.2520.0
 
 Where the version listed at the end is either the default version defined in
-pymdt\\__init__.py or was provided as the MDT_VERSION (see above).  You should use this
+pymdt\\__init__.py or was provided as the :ref:`MDT_VERSION` (see above).  You should use this
 value when your MDT installation is in a folder that does not follow the pattern.
 For instance, if it was installed on a drive other than the C drive or if there
 are any other path differences from what's shown above (other than the version number).
 
-sys.argv.append("MDT_BIN_DIR=<path to MDT binaries>")
+.. note::
+    If you use this setting, :ref:`MDT_VERSION` will be ignored for the purpose of
+    finding the binaries.  The path provided here should be a complete path
+    to the MDT installation directory.
+    
+.. code-block:: python
 
+    sys.argv.append("MDT_BIN_DIR=<path to MDT binaries>")
+    
 
 MDT_DATA_DIR
 ^^^^^^^^^^^^
@@ -70,8 +81,16 @@ C:\\ProgramData\\Sandia National Laboratories\\Microgrid Design Toolkit\\1.4.252
 Of course, the version number at the end will align with your current version.
 It should be rare that you need to provide this input.
 
-sys.argv.append("MDT_DATA_DIR=<path to MDT data directory>")
+.. note::
+    Unlike the :ref:`MDT_BIN_DIR`, the version number will be appended to this input.
+    For example, if you provide "D:\\My\\Custom\\Directory" as your input, the
+    final folder used will be "D:\\My\\Custom\\Directory\\1.4.2520.0" created by
+    appending the provided directory with the :ref:`MDT_VERSION`.
+    
+.. code-block:: python
 
+    sys.argv.append("MDT_DATA_DIR=<path to MDT data directory>")
+    
 
 MDT_SPEC_DB_DIR
 ^^^^^^^^^^^^^^^
@@ -83,7 +102,12 @@ Where the version number is the current version of the MDT you have installed.
 If you keep your database in a non-standard location, you can provide that path
 in this input.
 
-sys.argv.append("MDT_SPEC_DB_DIR=<path to MDT spec DB>")
+The path provided will be considered complete.  Nothing will be appended to it
+including the :ref:`MDT_VERSION`.
+
+.. code-block:: python
+
+    sys.argv.append("MDT_SPEC_DB_DIR=<path to MDT spec DB>")
 
 
 Submodules

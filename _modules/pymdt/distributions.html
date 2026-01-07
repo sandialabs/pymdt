@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pymdt.distributions &mdash; sandia-pymdt 1.4.2520 documentation</title>
+  <title>pymdt.distributions &mdash; PyMDT 1.4.2520 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
 
@@ -31,7 +31,7 @@
           
           
           <a href="../../index.html" class="icon icon-home">
-            sandia-pymdt
+            PyMDT
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -52,7 +52,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">sandia-pymdt</a>
+          <a href="../../index.html">PyMDT</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -324,13 +324,13 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">d</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Discrete</span><span class="p">()</span>
     <span class="n">ents</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">get_Entries</span><span class="p">()</span>
-    <span class="n">undos</span> <span class="o">=</span> <span class="n">Common</span><span class="o">.</span><span class="n">Undoing</span><span class="o">.</span><span class="n">UndoPack</span><span class="p">()</span>
+    <span class="n">undos</span> <span class="o">=</span> <span class="n">Common</span><span class="o">.</span><span class="n">Undoing</span><span class="o">.</span><span class="n">NullUndoPack</span><span class="p">()</span>
     <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">entries</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">tuple</span><span class="p">:</span>
         <span class="n">entries</span> <span class="o">=</span> <span class="p">{</span><span class="n">entries</span><span class="p">(</span><span class="mi">0</span><span class="p">):</span> <span class="n">entries</span><span class="p">(</span><span class="mi">1</span><span class="p">)}</span>
     <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">entries</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">dict</span><span class="p">:</span>
         <span class="n">entries</span> <span class="o">=</span> <span class="p">{</span><span class="n">entries</span><span class="p">}</span>
-    <span class="k">for</span> <span class="n">ent</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">:</span>
-        <span class="n">ents</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">MDT</span><span class="o">.</span><span class="n">DiscreteEntry</span><span class="p">(</span><span class="n">ent</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ent</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">undos</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">val</span><span class="p">,</span> <span class="n">prob</span> <span class="ow">in</span> <span class="n">entries</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">ents</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">MDT</span><span class="o">.</span><span class="n">DiscreteEntry</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">prob</span><span class="p">),</span> <span class="n">undos</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">d</span></div>
 
          
@@ -385,7 +385,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2025, John Eddy.</p>
+    <p>&#169; Copyright 2025 National Technology &amp; Engineering Solutions of Sandia, LLC (NTESS).</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pymdt.io &mdash; sandia-pymdt 1.4.2520 documentation</title>
+  <title>pymdt.io &mdash; PyMDT 1.4.2520 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
 
@@ -31,7 +31,7 @@
           
           
           <a href="../../index.html" class="icon icon-home">
-            sandia-pymdt
+            PyMDT
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -52,7 +52,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">sandia-pymdt</a>
+          <a href="../../index.html">PyMDT</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -91,24 +91,28 @@
 <span class="sd">    &quot;&quot;&quot;</span>
    
     <span class="n">Windmill</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">WindmillTextImporter</span><span class="o">.</span><span class="n">TXT_FORMAT</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; The text format exported from a Windmill model. (*.txt)</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot; The text format exported from a Windmill model. (\*.txt)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">ReNCAT</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">ReNCATResultsImporter</span><span class="o">.</span><span class="n">JSON_FORMAT</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; The JSON format exported from a ReNCAT model. (*.json)</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot; The JSON format exported from a ReNCAT model. (\*.json)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">OpenDSS</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">OpenDSSImporter</span><span class="o">.</span><span class="n">DSS_FORMAT</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; The OpenDSS file format. (*.dss)</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot; The OpenDSS file format. (\*.dss)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">PandaPower</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">PandaPowerImporter</span><span class="o">.</span><span class="n">JSON_FORMAT</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot; The Panda Power JSON file format. (\*.json)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">MDTProject</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">MDTProjectImporterExporter</span><span class="o">.</span><span class="n">PROJ_FORMAT</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; The project files created by the MDT that include any external data</span>
-<span class="sd">    packaged in. (*.mpf)</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot; The project files created by the MDT that include any external data</span>
+<span class="sd">    packaged in. (\*.mpf)</span>
 <span class="sd">    &quot;&quot;&quot;</span></div>
 
-   
-    
+
+
 <span class="k">class</span> <span class="nc">details</span><span class="p">:</span>
     
     <span class="nd">@staticmethod</span>
@@ -142,27 +146,93 @@
             <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
 
         <span class="k">return</span> <span class="kc">None</span>
+    
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_chooseReNCATGeneratorTypes</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Select a fuel type for each of the following generators &quot;</span> <span class="o">+</span>
+              <span class="s2">&quot;(1=Diesel, 2=Natural Gas, 3=Propane, 4=Solar, 5=Wind, 6=Hydro):&quot;</span><span class="p">)</span>
+
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="n">Collections</span><span class="o">.</span><span class="n">Generic</span><span class="o">.</span><span class="n">Dictionary</span><span class="p">[</span><span class="n">System</span><span class="o">.</span><span class="n">String</span><span class="p">,</span> <span class="n">System</span><span class="o">.</span><span class="n">String</span><span class="p">]()</span>
+
+        <span class="k">for</span> <span class="n">le</span> <span class="ow">in</span> <span class="n">args</span><span class="o">.</span><span class="n">Messages</span><span class="p">:</span>
+            
+            <span class="n">choice</span> <span class="o">=</span> <span class="mi">2</span>
+
+            <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">choice</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="n">le</span><span class="o">.</span><span class="n">Tag</span> <span class="o">+</span> <span class="s2">&quot; / &quot;</span> <span class="o">+</span> <span class="n">le</span><span class="o">.</span><span class="n">Message</span> <span class="o">+</span> <span class="s2">&quot;: &quot;</span><span class="p">))</span>
+
+                    <span class="k">if</span> <span class="p">(</span><span class="n">choice</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">choice</span> <span class="o">&gt;</span> <span class="mi">6</span><span class="p">):</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span>
+                    
+                    <span class="k">break</span>
+                <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span>
+                        <span class="s2">&quot;Invalid input.  Please enter an integer from the list &quot;</span> <span class="o">+</span>
+                        <span class="s2">&quot;provided (1-6).&quot;</span>
+                        <span class="p">)</span>
+
+            <span class="n">ret</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span>
+                <span class="n">le</span><span class="o">.</span><span class="n">Tag</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">le</span><span class="o">.</span><span class="n">Message</span><span class="p">,</span>
+                <span class="p">[</span><span class="s2">&quot;Diesel&quot;</span><span class="p">,</span> <span class="s2">&quot;Natural Gas&quot;</span><span class="p">,</span> <span class="s2">&quot;Propane&quot;</span><span class="p">,</span> <span class="s2">&quot;Solar&quot;</span><span class="p">,</span> <span class="s2">&quot;Wind&quot;</span><span class="p">,</span> <span class="s2">&quot;Hydro&quot;</span><span class="p">][</span><span class="n">choice</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">ret</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_askAboutReNCATMessages</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+        
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">args</span><span class="o">.</span><span class="n">Messages</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">Message</span>
+            <span class="k">break</span>
+
+        <span class="n">yeses</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;yes&quot;</span><span class="p">,</span> <span class="s2">&quot;yup&quot;</span><span class="p">,</span> <span class="s2">&quot;yas&quot;</span><span class="p">]</span>
+        <span class="n">nos</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;n&quot;</span><span class="p">,</span> <span class="s2">&quot;no&quot;</span><span class="p">,</span> <span class="s2">&quot;nope&quot;</span><span class="p">,</span> <span class="s2">&quot;nar&quot;</span><span class="p">]</span>
+
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">resp</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="n">msg</span> <span class="o">+</span> <span class="s2">&quot;(Y or N):&quot;</span><span class="p">)</span>
+                <span class="n">respcf</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">casefold</span><span class="p">()</span>
+
+                <span class="k">if</span> <span class="n">respcf</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">yeses</span> <span class="ow">and</span> <span class="n">respcf</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">nos</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span>
+                
+                <span class="n">choice</span> <span class="o">=</span> <span class="n">respcf</span> <span class="ow">in</span> <span class="n">yeses</span>
+
+                <span class="k">break</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Invalid input.  Please enter Y or N.&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">Common</span><span class="o">.</span><span class="n">GUI</span><span class="o">.</span><span class="n">Util</span><span class="o">.</span><span class="n">GraphicalMessageManager</span><span class="o">.</span><span class="n">OperationResult</span><span class="o">.</span><span class="n">YES</span> \
+            <span class="k">if</span> <span class="n">choice</span> <span class="k">else</span> <span class="n">Common</span><span class="o">.</span><span class="n">GUI</span><span class="o">.</span><span class="n">Util</span><span class="o">.</span><span class="n">GraphicalMessageManager</span><span class="o">.</span><span class="n">OperationResult</span><span class="o">.</span><span class="n">NO</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_onNeedUserInput</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">Message</span> <span class="o">==</span> <span class="n">MDT</span><span class="o">.</span><span class="n">ReNCATResultsImporter</span><span class="o">.</span><span class="n">INPUT_MSG</span><span class="p">:</span>
             <span class="n">args</span><span class="o">.</span><span class="n">Answer</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">_chooseReNCATSolution</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">Message</span> <span class="o">==</span> <span class="n">MDT</span><span class="o">.</span><span class="n">ReNCATResultsImporter</span><span class="o">.</span><span class="n">GEN_TYPE_MSG</span><span class="p">:</span>
+            <span class="n">args</span><span class="o">.</span><span class="n">Answer</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">_chooseReNCATGeneratorTypes</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">Message</span> <span class="o">==</span> <span class="n">MDT</span><span class="o">.</span><span class="n">ReNCATResultsImporter</span><span class="o">.</span><span class="n">READ_MISSION_MSG</span><span class="p">:</span>
+            <span class="n">args</span><span class="o">.</span><span class="n">Answer</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">_askAboutReNCATMessages</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
 
 <div class="viewcode-block" id="ImportInputFile">
 <a class="viewcode-back" href="../../pymdt.html#pymdt.io.ImportInputFile">[docs]</a>
 <span class="k">def</span> <span class="nf">ImportInputFile</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">errLog</span><span class="p">:</span> <span class="n">Common</span><span class="o">.</span><span class="n">Logging</span><span class="o">.</span><span class="n">Log</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Common</span><span class="o">.</span><span class="n">Logging</span><span class="o">.</span><span class="n">Log</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Imports the file with the supplied name and loads MDT inputs from it.</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot; Imports the file with the supplied name and loads MDT inputs from it.</span>
 <span class="sd">    </span>
 <span class="sd">    It is possible that multiple file types can be associated with the same file</span>
 <span class="sd">    extension.  For example, several applications store their inputs in JSON</span>
 <span class="sd">    files with a .json extension.  To disambiguate, you can provide an instance</span>
 <span class="sd">    of one of the constants in the ImportFormats class as the format argument.</span>
 <span class="sd">    </span>
-<span class="sd">    There are a few file types that the MDT is able to import.  Examples include</span>
-<span class="sd">        MDT Project Files (*.mpf)</span>
-<span class="sd">        OpenDSS Files (*.dss)</span>
-<span class="sd">        ReNCAT JSON Files (*.json)</span>
-<span class="sd">        Windmill Export Files (*.txt)</span>
+<span class="sd">    There are a few file types that the MDT is able to import.  Examples include:</span>
+<span class="sd">        * MDT Project Files (\*.mpf)</span>
+<span class="sd">        * OpenDSS Files (\*.dss)</span>
+<span class="sd">        * Panda Power JSON Files (\*.json)</span>
+<span class="sd">        * ReNCAT JSON Files (\*.json)</span>
+<span class="sd">        * Windmill Export Files (\*.txt)</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -177,9 +247,6 @@
 <span class="sd">    errLog: Common.Logging.Log</span>
 <span class="sd">        An optional log into which to merge any messages resulting from the </span>
 <span class="sd">        import operation.</span>
-<span class="sd">    undos: Common.Undoing.IUndoPack</span>
-<span class="sd">        An optional undo pack into which to load the undoable objects generated</span>
-<span class="sd">        during this operation (if any).</span>
 <span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -378,7 +445,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2025, John Eddy.</p>
+    <p>&#169; Copyright 2025 National Technology &amp; Engineering Solutions of Sandia, LLC (NTESS).</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

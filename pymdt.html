@@ -107,16 +107,16 @@ are provided for each as are details of when you may want to use them.  Often
 it is not necessary to use any of them.</p>
 <p>These arguments should be defined near the top of your python script file and
 <strong>must be provided before importing anything from pymdt</strong>.</p>
-<div class="literal-block-wrapper docutils container" id="id211">
-<div class="code-block-caption"><span class="caption-text"><strong>INCORRECT</strong></span><a class="headerlink" href="#id211" title="Link to this code"></a></div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="kn">import</span> <span class="nn">pymdt</span>
+<div class="literal-block-wrapper docutils container" id="id204">
+<div class="code-block-caption"><span class="caption-text"><strong>INCORRECT</strong></span><a class="headerlink" href="#id204" title="Link to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="kn">import</span> <span class="nn">pymdt</span>
     <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;MDT_VERSION=1.4.2520.0&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="literal-block-wrapper docutils container" id="id212">
-<div class="code-block-caption"><span class="caption-text"><strong>CORRECT</strong></span><a class="headerlink" href="#id212" title="Link to this code"></a></div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;MDT_VERSION=1.4.2520.0&quot;</span><span class="p">)</span>
+<div class="literal-block-wrapper docutils container" id="id205">
+<div class="code-block-caption"><span class="caption-text"><strong>CORRECT</strong></span><a class="headerlink" href="#id205" title="Link to this code"></a></div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;MDT_VERSION=1.4.2520.0&quot;</span><span class="p">)</span>
     <span class="kn">import</span> <span class="nn">pymdt</span>
 </pre></div>
 </div>
@@ -129,8 +129,10 @@ it tells pymdt where to find the MDT binaries as well as other things.  If the
 version listed in pymdt\__init__.py does not match with your installed version
 of MDT, you will need to provide this. The format is major.minor[.build[.revision]]
 where each component is an integer value.  For example:</p>
-<p>sys.argv.append(“MDT_VERSION=1.4.2520.0”)</p>
-<p>Given this and absent an explicitly provided MDT_BIN_DIR (see below), the MDT
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;MDT_VERSION=1.4.2520.0&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Given this and absent an explicitly provided <a class="reference internal" href="#mdt-bin-dir"><span class="std std-ref">MDT_BIN_DIR</span></a> (see below), the MDT
 will look for MDT binaries in an installation folder that looks like:</p>
 <p>C:\Program Files\Sandia National Laboratories\Microgrid Design Toolkit v1.4.2520.0</p>
 </section>
@@ -141,11 +143,19 @@ a folder into which the MDT has been installed on your computer.  It is typicall
 something like:</p>
 <p>C:\Program Files\Sandia National Laboratories\Microgrid Design Toolkit v1.4.2520.0</p>
 <p>Where the version listed at the end is either the default version defined in
-pymdt\__init__.py or was provided as the MDT_VERSION (see above).  You should use this
+pymdt\__init__.py or was provided as the <a class="reference internal" href="#mdt-version"><span class="std std-ref">MDT_VERSION</span></a> (see above).  You should use this
 value when your MDT installation is in a folder that does not follow the pattern.
 For instance, if it was installed on a drive other than the C drive or if there
 are any other path differences from what’s shown above (other than the version number).</p>
-<p>sys.argv.append(“MDT_BIN_DIR=&lt;path to MDT binaries&gt;”)</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you use this setting, <a class="reference internal" href="#mdt-version"><span class="std std-ref">MDT_VERSION</span></a> will be ignored for the purpose of
+finding the binaries.  The path provided here should be a complete path
+to the MDT installation directory.</p>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;MDT_BIN_DIR=&lt;path to MDT binaries&gt;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 </section>
 <section id="mdt-data-dir">
 <h3>MDT_DATA_DIR<a class="headerlink" href="#mdt-data-dir" title="Link to this heading"></a></h3>
@@ -155,7 +165,16 @@ location provided will have the version number appended.  This is typically</p>
 <p>C:\ProgramData\Sandia National Laboratories\Microgrid Design Toolkit\1.4.2520.0</p>
 <p>Of course, the version number at the end will align with your current version.
 It should be rare that you need to provide this input.</p>
-<p>sys.argv.append(“MDT_DATA_DIR=&lt;path to MDT data directory&gt;”)</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Unlike the <a class="reference internal" href="#mdt-bin-dir"><span class="std std-ref">MDT_BIN_DIR</span></a>, the version number will be appended to this input.
+For example, if you provide “D:\My\Custom\Directory” as your input, the
+final folder used will be “D:\My\Custom\Directory\1.4.2520.0” created by
+appending the provided directory with the <a class="reference internal" href="#mdt-version"><span class="std std-ref">MDT_VERSION</span></a>.</p>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;MDT_DATA_DIR=&lt;path to MDT data directory&gt;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 </section>
 <section id="mdt-spec-db-dir">
 <h3>MDT_SPEC_DB_DIR<a class="headerlink" href="#mdt-spec-db-dir" title="Link to this heading"></a></h3>
@@ -164,7 +183,11 @@ It should be rare that you need to provide this input.</p>
 <p>Where the version number is the current version of the MDT you have installed.
 If you keep your database in a non-standard location, you can provide that path
 in this input.</p>
-<p>sys.argv.append(“MDT_SPEC_DB_DIR=&lt;path to MDT spec DB&gt;”)</p>
+<p>The path provided will be considered complete.  Nothing will be appended to it
+including the <a class="reference internal" href="#mdt-version"><span class="std std-ref">MDT_VERSION</span></a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;MDT_SPEC_DB_DIR=&lt;path to MDT spec DB&gt;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 </section>
 </section>
 <section id="submodules">
@@ -216,15 +239,13 @@ activities in the periods between DBT occurrences.</p>
 <p>The parameters all have to do with the tracking of failures and repairs
 during the grid-tied operation phase of the simulation.  A couple things to
 note are:</p>
-<dl class="simple">
-<dt>1 - Even if tracking, statistics for failures and repairs are not kept</dt><dd><p>during this phase.  The only real effect of doing so is that it is
+<p>1 - Even if tracking, statistics for failures and repairs are not kept
+during this phase.  The only real effect of doing so is that it is
 possible (or more possible) for an asset to be broken at the start
 of the next DBT.</p>
-</dd>
-<dt>2 - Even if not tracking, a repair for an asset that failed during the</dt><dd><p>DBT still may occur during the grid tied period and the full time
+<p>2 - Even if not tracking, a repair for an asset that failed during the
+DBT still may occur during the grid tied period and the full time
 of the repair will be tallied in statistics.</p>
-</dd>
-</dl>
 <section id="id1">
 <h4>Parameters<a class="headerlink" href="#id1" title="Link to this heading"></a></h4>
 <dl>
@@ -235,31 +256,31 @@ configured.</p>
 The arguments used by this method include:</p>
 <dl class="simple">
 <dt>track_line_failures: bool</dt><dd><p>Whether or not to execute failures and repairs of lines during the
-grid-tied operations.</p>
+grid-tied operations. Default = True.</p>
 </dd>
 <dt>track_transformer_failures: bool</dt><dd><p>Whether or not to execute failures and repairs of transformers
-during the grid-tied operations.</p>
+during the grid-tied operations. Default = True.</p>
 </dd>
 <dt>track_switch_failures: bool</dt><dd><p>Whether or not to execute failures and repairs of switches
-during the grid-tied operations.</p>
+during the grid-tied operations. Default = True.</p>
 </dd>
 <dt>track_ups_failures: bool</dt><dd><p>Whether or not to execute failures and repairs of UPSs
-during the grid-tied operations.</p>
+during the grid-tied operations. Default = True.</p>
 </dd>
 <dt>track_battery_failures: bool</dt><dd><p>Whether or not to execute failures and repairs of Batteries
-during the grid-tied operations.</p>
+during the grid-tied operations. Default = True.</p>
 </dd>
 <dt>track_wind_failures: bool</dt><dd><p>Whether or not to execute failures and repairs of Wind generators
-during the grid-tied operations.</p>
+during the grid-tied operations. Default = True.</p>
 </dd>
 <dt>track_hydro_failures: bool</dt><dd><p>Whether or not to execute failures and repairs of Hydro generators
-during the grid-tied operations.</p>
+during the grid-tied operations. Default = True.</p>
 </dd>
 <dt>track_solar_failures: bool</dt><dd><p>Whether or not to execute failures and repairs of Solar generators
-during the grid-tied operations.</p>
+during the grid-tied operations. Default = True.</p>
 </dd>
 <dt>track_inverter_failures: bool</dt><dd><p>Whether or not to execute failures and repairs of inverters during
-the grid-tied operations.</p>
+the grid-tied operations. Default = True.</p>
 </dd>
 <dt>err_log: Common.Logging.Log</dt><dd><p>The log into which to record any errors encountered during the
 building, loading, or saving of the new item.  If this argument is
@@ -341,6 +362,11 @@ normal operations (or “blue sky) time.  The default is 1000 years.</p>
 powerflow calculations and no (NONE) calculations.  These should be
 provided as members of the pymdt.core.powerflow_types enumeration.
 The default is NONE.</p>
+</dd>
+<dt>powerflow_precision:</dt><dd><p>The precision used to find powerflow solutions in a cache of
+previously run computations. This should be provided as members of
+the pymdt.core.powerflow_precisions enumeration. The default is
+MEDIUM.</p>
 </dd>
 <dt>use_reliability: bool</dt><dd><p>Whether or not to include reliability calculations in the
 simulation.  This serves as a means of telling the simulation to
@@ -3151,6 +3177,41 @@ resort.</p>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="pymdt.core.powerflow_precisions">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pymdt.core.</span></span><span class="sig-name descname"><span class="pre">powerflow_precisions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymdt/core.html#powerflow_precisions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pymdt.core.powerflow_precisions" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>An enumeration of the possible powerflow precision levels supported by
+the MDT.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pymdt.core.powerflow_precisions.FULL">
+<span class="sig-name descname"><span class="pre">FULL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;PowerflowPrecisionEnum.Full:</span> <span class="pre">0&gt;</span></em><a class="headerlink" href="#pymdt.core.powerflow_precisions.FULL" title="Link to this definition"></a></dt>
+<dd><p>Use full precision of all PF parameters in the solution.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pymdt.core.powerflow_precisions.HIGH">
+<span class="sig-name descname"><span class="pre">HIGH</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;PowerflowPrecisionEnum.High:</span> <span class="pre">1&gt;</span></em><a class="headerlink" href="#pymdt.core.powerflow_precisions.HIGH" title="Link to this definition"></a></dt>
+<dd><p>Round a small amount precision away from the PF parameters in the
+solution process to increase cache hits (round to ~10e-6 Watts).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pymdt.core.powerflow_precisions.LOW">
+<span class="sig-name descname"><span class="pre">LOW</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;PowerflowPrecisionEnum.Low:</span> <span class="pre">3&gt;</span></em><a class="headerlink" href="#pymdt.core.powerflow_precisions.LOW" title="Link to this definition"></a></dt>
+<dd><p>Round significant precision away from the PF parameters in the
+solution process to increase cache hits (round to ~10e-2 Watts).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pymdt.core.powerflow_precisions.MEDIUM">
+<span class="sig-name descname"><span class="pre">MEDIUM</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;PowerflowPrecisionEnum.Medium:</span> <span class="pre">2&gt;</span></em><a class="headerlink" href="#pymdt.core.powerflow_precisions.MEDIUM" title="Link to this definition"></a></dt>
+<dd><p>Round precision away from the PF parameters in the
+solution process to increase cache hits (round to ~10e-4 Watts).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="pymdt.core.powerflow_types">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pymdt.core.</span></span><span class="sig-name descname"><span class="pre">powerflow_types</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymdt/core.html#powerflow_types"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pymdt.core.powerflow_types" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
@@ -3507,25 +3568,31 @@ files from other applications.</p>
 <dt class="sig sig-object py" id="pymdt.io.ImportFormats.MDTProject">
 <span class="sig-name descname"><span class="pre">MDTProject</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Common.Serialization.FileFormat</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pymdt.io.ImportFormats.MDTProject" title="Link to this definition"></a></dt>
 <dd><p>The project files created by the MDT that include any external data
-packaged in. (<a href="#id119"><span class="problematic" id="id120">*</span></a>.mpf)</p>
+packaged in. (*.mpf)</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pymdt.io.ImportFormats.OpenDSS">
 <span class="sig-name descname"><span class="pre">OpenDSS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Common.Serialization.FileFormat</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pymdt.io.ImportFormats.OpenDSS" title="Link to this definition"></a></dt>
-<dd><p>The OpenDSS file format. (<a href="#id121"><span class="problematic" id="id122">*</span></a>.dss)</p>
+<dd><p>The OpenDSS file format. (*.dss)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pymdt.io.ImportFormats.PandaPower">
+<span class="sig-name descname"><span class="pre">PandaPower</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Common.Serialization.FileFormat</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pymdt.io.ImportFormats.PandaPower" title="Link to this definition"></a></dt>
+<dd><p>The Panda Power JSON file format. (*.json)</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pymdt.io.ImportFormats.ReNCAT">
 <span class="sig-name descname"><span class="pre">ReNCAT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Common.Serialization.FileFormat</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pymdt.io.ImportFormats.ReNCAT" title="Link to this definition"></a></dt>
-<dd><p>The JSON format exported from a ReNCAT model. (<a href="#id123"><span class="problematic" id="id124">*</span></a>.json)</p>
+<dd><p>The JSON format exported from a ReNCAT model. (*.json)</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="pymdt.io.ImportFormats.Windmill">
 <span class="sig-name descname"><span class="pre">Windmill</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;Common.Serialization.FileFormat</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#pymdt.io.ImportFormats.Windmill" title="Link to this definition"></a></dt>
-<dd><p>The text format exported from a Windmill model. (<a href="#id125"><span class="problematic" id="id126">*</span></a>.txt)</p>
+<dd><p>The text format exported from a Windmill model. (*.txt)</p>
 </dd></dl>
 
 </dd></dl>
@@ -3539,14 +3606,17 @@ extension.  For example, several applications store their inputs in JSON
 files with a .json extension.  To disambiguate, you can provide an instance
 of one of the constants in the ImportFormats class as the format argument.</p>
 <dl class="simple">
-<dt>There are a few file types that the MDT is able to import.  Examples include</dt><dd><p>MDT Project Files (<em>.mpf)
-OpenDSS Files (</em>.dss)
-ReNCAT JSON Files (<em>.json)
-Windmill Export Files (</em>.txt)</p>
+<dt>There are a few file types that the MDT is able to import.  Examples include:</dt><dd><ul class="simple">
+<li><p>MDT Project Files (*.mpf)</p></li>
+<li><p>OpenDSS Files (*.dss)</p></li>
+<li><p>Panda Power JSON Files (*.json)</p></li>
+<li><p>ReNCAT JSON Files (*.json)</p></li>
+<li><p>Windmill Export Files (*.txt)</p></li>
+</ul>
 </dd>
 </dl>
-<section id="id127">
-<h4>Parameters<a class="headerlink" href="#id127" title="Link to this heading"></a></h4>
+<section id="id119">
+<h4>Parameters<a class="headerlink" href="#id119" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>file_name: str</dt><dd><p>The name of the file from which to read the inputs.  The extension of
 the provided name will determine the importer used unless a valid format
@@ -3559,13 +3629,10 @@ be one of the members of the ImportFormats class defined in this module.</p>
 <dt>errLog: Common.Logging.Log</dt><dd><p>An optional log into which to merge any messages resulting from the 
 import operation.</p>
 </dd>
-<dt>undos: Common.Undoing.IUndoPack</dt><dd><p>An optional undo pack into which to load the undoable objects generated
-during this operation (if any).</p>
-</dd>
 </dl>
 </section>
-<section id="id128">
-<h4>Returns<a class="headerlink" href="#id128" title="Link to this heading"></a></h4>
+<section id="id120">
+<h4>Returns<a class="headerlink" href="#id120" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>Common.Logging.Log:</dt><dd><p>A log of any and all messages produced during the import operation and
 any that may have been in the provided errLog argument.  If the provided
@@ -3580,8 +3647,8 @@ messages created during the import.</p>
 <dt class="sig sig-object py" id="pymdt.io.ReadInputFile">
 <span class="sig-prename descclassname"><span class="pre">pymdt.io.</span></span><span class="sig-name descname"><span class="pre">ReadInputFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">errLog</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Log</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Log</span></span></span><a class="reference internal" href="_modules/pymdt/io.html#ReadInputFile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pymdt.io.ReadInputFile" title="Link to this definition"></a></dt>
 <dd><p>Reads the file with the supplied name and loads MDT inputs from it.</p>
-<section id="id129">
-<h4>Parameters<a class="headerlink" href="#id129" title="Link to this heading"></a></h4>
+<section id="id121">
+<h4>Parameters<a class="headerlink" href="#id121" title="Link to this heading"></a></h4>
 <dl>
 <dt>file_name: str</dt><dd><p>The name of the file from which to read the inputs.  The provided name
 should have a “.mbf” extension.</p>
@@ -3599,8 +3666,8 @@ older version of the MDT.  The default is False.</p>
 </dd>
 </dl>
 </section>
-<section id="id130">
-<h4>Returns<a class="headerlink" href="#id130" title="Link to this heading"></a></h4>
+<section id="id122">
+<h4>Returns<a class="headerlink" href="#id122" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>Common.Logging.Log:</dt><dd><p>A log of any and all messages produced during the load operation and any
 that may have been in the provided errLog argument.  If the provided
@@ -3615,8 +3682,8 @@ messages created during the load.</p>
 <dt class="sig sig-object py" id="pymdt.io.WriteInputFile">
 <span class="sig-prename descclassname"><span class="pre">pymdt.io.</span></span><span class="sig-name descname"><span class="pre">WriteInputFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">errLog</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Log</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Log</span></span></span><a class="reference internal" href="_modules/pymdt/io.html#WriteInputFile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pymdt.io.WriteInputFile" title="Link to this definition"></a></dt>
 <dd><p>Writes the current MDT inputs to a file with the supplied name.</p>
-<section id="id131">
-<h4>Parameters<a class="headerlink" href="#id131" title="Link to this heading"></a></h4>
+<section id="id123">
+<h4>Parameters<a class="headerlink" href="#id123" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>file_name: str</dt><dd><p>The name of the file into which to write the inputs.  The provided name
 should have a “.mbf” extension.</p>
@@ -3626,8 +3693,8 @@ operation.</p>
 </dd>
 </dl>
 </section>
-<section id="id132">
-<h4>Returns<a class="headerlink" href="#id132" title="Link to this heading"></a></h4>
+<section id="id124">
+<h4>Returns<a class="headerlink" href="#id124" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>Common.Logging.Log:</dt><dd><p>A log of any and all messages produced during the save operation.  No
 matter whether an errLog is provided as a parameter to the method, the
@@ -3643,8 +3710,8 @@ operation.</p>
 <span class="sig-prename descclassname"><span class="pre">pymdt.io.</span></span><span class="sig-name descname"><span class="pre">WriteOutputFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sri</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">errLog</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Log</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Log</span></span></span><a class="reference internal" href="_modules/pymdt/io.html#WriteOutputFile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pymdt.io.WriteOutputFile" title="Link to this definition"></a></dt>
 <dd><p>Writes an MDT results file for the provided solver run info object to
 a file with the supplied name.</p>
-<section id="id133">
-<h4>Parameters<a class="headerlink" href="#id133" title="Link to this heading"></a></h4>
+<section id="id125">
+<h4>Parameters<a class="headerlink" href="#id125" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>file_name: str</dt><dd><p>The name of the file into which to write the results.  The provided name
 have a “.mof” extension.</p>
@@ -3657,8 +3724,8 @@ operation.</p>
 </dd>
 </dl>
 </section>
-<section id="id134">
-<h4>Returns<a class="headerlink" href="#id134" title="Link to this heading"></a></h4>
+<section id="id126">
+<h4>Returns<a class="headerlink" href="#id126" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>Common.Logging.Log:</dt><dd><p>A log of any and all messages produced during the save operation.  No
 matter whether an errLog is provided as a parameter to the method, the
@@ -3678,8 +3745,8 @@ operation.</p>
 <dd><p>Builds an instance of the MDT.AverageEnergySuppliedByRenewables class,
 loads its properties, adds it to the microgrid (if provided), and
 returns it.</p>
-<section id="id135">
-<h4>Parameters<a class="headerlink" href="#id135" title="Link to this heading"></a></h4>
+<section id="id127">
+<h4>Parameters<a class="headerlink" href="#id127" title="Link to this heading"></a></h4>
 <dl>
 <dt>mg: MDT.Microgrid</dt><dd><p>The microgrid to which to add the new metric.  If this argument is None,
 then the metric is created and loaded but not added to any entities
@@ -3750,8 +3817,8 @@ random Guid is used.</p>
 <dd><p>Builds an instance of the MDT.AverageRenewableEnergySpilledConstraint
 class, loads its properties, adds it to the microgrid (if provided), and
 returns it.</p>
-<section id="id136">
-<h4>Parameters<a class="headerlink" href="#id136" title="Link to this heading"></a></h4>
+<section id="id128">
+<h4>Parameters<a class="headerlink" href="#id128" title="Link to this heading"></a></h4>
 <dl>
 <dt>mg: MDT.Microgrid</dt><dd><p>The microgrid to which to add the new metric.  If this argument is None,
 then the metric is created and loaded but not added to any entities
@@ -3822,8 +3889,8 @@ random Guid is used.</p>
 <dd><p>Builds an instance of the MDT.AverageRenewablePenetrationConstraint
 class, loads its properties, adds it to the microgrid (if provided), and
 returns it.</p>
-<section id="id137">
-<h4>Parameters<a class="headerlink" href="#id137" title="Link to this heading"></a></h4>
+<section id="id129">
+<h4>Parameters<a class="headerlink" href="#id129" title="Link to this heading"></a></h4>
 <dl>
 <dt>mg: MDT.Microgrid</dt><dd><p>The microgrid to which to add the new metric.  If this argument is None,
 then the metric is created and loaded but not added to any entities
@@ -3894,8 +3961,8 @@ random Guid is used.</p>
 <dd><p>Builds an instance of the MDT.AverageSpinningReserveConstraint class,
 loads its properties, adds it to the microgrid (if provided), and
 returns it.</p>
-<section id="id138">
-<h4>Parameters<a class="headerlink" href="#id138" title="Link to this heading"></a></h4>
+<section id="id130">
+<h4>Parameters<a class="headerlink" href="#id130" title="Link to this heading"></a></h4>
 <dl>
 <dt>mg: MDT.Microgrid</dt><dd><p>The microgrid to which to add the new metric.  If this argument is None,
 then the metric is created and loaded but not added to any entities
@@ -3965,8 +4032,8 @@ random Guid is used.</p>
 <span class="sig-prename descclassname"><span class="pre">pymdt.metrics.</span></span><span class="sig-name descname"><span class="pre">MakeDieselEfficiencyMetric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Microgrid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DieselEfficiencyConstraint</span></span></span><a class="reference internal" href="_modules/pymdt/metrics.html#MakeDieselEfficiencyMetric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pymdt.metrics.MakeDieselEfficiencyMetric" title="Link to this definition"></a></dt>
 <dd><p>Builds an instance of the MDT.DieselEfficiencyConstraint class, loads
 its properties, adds it to the microgrid (if provided), and returns it.</p>
-<section id="id139">
-<h4>Parameters<a class="headerlink" href="#id139" title="Link to this heading"></a></h4>
+<section id="id131">
+<h4>Parameters<a class="headerlink" href="#id131" title="Link to this heading"></a></h4>
 <dl>
 <dt>mg: MDT.Microgrid</dt><dd><p>The microgrid to which to add the new metric.  If this argument is None,
 then the metric is created and loaded but not added to any entities
@@ -4036,8 +4103,8 @@ random Guid is used.</p>
 <span class="sig-prename descclassname"><span class="pre">pymdt.metrics.</span></span><span class="sig-name descname"><span class="pre">MakeDieselFuelCostMetric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Microgrid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DieselFuelCostConstraint</span></span></span><a class="reference internal" href="_modules/pymdt/metrics.html#MakeDieselFuelCostMetric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pymdt.metrics.MakeDieselFuelCostMetric" title="Link to this definition"></a></dt>
 <dd><p>Builds an instance of the MDT.DieselFuelCostConstraint class, loads its
 properties, adds it to the microgrid (if provided), and returns it.</p>
-<section id="id140">
-<h4>Parameters<a class="headerlink" href="#id140" title="Link to this heading"></a></h4>
+<section id="id132">
+<h4>Parameters<a class="headerlink" href="#id132" title="Link to this heading"></a></h4>
 <dl>
 <dt>mg: MDT.Microgrid</dt><dd><p>The microgrid to which to add the new metric.  If this argument is None,
 then the metric is created and loaded but not added to any entities
@@ -4107,8 +4174,8 @@ random Guid is used.</p>
 <span class="sig-prename descclassname"><span class="pre">pymdt.metrics.</span></span><span class="sig-name descname"><span class="pre">MakeDieselFuelMetric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Microgrid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DieselFuelConstraint</span></span></span><a class="reference internal" href="_modules/pymdt/metrics.html#MakeDieselFuelMetric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pymdt.metrics.MakeDieselFuelMetric" title="Link to this definition"></a></dt>
 <dd><p>Builds an instance of the MDT.DieselFuelConstraint class, loads its
 properties, adds it to the microgrid (if provided), and returns it.</p>
-<section id="id141">
-<h4>Parameters<a class="headerlink" href="#id141" title="Link to this heading"></a></h4>
+<section id="id133">
+<h4>Parameters<a class="headerlink" href="#id133" title="Link to this heading"></a></h4>
 <dl>
 <dt>mg: MDT.Microgrid</dt><dd><p>The microgrid to which to add the new metric.  If this argument is None,
 then the metric is created and loaded but not added to any entities
@@ -4178,8 +4245,8 @@ random Guid is used.</p>
 <span class="sig-prename descclassname"><span class="pre">pymdt.metrics.</span></span><span class="sig-name descname"><span class="pre">MakeDieselUtilizationRateMetric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Microgrid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DieselUtilizationConstraint</span></span></span><a class="reference internal" href="_modules/pymdt/metrics.html#MakeDieselUtilizationRateMetric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pymdt.metrics.MakeDieselUtilizationRateMetric" title="Link to this definition"></a></dt>
 <dd><p>Builds an instance of the MDT.DieselUtilizationConstraint class, loads
 its properties, adds it to the microgrid (if provided), and returns it.</p>
-<section id="id142">
-<h4>Parameters<a class="headerlink" href="#id142" title="Link to this heading"></a></h4>
+<section id="id134">
+<h4>Parameters<a class="headerlink" href="#id134" title="Link to this heading"></a></h4>
 <dl>
 <dt>mg: MDT.Microgrid</dt><dd><p>The microgrid to which to add the new metric.  If this argument is None,
 then the metric is created and loaded but not added to any entities
@@ -4249,8 +4316,8 @@ random Guid is used.</p>
 <span class="sig-prename descclassname"><span class="pre">pymdt.metrics.</span></span><span class="sig-name descname"><span class="pre">MakeEnergyAvailabilityMetric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Microgrid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">EnergyAvailabilityConstraint</span></span></span><a class="reference internal" href="_modules/pymdt/metrics.html#MakeEnergyAvailabilityMetric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pymdt.metrics.MakeEnergyAvailabilityMetric" title="Link to this definition"></a></dt>
 <dd><p>Builds an instance of the MDT.EnergyAvailabilityConstraint class, loads
 its properties, adds it to the microgrid (if provided), and returns it.</p>
-<section id="id143">
-<h4>Parameters<a class="headerlink" href="#id143" title="Link to this heading"></a></h4>
+<section id="id135">
+<h4>Parameters<a class="headerlink" href="#id135" title="Link to this heading"></a></h4>
 <dl>
 <dt>mg: MDT.Microgrid</dt><dd><p>The microgrid to which to add the new metric.  If this argument is None,
 then the metric is created and loaded but not added to any entities
@@ -4329,8 +4396,8 @@ random Guid is used.</p>
 <dd><p>Builds an instance of the MDT.FossilOffTimePercentageConstraint class,
 loads its properties, adds it to the microgrid (if provided), and
 returns it.</p>
-<section id="id144">
-<h4>Parameters<a class="headerlink" href="#id144" title="Link to this heading"></a></h4>
+<section id="id136">
+<h4>Parameters<a class="headerlink" href="#id136" title="Link to this heading"></a></h4>
 <dl>
 <dt>mg: MDT.Microgrid</dt><dd><p>The microgrid to which to add the new metric.  If this argument is None,
 then the metric is created and loaded but not added to any entities
@@ -4400,8 +4467,8 @@ random Guid is used.</p>
 <span class="sig-prename descclassname"><span class="pre">pymdt.metrics.</span></span><span class="sig-name descname"><span class="pre">MakeFrequencyOfLoadNotServedMetric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Microgrid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">FreqOfLNSConstraint</span></span></span><a class="reference internal" href="_modules/pymdt/metrics.html#MakeFrequencyOfLoadNotServedMetric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pymdt.metrics.MakeFrequencyOfLoadNotServedMetric" title="Link to this definition"></a></dt>
 <dd><p>Builds an instance of the MDT.FreqOfLNSConstraint class, loads its
 properties, adds it to the microgrid (if provided), and returns it.</p>
-<section id="id145">
-<h4>Parameters<a class="headerlink" href="#id145" title="Link to this heading"></a></h4>
+<section id="id137">
+<h4>Parameters<a class="headerlink" href="#id137" title="Link to this heading"></a></h4>
 <dl>
 <dt>mg: MDT.Microgrid</dt><dd><p>The microgrid to which to add the new metric.  If this argument is None,
 then the metric is created and loaded but not added to any entities
@@ -4479,8 +4546,8 @@ random Guid is used.</p>
 <span class="sig-prename descclassname"><span class="pre">pymdt.metrics.</span></span><span class="sig-name descname"><span class="pre">MakeHeatRecoveryMetric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Microgrid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">HeatRecoveryConstraint</span></span></span><a class="reference internal" href="_modules/pymdt/metrics.html#MakeHeatRecoveryMetric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pymdt.metrics.MakeHeatRecoveryMetric" title="Link to this definition"></a></dt>
 <dd><p>Builds an instance of the MDT.HeatRecoveryConstraint class, loads its
 properties, adds it to the microgrid (if provided), and returns it.</p>
-<section id="id146">
-<h4>Parameters<a class="headerlink" href="#id146" title="Link to this heading"></a></h4>
+<section id="id138">
+<h4>Parameters<a class="headerlink" href="#id138" title="Link to this heading"></a></h4>
 <dl>
 <dt>mg: MDT.Microgrid</dt><dd><p>The microgrid to which to add the new metric.  If this argument is None,
 then the metric is created and loaded but not added to any entities
@@ -4550,8 +4617,87 @@ random Guid is used.</p>
 <span class="sig-prename descclassname"><span class="pre">pymdt.metrics.</span></span><span class="sig-name descname"><span class="pre">MakeMagnitudeOfLoadNotServedMetric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Microgrid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">MagOfLNSConstraint</span></span></span><a class="reference internal" href="_modules/pymdt/metrics.html#MakeMagnitudeOfLoadNotServedMetric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pymdt.metrics.MakeMagnitudeOfLoadNotServedMetric" title="Link to this definition"></a></dt>
 <dd><p>Builds an instance of the MDT.MagOfLNSConstraint class, loads its
 properties, adds it to the microgrid (if provided), and returns it.</p>
-<section id="id147">
-<h4>Parameters<a class="headerlink" href="#id147" title="Link to this heading"></a></h4>
+<section id="id139">
+<h4>Parameters<a class="headerlink" href="#id139" title="Link to this heading"></a></h4>
+<dl>
+<dt>mg: MDT.Microgrid</dt><dd><p>The microgrid to which to add the new metric.  If this argument is None,
+then the metric is created and loaded but not added to any entities
+metric list.  That will have to happen later.</p>
+</dd>
+<dt>kwargs: dict</dt><dd><p>A dictionary of all the variable arguments provided to this function.
+The arguments used by this method include:</p>
+<dl class="simple">
+<dt>tier:</dt><dd><p>The tier for this newly created metric.  This can be an
+MDT.LoadTier or the name of a tier in which case the actual load
+tier will be found in the master list and assigned.</p>
+</dd>
+<dt>improvement_type: pymdt.metrics.improvement_types</dt><dd><p>A member of the pymdt.metrics.improvement_types enumeration
+indicating the desired improvement direction of the new metric.  The
+default improvement type for this metric type is minimize.</p>
+</dd>
+<dt>limit: float</dt><dd><p>The worst acceptable value for this metric.  This defines the
+boundary between acceptable and not acceptable. This is required.</p>
+</dd>
+<dt>objective: float</dt><dd><p>The desired value for this metric.  This is a value that, if
+achieved, provides full satisfaction.  Achieving values better than
+the objective may still provide benefit but at a diminishing rate of
+return.  This is required.</p>
+</dd>
+<dt>limit_stiffness: pymdt.metrics.limit_stiffnesses</dt><dd><p>A member of the pymdt.metrics.limit_stiffnesses enumeration
+indicating the desired strength of the limit for the new metric.
+The default stiffness for this metric type is medium.</p>
+</dd>
+<dt>relative_importance: float</dt><dd><p>The desired weight of this metric in trade-offs that occur.  It is
+advised that you not use this parameter unless absolutely necessary.
+Instead, the limit and objective values should be the primary means
+by which a metric is valued.  Using the relative_importance may not
+provide the results expected.  The default value for this is 1.0.</p>
+</dd>
+<dt>value_beyond_objective: pymdt.metrics.value_beyond_objective</dt><dd><p>A member of the pymdt.metrics.value_beyond_objective enumeration,
+this parameter controls the rate of diminishing returns for
+exceeding (doing better than) the objective for a configuration.
+the lower the VBO, the faster the rate of diminishing returns.
+The default for this is medium.</p>
+</dd>
+<dt>phase: pymdt.metrics.sim_phases</dt><dd><p>This parameter should be a member of the pymdt.metrics.sim_phases
+enumeration.  This indicates what phase of the simulation the new
+metric should be applied to.  See the enumeration for details.</p>
+</dd>
+<dt>owner:</dt><dd><p>An optional parameter to serve as the owner of the new metric.  This
+is typically used if one does not want the metric added to the
+microgrid as part of this call in which case None is specified as
+the owner.  If no owner is provided, then the supplied microgrid
+(mg) is used.</p>
+</dd>
+<dt>err_log: Common.Logging.Log</dt><dd><p>The log into which to record any errors encountered during the
+building, loading, or saving of the new specification.  If this
+argument is not provided, messages will be recorded into the
+pymdt.GlobalErrorLog instance.</p>
+</dd>
+<dt>undos: Common.Undoing.IUndoPack</dt><dd><p>An optional undo pack into which to load the undoable objects
+generated during this operation (if any).</p>
+</dd>
+<dt>notes: str</dt><dd><p>Any notes to assign to the resulting metric. Not required.</p>
+</dd>
+<dt>guid:</dt><dd><p>The unique identifier to use for this new asset.  This can be
+a string formatted as described in:
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/system.guid.-ctor?view=net-8.0#system-guid-ctor(system-string">https://learn.microsoft.com/en-us/dotnet/api/system.guid.-ctor?view=net-8.0#system-guid-ctor(system-string</a>)
+or a System.Guid instance.  If not provided, a newly created,
+random Guid is used.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pymdt.metrics.MakeMaximumLoadDropDurationMetric">
+<span class="sig-prename descclassname"><span class="pre">pymdt.metrics.</span></span><span class="sig-name descname"><span class="pre">MakeMaximumLoadDropDurationMetric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Microgrid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">MaximumLoadDropDurationConstraint</span></span></span><a class="reference internal" href="_modules/pymdt/metrics.html#MakeMaximumLoadDropDurationMetric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pymdt.metrics.MakeMaximumLoadDropDurationMetric" title="Link to this definition"></a></dt>
+<dd><p>Builds an instance of the MDT.MaximumLoadDropDurationConstraint class, loads
+its properties, adds it to the microgrid (if provided), and returns it.</p>
+<section id="id140">
+<h4>Parameters<a class="headerlink" href="#id140" title="Link to this heading"></a></h4>
 <dl>
 <dt>mg: MDT.Microgrid</dt><dd><p>The microgrid to which to add the new metric.  If this argument is None,
 then the metric is created and loaded but not added to any entities
@@ -4630,8 +4776,8 @@ random Guid is used.</p>
 <dd><p>Builds an instance of the MDT.MaximumMissionOutageDurationConstraint
 class, loads its properties, adds it to the microgrid (if provided), and
 returns it.</p>
-<section id="id148">
-<h4>Parameters<a class="headerlink" href="#id148" title="Link to this heading"></a></h4>
+<section id="id141">
+<h4>Parameters<a class="headerlink" href="#id141" title="Link to this heading"></a></h4>
 <dl>
 <dt>mg: MDT.Microgrid</dt><dd><p>The microgrid to which to add the new metric.  If this argument is None,
 then the metric is created and loaded but not added to any entities
@@ -4704,8 +4850,8 @@ random Guid is used.</p>
 <dd><p>Builds an instance of the MDT.NaturalGasEfficiencyConstraint class,
 loads its properties, adds it to the microgrid (if provided), and
 returns it.</p>
-<section id="id149">
-<h4>Parameters<a class="headerlink" href="#id149" title="Link to this heading"></a></h4>
+<section id="id142">
+<h4>Parameters<a class="headerlink" href="#id142" title="Link to this heading"></a></h4>
 <dl>
 <dt>mg: MDT.Microgrid</dt><dd><p>The microgrid to which to add the new metric.  If this argument is None,
 then the metric is created and loaded but not added to any entities
@@ -4775,8 +4921,8 @@ random Guid is used.</p>
 <span class="sig-prename descclassname"><span class="pre">pymdt.metrics.</span></span><span class="sig-name descname"><span class="pre">MakeNaturalGasFuelCostMetric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Microgrid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">NaturalGasFuelCostConstraint</span></span></span><a class="reference internal" href="_modules/pymdt/metrics.html#MakeNaturalGasFuelCostMetric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pymdt.metrics.MakeNaturalGasFuelCostMetric" title="Link to this definition"></a></dt>
 <dd><p>Builds an instance of the MDT.NaturalGasFuelCostConstraint class, loads
 its properties, adds it to the microgrid (if provided), and returns it.</p>
-<section id="id150">
-<h4>Parameters<a class="headerlink" href="#id150" title="Link to this heading"></a></h4>
+<section id="id143">
+<h4>Parameters<a class="headerlink" href="#id143" title="Link to this heading"></a></h4>
 <dl>
 <dt>mg: MDT.Microgrid</dt><dd><p>The microgrid to which to add the new metric.  If this argument is None,
 then the metric is created and loaded but not added to any entities
@@ -4846,8 +4992,8 @@ random Guid is used.</p>
 <span class="sig-prename descclassname"><span class="pre">pymdt.metrics.</span></span><span class="sig-name descname"><span class="pre">MakeNaturalGasFuelMetric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Microgrid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">NaturalGasFuelConstraint</span></span></span><a class="reference internal" href="_modules/pymdt/metrics.html#MakeNaturalGasFuelMetric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pymdt.metrics.MakeNaturalGasFuelMetric" title="Link to this definition"></a></dt>
 <dd><p>Builds an instance of the MDT.NaturalGasFuelConstraint class, loads its
 properties, adds it to the microgrid (if provided), and returns it.</p>
-<section id="id151">
-<h4>Parameters<a class="headerlink" href="#id151" title="Link to this heading"></a></h4>
+<section id="id144">
+<h4>Parameters<a class="headerlink" href="#id144" title="Link to this heading"></a></h4>
 <dl>
 <dt>mg: MDT.Microgrid</dt><dd><p>The microgrid to which to add the new metric.  If this argument is None,
 then the metric is created and loaded but not added to any entities
@@ -4918,8 +5064,8 @@ random Guid is used.</p>
 <dd><p>Builds an instance of the MDT.NaturalGasUtilizationConstraint class,
 loads its properties, adds it to the microgrid (if provided), and
 returns it.</p>
-<section id="id152">
-<h4>Parameters<a class="headerlink" href="#id152" title="Link to this heading"></a></h4>
+<section id="id145">
+<h4>Parameters<a class="headerlink" href="#id145" title="Link to this heading"></a></h4>
 <dl>
 <dt>mg: MDT.Microgrid</dt><dd><p>The microgrid to which to add the new metric.  If this argument is None,
 then the metric is created and loaded but not added to any entities
@@ -4989,8 +5135,8 @@ random Guid is used.</p>
 <span class="sig-prename descclassname"><span class="pre">pymdt.metrics.</span></span><span class="sig-name descname"><span class="pre">MakePropaneEfficiencyMetric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Microgrid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">PropaneEfficiencyConstraint</span></span></span><a class="reference internal" href="_modules/pymdt/metrics.html#MakePropaneEfficiencyMetric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pymdt.metrics.MakePropaneEfficiencyMetric" title="Link to this definition"></a></dt>
 <dd><p>Builds an instance of the MDT.PropaneEfficiencyConstraint class, loads
 its properties, adds it to the microgrid (if provided), and returns it.</p>
-<section id="id153">
-<h4>Parameters<a class="headerlink" href="#id153" title="Link to this heading"></a></h4>
+<section id="id146">
+<h4>Parameters<a class="headerlink" href="#id146" title="Link to this heading"></a></h4>
 <dl>
 <dt>mg: MDT.Microgrid</dt><dd><p>The microgrid to which to add the new metric.  If this argument is None,
 then the metric is created and loaded but not added to any entities
@@ -5060,8 +5206,8 @@ random Guid is used.</p>
 <span class="sig-prename descclassname"><span class="pre">pymdt.metrics.</span></span><span class="sig-name descname"><span class="pre">MakePropaneFuelCostMetric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Microgrid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">PropaneFuelCostConstraint</span></span></span><a class="reference internal" href="_modules/pymdt/metrics.html#MakePropaneFuelCostMetric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pymdt.metrics.MakePropaneFuelCostMetric" title="Link to this definition"></a></dt>
 <dd><p>Builds an instance of the MDT.PropaneFuelCostConstraint class, loads
 its properties, adds it to the microgrid (if provided), and returns it.</p>
-<section id="id154">
-<h4>Parameters<a class="headerlink" href="#id154" title="Link to this heading"></a></h4>
+<section id="id147">
+<h4>Parameters<a class="headerlink" href="#id147" title="Link to this heading"></a></h4>
 <dl>
 <dt>mg: MDT.Microgrid</dt><dd><p>The microgrid to which to add the new metric.  If this argument is None,
 then the metric is created and loaded but not added to any entities
@@ -5131,8 +5277,8 @@ random Guid is used.</p>
 <span class="sig-prename descclassname"><span class="pre">pymdt.metrics.</span></span><span class="sig-name descname"><span class="pre">MakePropaneFuelMetric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Microgrid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">PropaneFuelConstraint</span></span></span><a class="reference internal" href="_modules/pymdt/metrics.html#MakePropaneFuelMetric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pymdt.metrics.MakePropaneFuelMetric" title="Link to this definition"></a></dt>
 <dd><p>Builds an instance of the MDT.PropaneFuelConstraint class, loads its
 properties, adds it to the microgrid (if provided), and returns it.</p>
-<section id="id155">
-<h4>Parameters<a class="headerlink" href="#id155" title="Link to this heading"></a></h4>
+<section id="id148">
+<h4>Parameters<a class="headerlink" href="#id148" title="Link to this heading"></a></h4>
 <dl>
 <dt>mg: MDT.Microgrid</dt><dd><p>The microgrid to which to add the new metric.  If this argument is None,
 then the metric is created and loaded but not added to any entities
@@ -5202,8 +5348,8 @@ random Guid is used.</p>
 <span class="sig-prename descclassname"><span class="pre">pymdt.metrics.</span></span><span class="sig-name descname"><span class="pre">MakePropaneUtilizationRateMetric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Microgrid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">PropaneUtilizationConstraint</span></span></span><a class="reference internal" href="_modules/pymdt/metrics.html#MakePropaneUtilizationRateMetric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pymdt.metrics.MakePropaneUtilizationRateMetric" title="Link to this definition"></a></dt>
 <dd><p>Builds an instance of the MDT.PropaneUtilizationConstraint class, loads
 its properties, adds it to the microgrid (if provided), and returns it.</p>
-<section id="id156">
-<h4>Parameters<a class="headerlink" href="#id156" title="Link to this heading"></a></h4>
+<section id="id149">
+<h4>Parameters<a class="headerlink" href="#id149" title="Link to this heading"></a></h4>
 <dl>
 <dt>mg: MDT.Microgrid</dt><dd><p>The microgrid to which to add the new metric.  If this argument is None,
 then the metric is created and loaded but not added to any entities
@@ -5273,8 +5419,8 @@ random Guid is used.</p>
 <span class="sig-prename descclassname"><span class="pre">pymdt.metrics.</span></span><span class="sig-name descname"><span class="pre">MakeResponseFunctionGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SolverInterface</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ResponseFunctionGroup</span></span></span><a class="reference internal" href="_modules/pymdt/metrics.html#MakeResponseFunctionGroup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pymdt.metrics.MakeResponseFunctionGroup" title="Link to this definition"></a></dt>
 <dd><p>Builds an instance of a TMO.ResponseFunctionGroup class, loads its
 properties, adds it to the solver (if provided), and returns it.</p>
-<section id="id157">
-<h4>Parameters<a class="headerlink" href="#id157" title="Link to this heading"></a></h4>
+<section id="id150">
+<h4>Parameters<a class="headerlink" href="#id150" title="Link to this heading"></a></h4>
 <dl>
 <dt>s: TMO.SolverInterface</dt><dd><p>The solver to which to add the new group.  If this argument is None,
 then the group is created and loaded but not added to any solvers group
@@ -5322,8 +5468,8 @@ random Guid is used.</p>
 <span class="sig-prename descclassname"><span class="pre">pymdt.metrics.</span></span><span class="sig-name descname"><span class="pre">MakeTotalFuelCostMetric</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Microgrid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">TotalFuelCostConstraint</span></span></span><a class="reference internal" href="_modules/pymdt/metrics.html#MakeTotalFuelCostMetric"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pymdt.metrics.MakeTotalFuelCostMetric" title="Link to this definition"></a></dt>
 <dd><p>Builds an instance of the MDT.TotalFuelCostConstraint class, loads its
 properties, adds it to the microgrid (if provided), and returns it.</p>
-<section id="id158">
-<h4>Parameters<a class="headerlink" href="#id158" title="Link to this heading"></a></h4>
+<section id="id151">
+<h4>Parameters<a class="headerlink" href="#id151" title="Link to this heading"></a></h4>
 <dl>
 <dt>mg: MDT.Microgrid</dt><dd><p>The microgrid to which to add the new metric.  If this argument is None,
 then the metric is created and loaded but not added to any entities
@@ -5517,9 +5663,9 @@ the value of exceeding the objective is moderate.</p>
 <span class="sig-prename descclassname"><span class="pre">pymdt.missions.</span></span><span class="sig-name descname"><span class="pre">MakeAndNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">children</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">AndNode</span></span></span><a class="reference internal" href="_modules/pymdt/missions.html#MakeAndNode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pymdt.missions.MakeAndNode" title="Link to this definition"></a></dt>
 <dd><p>This helper function creates a new and node, extracts any provided
 properties, loads it into its parent, and returns it.</p>
-<section id="id159">
-<h4>Parameters<a class="headerlink" href="#id159" title="Link to this heading"></a></h4>
-<dl class="simple">
+<section id="id152">
+<h4>Parameters<a class="headerlink" href="#id152" title="Link to this heading"></a></h4>
+<dl>
 <dt>parent</dt><dd><p>The parent node of the new and node being created.  This can be a
 mission function or another node such as an and, or, or M of N node.</p>
 </dd>
@@ -5527,12 +5673,19 @@ mission function or another node such as an and, or, or M of N node.</p>
 empty collection if desired as children can be added subsequently.</p>
 </dd>
 <dt>kwargs: dict</dt><dd><p>A dictionary of all the variable arguments provided to this function.
-This function does not use any keyword arguments.</p>
+The arguments used by this method include:</p>
+<dl class="simple">
+<dt>err_log: Common.Logging.Log</dt><dd><p>The log into which to record any errors encountered during the
+building, loading, or saving of the new item.  If this argument is
+not provided, messages will be recorded into the
+pymdt.GlobalErrorLog instance.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </section>
-<section id="id160">
-<h4>Returns<a class="headerlink" href="#id160" title="Link to this heading"></a></h4>
+<section id="id153">
+<h4>Returns<a class="headerlink" href="#id153" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>TMO.AndNode:</dt><dd><p>The newly created and node instance.</p>
 </dd>
@@ -5545,8 +5698,8 @@ This function does not use any keyword arguments.</p>
 <span class="sig-prename descclassname"><span class="pre">pymdt.missions.</span></span><span class="sig-name descname"><span class="pre">MakeMission</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Site</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Mission</span></span></span><a class="reference internal" href="_modules/pymdt/missions.html#MakeMission"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pymdt.missions.MakeMission" title="Link to this definition"></a></dt>
 <dd><p>This helper function creates a new mission, extracts any provided
 properties, loads it into its owner, and returns it.</p>
-<section id="id161">
-<h4>Parameters<a class="headerlink" href="#id161" title="Link to this heading"></a></h4>
+<section id="id154">
+<h4>Parameters<a class="headerlink" href="#id154" title="Link to this heading"></a></h4>
 <dl>
 <dt>s: MDT.Site</dt><dd><p>The site for which this mission is being built.</p>
 </dd>
@@ -5581,8 +5734,8 @@ random Guid is used.</p>
 </dd>
 </dl>
 </section>
-<section id="id162">
-<h4>Returns<a class="headerlink" href="#id162" title="Link to this heading"></a></h4>
+<section id="id155">
+<h4>Returns<a class="headerlink" href="#id155" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>MDT.Mission:</dt><dd><p>The newly created mission instance.</p>
 </dd>
@@ -5595,8 +5748,8 @@ random Guid is used.</p>
 <span class="sig-prename descclassname"><span class="pre">pymdt.missions.</span></span><span class="sig-name descname"><span class="pre">MakeMissionFunction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Site</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">MissionFunction</span></span></span><a class="reference internal" href="_modules/pymdt/missions.html#MakeMissionFunction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pymdt.missions.MakeMissionFunction" title="Link to this definition"></a></dt>
 <dd><p>This helper function creates a new mission function, extracts any
 provided properties, loads it into its owner, and returns it.</p>
-<section id="id163">
-<h4>Parameters<a class="headerlink" href="#id163" title="Link to this heading"></a></h4>
+<section id="id156">
+<h4>Parameters<a class="headerlink" href="#id156" title="Link to this heading"></a></h4>
 <dl>
 <dt>s: MDT.Site</dt><dd><p>The site for which this mission function is being built.</p>
 </dd>
@@ -5632,8 +5785,8 @@ random Guid is used.</p>
 </dd>
 </dl>
 </section>
-<section id="id164">
-<h4>Returns<a class="headerlink" href="#id164" title="Link to this heading"></a></h4>
+<section id="id157">
+<h4>Returns<a class="headerlink" href="#id157" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>MDT.MissionFunction:</dt><dd><p>The newly created mission function instance.</p>
 </dd>
@@ -5646,9 +5799,9 @@ random Guid is used.</p>
 <span class="sig-prename descclassname"><span class="pre">pymdt.missions.</span></span><span class="sig-name descname"><span class="pre">MakeMofNNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">children</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">MofNNode</span></span></span><a class="reference internal" href="_modules/pymdt/missions.html#MakeMofNNode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pymdt.missions.MakeMofNNode" title="Link to this definition"></a></dt>
 <dd><p>This helper function creates a new M of N node, extracts any provided
 properties, loads it into its parent, and returns it.</p>
-<section id="id165">
-<h4>Parameters<a class="headerlink" href="#id165" title="Link to this heading"></a></h4>
-<dl class="simple">
+<section id="id158">
+<h4>Parameters<a class="headerlink" href="#id158" title="Link to this heading"></a></h4>
+<dl>
 <dt>parent</dt><dd><p>The parent node of the new M of N node being created.  This can be a
 mission function or another node such as an and, or, or M of N node.</p>
 </dd>
@@ -5656,12 +5809,22 @@ mission function or another node such as an and, or, or M of N node.</p>
 an empty collection if desired as children can be added subsequently.</p>
 </dd>
 <dt>kwargs: dict</dt><dd><p>A dictionary of all the variable arguments provided to this function.
-This function does not use any keyword arguments.</p>
+The arguments used by this method include:</p>
+<dl class="simple">
+<dt>err_log: Common.Logging.Log</dt><dd><p>The log into which to record any errors encountered during the
+building, loading, or saving of the new item.  If this argument is
+not provided, messages will be recorded into the
+pymdt.GlobalErrorLog instance.</p>
+</dd>
+<dt>undos: Common.Undoing.IUndoPack</dt><dd><p>An optional undo pack into which to load the undoable objects
+generated during this operation (if any).</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </section>
-<section id="id166">
-<h4>Returns<a class="headerlink" href="#id166" title="Link to this heading"></a></h4>
+<section id="id159">
+<h4>Returns<a class="headerlink" href="#id159" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>TMO.MofNNode:</dt><dd><p>The newly created M of N node instance.</p>
 </dd>
@@ -5672,11 +5835,11 @@ This function does not use any keyword arguments.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pymdt.missions.MakeNotNode">
 <span class="sig-prename descclassname"><span class="pre">pymdt.missions.</span></span><span class="sig-name descname"><span class="pre">MakeNotNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">child</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">NotNode</span></span></span><a class="reference internal" href="_modules/pymdt/missions.html#MakeNotNode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pymdt.missions.MakeNotNode" title="Link to this definition"></a></dt>
-<dd><p>This helper function creates a new not node, extracts any
-provided properties, loads it into its parent, and returns it.</p>
-<section id="id167">
-<h4>Parameters<a class="headerlink" href="#id167" title="Link to this heading"></a></h4>
-<dl class="simple">
+<dd><p>This helper function creates a new not node, extracts any provided
+properties, loads it into its parent, and returns it.</p>
+<section id="id160">
+<h4>Parameters<a class="headerlink" href="#id160" title="Link to this heading"></a></h4>
+<dl>
 <dt>parent</dt><dd><p>The parent node of the new not node being created.  This can be a
 mission function or another node such as an and, or, or M of N node.</p>
 </dd>
@@ -5684,12 +5847,19 @@ mission function or another node such as an and, or, or M of N node.</p>
 none if desired as the child can be added subsequently.</p>
 </dd>
 <dt>kwargs: dict</dt><dd><p>A dictionary of all the variable arguments provided to this function.
-This function does not use any keyword arguments.</p>
+The arguments used by this method include:</p>
+<dl class="simple">
+<dt>err_log: Common.Logging.Log</dt><dd><p>The log into which to record any errors encountered during the
+building, loading, or saving of the new item.  If this argument is
+not provided, messages will be recorded into the
+pymdt.GlobalErrorLog instance.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </section>
-<section id="id168">
-<h4>Returns<a class="headerlink" href="#id168" title="Link to this heading"></a></h4>
+<section id="id161">
+<h4>Returns<a class="headerlink" href="#id161" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>TMO.NotNode:</dt><dd><p>The newly created not node instance.</p>
 </dd>
@@ -5702,9 +5872,9 @@ This function does not use any keyword arguments.</p>
 <span class="sig-prename descclassname"><span class="pre">pymdt.missions.</span></span><span class="sig-name descname"><span class="pre">MakeOrNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">children</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">OrNode</span></span></span><a class="reference internal" href="_modules/pymdt/missions.html#MakeOrNode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pymdt.missions.MakeOrNode" title="Link to this definition"></a></dt>
 <dd><p>This helper function creates a new or node, extracts any provided
 properties, loads it into its parent, and returns it.</p>
-<section id="id169">
-<h4>Parameters<a class="headerlink" href="#id169" title="Link to this heading"></a></h4>
-<dl class="simple">
+<section id="id162">
+<h4>Parameters<a class="headerlink" href="#id162" title="Link to this heading"></a></h4>
+<dl>
 <dt>parent</dt><dd><p>The parent node of the new or node being created.  This can be a mission
 function or another node such as an and, or, or M of N node.</p>
 </dd>
@@ -5712,12 +5882,19 @@ function or another node such as an and, or, or M of N node.</p>
 empty collection if desired as children can be added subsequently.</p>
 </dd>
 <dt>kwargs: dict</dt><dd><p>A dictionary of all the variable arguments provided to this function.
-This function does not use any keyword arguments.</p>
+The arguments used by this method include:</p>
+<dl class="simple">
+<dt>err_log: Common.Logging.Log</dt><dd><p>The log into which to record any errors encountered during the
+building, loading, or saving of the new item.  If this argument is
+not provided, messages will be recorded into the
+pymdt.GlobalErrorLog instance.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </section>
-<section id="id170">
-<h4>Returns<a class="headerlink" href="#id170" title="Link to this heading"></a></h4>
+<section id="id163">
+<h4>Returns<a class="headerlink" href="#id163" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>TMO.OrNode:</dt><dd><p>The newly created or node instance.</p>
 </dd>
@@ -5825,8 +6002,8 @@ Microgrid (mg) from the specified upgrade configuration.</p>
 to one created as part of an input set.  See the
 FindCorrespondingMicrogridFromRunInfo or similar function in this module for
 more information.</p>
-<section id="id171">
-<h4>Parameters<a class="headerlink" href="#id171" title="Link to this heading"></a></h4>
+<section id="id164">
+<h4>Parameters<a class="headerlink" href="#id164" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>mg: MDT.Microgrid</dt><dd><p>The microgrid for which the realization is sought.</p>
 </dd>
@@ -5835,8 +6012,8 @@ for the supplied Microgrid.</p>
 </dd>
 </dl>
 </section>
-<section id="id172">
-<h4>Returns<a class="headerlink" href="#id172" title="Link to this heading"></a></h4>
+<section id="id165">
+<h4>Returns<a class="headerlink" href="#id165" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>MDT.MicrogridRealization:</dt><dd><p>The found realization if one.  None otherwise.</p>
 </dd>
@@ -5849,8 +6026,8 @@ for the supplied Microgrid.</p>
 <span class="sig-prename descclassname"><span class="pre">pymdt.results.</span></span><span class="sig-name descname"><span class="pre">GetResponseFunctionGroups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sri</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">SolverRunInfo</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">IKeyedCollectionWithUndo</span><span class="p"><span class="pre">[</span></span><span class="pre">Guid</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ResponseFunctionGroup</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pymdt/results.html#GetResponseFunctionGroups"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pymdt.results.GetResponseFunctionGroups" title="Link to this definition"></a></dt>
 <dd><p>Extracts and returns the collection of TMO.ResponseFunctionGroup objects
 used in the creation of the results in sri.</p>
-<section id="id173">
-<h4>Parameters<a class="headerlink" href="#id173" title="Link to this heading"></a></h4>
+<section id="id166">
+<h4>Parameters<a class="headerlink" href="#id166" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>sri: TMO.SolverRunInfo</dt><dd><p>The solver run information object that contains results.  These results
 were generated for a set of response function groups.  Those groups
@@ -5858,8 +6035,8 @@ are extracted from this object.</p>
 </dd>
 </dl>
 </section>
-<section id="id174">
-<h4>Returns<a class="headerlink" href="#id174" title="Link to this heading"></a></h4>
+<section id="id167">
+<h4>Returns<a class="headerlink" href="#id167" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>Common.Databinding.IKeyedCollectionWithUndo[System.Guid, TMO.ResponseFunctionGroup]:</dt><dd><p>The collection of response function groups found.  None otherwise.</p>
 </dd>
@@ -5904,8 +6081,8 @@ are extracted from this object.</p>
 <dd><p>This helper function creates a new BatterySpec, extracts any
 provided properties, loads it into the master list of specifications,
 and returns it.</p>
-<section id="id175">
-<h4>Parameters<a class="headerlink" href="#id175" title="Link to this heading"></a></h4>
+<section id="id168">
+<h4>Parameters<a class="headerlink" href="#id168" title="Link to this heading"></a></h4>
 <dl>
 <dt>name: str</dt><dd><p>The name to be given to the new specification.  Names of like-type
 specifications must be unique.</p>
@@ -5981,8 +6158,8 @@ random Guid is used.</p>
 </dd>
 </dl>
 </section>
-<section id="id176">
-<h4>Returns<a class="headerlink" href="#id176" title="Link to this heading"></a></h4>
+<section id="id169">
+<h4>Returns<a class="headerlink" href="#id169" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>MDT.BatterySpec:</dt><dd><p>The newly created specification instance.</p>
 </dd>
@@ -5996,8 +6173,8 @@ random Guid is used.</p>
 <dd><p>This helper function creates a new DieselGeneratorSpec, extracts any
 provided properties, loads it into the master list of specifications,
 and returns it.</p>
-<section id="id177">
-<h4>Parameters<a class="headerlink" href="#id177" title="Link to this heading"></a></h4>
+<section id="id170">
+<h4>Parameters<a class="headerlink" href="#id170" title="Link to this heading"></a></h4>
 <dl>
 <dt>name: str</dt><dd><p>The name to be given to the new specification.  Names of like-type
 specifications must be unique.</p>
@@ -6079,8 +6256,8 @@ random Guid is used.</p>
 </dd>
 </dl>
 </section>
-<section id="id178">
-<h4>Returns<a class="headerlink" href="#id178" title="Link to this heading"></a></h4>
+<section id="id171">
+<h4>Returns<a class="headerlink" href="#id171" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>MDT.DieselGeneratorSpec:</dt><dd><p>The newly created specification instance.</p>
 </dd>
@@ -6094,8 +6271,8 @@ random Guid is used.</p>
 <dd><p>This helper function creates a new DieselTankSpec, extracts any
 provided properties, loads it into the master list of specifications,
 and returns it.</p>
-<section id="id179">
-<h4>Parameters<a class="headerlink" href="#id179" title="Link to this heading"></a></h4>
+<section id="id172">
+<h4>Parameters<a class="headerlink" href="#id172" title="Link to this heading"></a></h4>
 <dl>
 <dt>name: str</dt><dd><p>The name to be given to the new specification.  Names of like-type
 specifications must be unique.</p>
@@ -6138,8 +6315,8 @@ random Guid is used.</p>
 </dd>
 </dl>
 </section>
-<section id="id180">
-<h4>Returns<a class="headerlink" href="#id180" title="Link to this heading"></a></h4>
+<section id="id173">
+<h4>Returns<a class="headerlink" href="#id173" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>MDT.DieselTankSpec:</dt><dd><p>The newly created specification instance.</p>
 </dd>
@@ -6153,8 +6330,8 @@ random Guid is used.</p>
 <dd><p>This helper function creates a new HydroGeneratorSpec, extracts any
 provided properties, loads it into the master list of specifications,
 and returns it.</p>
-<section id="id181">
-<h4>Parameters<a class="headerlink" href="#id181" title="Link to this heading"></a></h4>
+<section id="id174">
+<h4>Parameters<a class="headerlink" href="#id174" title="Link to this heading"></a></h4>
 <dl>
 <dt>name: str</dt><dd><p>The name to be given to the new specification.  Names of like-type
 specifications must be unique.</p>
@@ -6209,8 +6386,8 @@ random Guid is used.</p>
 </dd>
 </dl>
 </section>
-<section id="id182">
-<h4>Returns<a class="headerlink" href="#id182" title="Link to this heading"></a></h4>
+<section id="id175">
+<h4>Returns<a class="headerlink" href="#id175" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>MDT.HydroGeneratorSpec:</dt><dd><p>The newly created specification instance.</p>
 </dd>
@@ -6224,8 +6401,8 @@ random Guid is used.</p>
 <dd><p>This helper function creates a new InverterSpec, extracts any
 provided properties, loads it into the master list of specifications,
 and returns it.</p>
-<section id="id183">
-<h4>Parameters<a class="headerlink" href="#id183" title="Link to this heading"></a></h4>
+<section id="id176">
+<h4>Parameters<a class="headerlink" href="#id176" title="Link to this heading"></a></h4>
 <dl>
 <dt>name: str</dt><dd><p>The name to be given to the new specification.  Names of like-type
 specifications must be unique.</p>
@@ -6269,8 +6446,8 @@ random Guid is used.</p>
 </dd>
 </dl>
 </section>
-<section id="id184">
-<h4>Returns<a class="headerlink" href="#id184" title="Link to this heading"></a></h4>
+<section id="id177">
+<h4>Returns<a class="headerlink" href="#id177" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>MDT.InverterSpec:</dt><dd><p>The newly created specification instance.</p>
 </dd>
@@ -6284,8 +6461,8 @@ random Guid is used.</p>
 <dd><p>This helper function creates a new LineSpec, extracts any
 provided properties, loads it into the master list of specifications,
 and returns it.</p>
-<section id="id185">
-<h4>Parameters<a class="headerlink" href="#id185" title="Link to this heading"></a></h4>
+<section id="id178">
+<h4>Parameters<a class="headerlink" href="#id178" title="Link to this heading"></a></h4>
 <dl>
 <dt>name: str</dt><dd><p>The name to be given to the new specification.  Names of like-type
 specifications must be unique.</p>
@@ -6340,8 +6517,8 @@ random Guid is used.</p>
 </dd>
 </dl>
 </section>
-<section id="id186">
-<h4>Returns<a class="headerlink" href="#id186" title="Link to this heading"></a></h4>
+<section id="id179">
+<h4>Returns<a class="headerlink" href="#id179" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>MDT.LineSpec:</dt><dd><p>The newly created specification instance.</p>
 </dd>
@@ -6355,8 +6532,8 @@ random Guid is used.</p>
 <dd><p>This helper function creates a new NaturalGasGeneratorSpec, extracts any
 provided properties, loads it into the master list of specifications,
 and returns it.</p>
-<section id="id187">
-<h4>Parameters<a class="headerlink" href="#id187" title="Link to this heading"></a></h4>
+<section id="id180">
+<h4>Parameters<a class="headerlink" href="#id180" title="Link to this heading"></a></h4>
 <dl>
 <dt>name: str</dt><dd><p>The name to be given to the new specification.  Names of like-type
 specifications must be unique.</p>
@@ -6438,8 +6615,8 @@ random Guid is used.</p>
 </dd>
 </dl>
 </section>
-<section id="id188">
-<h4>Returns<a class="headerlink" href="#id188" title="Link to this heading"></a></h4>
+<section id="id181">
+<h4>Returns<a class="headerlink" href="#id181" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>MDT.NaturalGasGeneratorSpec:</dt><dd><p>The newly created specification instance.</p>
 </dd>
@@ -6453,8 +6630,8 @@ random Guid is used.</p>
 <dd><p>This helper function creates a new PropaneGeneratorSpec, extracts any
 provided properties, loads it into the master list of specifications,
 and returns it.</p>
-<section id="id189">
-<h4>Parameters<a class="headerlink" href="#id189" title="Link to this heading"></a></h4>
+<section id="id182">
+<h4>Parameters<a class="headerlink" href="#id182" title="Link to this heading"></a></h4>
 <dl>
 <dt>name: str</dt><dd><p>The name to be given to the new specification.  Names of like-type
 specifications must be unique.</p>
@@ -6536,8 +6713,8 @@ random Guid is used.</p>
 </dd>
 </dl>
 </section>
-<section id="id190">
-<h4>Returns<a class="headerlink" href="#id190" title="Link to this heading"></a></h4>
+<section id="id183">
+<h4>Returns<a class="headerlink" href="#id183" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>MDT.PropaneGeneratorSpec:</dt><dd><p>The newly created specification instance.</p>
 </dd>
@@ -6551,8 +6728,8 @@ random Guid is used.</p>
 <dd><p>This helper function creates a new PropaneTankSpec, extracts any
 provided properties, loads it into the master list of specifications,
 and returns it.</p>
-<section id="id191">
-<h4>Parameters<a class="headerlink" href="#id191" title="Link to this heading"></a></h4>
+<section id="id184">
+<h4>Parameters<a class="headerlink" href="#id184" title="Link to this heading"></a></h4>
 <dl>
 <dt>name: str</dt><dd><p>The name to be given to the new specification.  Names of like-type
 specifications must be unique.</p>
@@ -6595,8 +6772,8 @@ random Guid is used.</p>
 </dd>
 </dl>
 </section>
-<section id="id192">
-<h4>Returns<a class="headerlink" href="#id192" title="Link to this heading"></a></h4>
+<section id="id185">
+<h4>Returns<a class="headerlink" href="#id185" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>MDT.PropaneTankSpec:</dt><dd><p>The newly created specification instance.</p>
 </dd>
@@ -6610,8 +6787,8 @@ random Guid is used.</p>
 <dd><p>This helper function creates a new SolarGeneratorSpec, extracts any
 provided properties, loads it into the master list of specifications,
 and returns it.</p>
-<section id="id193">
-<h4>Parameters<a class="headerlink" href="#id193" title="Link to this heading"></a></h4>
+<section id="id186">
+<h4>Parameters<a class="headerlink" href="#id186" title="Link to this heading"></a></h4>
 <dl>
 <dt>name: str</dt><dd><p>The name to be given to the new specification.  Names of like-type
 specifications must be unique.</p>
@@ -6666,8 +6843,8 @@ random Guid is used.</p>
 </dd>
 </dl>
 </section>
-<section id="id194">
-<h4>Returns<a class="headerlink" href="#id194" title="Link to this heading"></a></h4>
+<section id="id187">
+<h4>Returns<a class="headerlink" href="#id187" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>MDT.SolarGeneratorSpec:</dt><dd><p>The newly created specification instance.</p>
 </dd>
@@ -6681,8 +6858,8 @@ random Guid is used.</p>
 <dd><p>This helper function creates a new SwitchSpec, extracts any
 provided properties, loads it into the master list of specifications,
 and returns it.</p>
-<section id="id195">
-<h4>Parameters<a class="headerlink" href="#id195" title="Link to this heading"></a></h4>
+<section id="id188">
+<h4>Parameters<a class="headerlink" href="#id188" title="Link to this heading"></a></h4>
 <dl>
 <dt>name: str</dt><dd><p>The name to be given to the new specification.  Names of like-type
 specifications must be unique.</p>
@@ -6735,8 +6912,8 @@ random Guid is used.</p>
 </dd>
 </dl>
 </section>
-<section id="id196">
-<h4>Returns<a class="headerlink" href="#id196" title="Link to this heading"></a></h4>
+<section id="id189">
+<h4>Returns<a class="headerlink" href="#id189" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>MDT.SwitchSpec:</dt><dd><p>The newly created specification instance.</p>
 </dd>
@@ -6750,8 +6927,8 @@ random Guid is used.</p>
 <dd><p>This helper function creates a new TransformerSpec, extracts any
 provided properties, loads it into the master list of specifications,
 and returns it.</p>
-<section id="id197">
-<h4>Parameters<a class="headerlink" href="#id197" title="Link to this heading"></a></h4>
+<section id="id190">
+<h4>Parameters<a class="headerlink" href="#id190" title="Link to this heading"></a></h4>
 <dl>
 <dt>name: str</dt><dd><p>The name to be given to the new specification.  Names of like-type
 specifications must be unique.</p>
@@ -6806,8 +6983,8 @@ random Guid is used.</p>
 </dd>
 </dl>
 </section>
-<section id="id198">
-<h4>Returns<a class="headerlink" href="#id198" title="Link to this heading"></a></h4>
+<section id="id191">
+<h4>Returns<a class="headerlink" href="#id191" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>MDT.TransformerSpec:</dt><dd><p>The newly created specification instance.</p>
 </dd>
@@ -6821,8 +6998,8 @@ random Guid is used.</p>
 <dd><p>This helper function creates a new UPSSpec, extracts any
 provided properties, loads it into the master list of specifications,
 and returns it.</p>
-<section id="id199">
-<h4>Parameters<a class="headerlink" href="#id199" title="Link to this heading"></a></h4>
+<section id="id192">
+<h4>Parameters<a class="headerlink" href="#id192" title="Link to this heading"></a></h4>
 <dl>
 <dt>name: str</dt><dd><p>The name to be given to the new specification.  Names of like-type
 specifications must be unique.</p>
@@ -6895,8 +7072,8 @@ random Guid is used.</p>
 </dd>
 </dl>
 </section>
-<section id="id200">
-<h4>Returns<a class="headerlink" href="#id200" title="Link to this heading"></a></h4>
+<section id="id193">
+<h4>Returns<a class="headerlink" href="#id193" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>MDT.UPSSpec:</dt><dd><p>The newly created specification instance.</p>
 </dd>
@@ -6910,8 +7087,8 @@ random Guid is used.</p>
 <dd><p>This helper function creates a new WindGeneratorSpec, extracts any
 provided properties, loads it into the master list of specifications,
 and returns it.</p>
-<section id="id201">
-<h4>Parameters<a class="headerlink" href="#id201" title="Link to this heading"></a></h4>
+<section id="id194">
+<h4>Parameters<a class="headerlink" href="#id194" title="Link to this heading"></a></h4>
 <dl>
 <dt>name: str</dt><dd><p>The name to be given to the new specification.  Names of like-type
 specifications must be unique.</p>
@@ -6966,8 +7143,8 @@ random Guid is used.</p>
 </dd>
 </dl>
 </section>
-<section id="id202">
-<h4>Returns<a class="headerlink" href="#id202" title="Link to this heading"></a></h4>
+<section id="id195">
+<h4>Returns<a class="headerlink" href="#id195" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>MDT.WindGeneratorSpec:</dt><dd><p>The newly created specification instance.</p>
 </dd>
@@ -6982,8 +7159,8 @@ random Guid is used.</p>
 to the underlying database.</p>
 <p>Without calling this function, any changes made will not be saved for
 use in the future.</p>
-<section id="id203">
-<h4>Parameters<a class="headerlink" href="#id203" title="Link to this heading"></a></h4>
+<section id="id196">
+<h4>Parameters<a class="headerlink" href="#id196" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>errLog: Common.Logging.Log</dt><dd><p>A log that will receive any messages produced while saving the database
 changes and additions. If this parameter is None, then the
@@ -6991,8 +7168,8 @@ pymdt.GlobalErrorLog will be used.</p>
 </dd>
 </dl>
 </section>
-<section id="id204">
-<h4>Returns<a class="headerlink" href="#id204" title="Link to this heading"></a></h4>
+<section id="id197">
+<h4>Returns<a class="headerlink" href="#id197" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>Common.Logging.Log:</dt><dd><p>A log containing any errors or messages creating during the
 synchronization operation.  If the errLog parameter is None, then the
@@ -7011,8 +7188,8 @@ pymdt.GlobalErrorLog will be used and returned.</p>
 <dd><p>A helper function for setting properties on MDT (or associated library)
 class objects.  This helps with management of messages that may occur when
 setting a property that should be processed (error messages for example).</p>
-<section id="id205">
-<h4>Parameters<a class="headerlink" href="#id205" title="Link to this heading"></a></h4>
+<section id="id198">
+<h4>Parameters<a class="headerlink" href="#id198" title="Link to this heading"></a></h4>
 <dl>
 <dt>obj:</dt><dd><p>The object on which a property set should occur.</p>
 </dd>
@@ -7047,8 +7224,8 @@ the pymdt.GlobalErrorLog.</p>
 <dd><p>Searches through a collection to find an item with the given name.</p>
 <p>In the case of the MDT interface, the name is indicated by the value of
 the StringID property of an entry in all_ents.</p>
-<section id="id206">
-<h4>Parameters<a class="headerlink" href="#id206" title="Link to this heading"></a></h4>
+<section id="id199">
+<h4>Parameters<a class="headerlink" href="#id199" title="Link to this heading"></a></h4>
 <dl>
 <dt>all_ents:</dt><dd><p>Something that can be iterated to search for an item with the supplied
 name.  Then entities in this list must have a property named StringID
@@ -7077,8 +7254,8 @@ the failed search.</p>
 </dd>
 </dl>
 </section>
-<section id="id207">
-<h4>Returns<a class="headerlink" href="#id207" title="Link to this heading"></a></h4>
+<section id="id200">
+<h4>Returns<a class="headerlink" href="#id200" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>Found Item:</dt><dd><p>The item that was found or None if no matching item is found.</p>
 </dd>
@@ -7093,8 +7270,8 @@ the failed search.</p>
 names in the collection all_ents by adding digits to the end.</p>
 <p>In the case of the MDT interface, the name is indicated by the value of
 the StringID property of an entry in all_ents.</p>
-<section id="id208">
-<h4>Parameters<a class="headerlink" href="#id208" title="Link to this heading"></a></h4>
+<section id="id201">
+<h4>Parameters<a class="headerlink" href="#id201" title="Link to this heading"></a></h4>
 <dl>
 <dt>all_ents:</dt><dd><p>Something that can be iterated to search for an item with the supplied
 name.  Then entities in this list must have a property named StringID
@@ -7112,8 +7289,8 @@ them to get a unique name.</p>
 </dd>
 </dl>
 </section>
-<section id="id209">
-<h4>Returns<a class="headerlink" href="#id209" title="Link to this heading"></a></h4>
+<section id="id202">
+<h4>Returns<a class="headerlink" href="#id202" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>str:</dt><dd><p>The name that is unique to the supplied collection which may be the
 supplied name if it was already unique.</p>
@@ -7126,8 +7303,8 @@ supplied name if it was already unique.</p>
 <dt class="sig sig-object py" id="pymdt.utils.PrintLog">
 <span class="sig-prename descclassname"><span class="pre">pymdt.utils.</span></span><span class="sig-name descname"><span class="pre">PrintLog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">log</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Log</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">writeTags</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxEntries</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymdt/utils.html#PrintLog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pymdt.utils.PrintLog" title="Link to this definition"></a></dt>
 <dd><p>A simple helper function to print out the contents of a Log.</p>
-<section id="id210">
-<h4>Parameters<a class="headerlink" href="#id210" title="Link to this heading"></a></h4>
+<section id="id203">
+<h4>Parameters<a class="headerlink" href="#id203" title="Link to this heading"></a></h4>
 <dl class="simple">
 <dt>log: Common.Logging.Log</dt><dd><p>The log to print using the print() function.</p>
 </dd>

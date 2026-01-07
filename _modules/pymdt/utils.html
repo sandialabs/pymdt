@@ -202,14 +202,21 @@
     <span class="k">def</span> <span class="nf">_log_merge_handler</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">details</span><span class="o">.</span><span class="n">currentLog</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">details</span><span class="o">.</span><span class="n">currentLog</span><span class="o">.</span><span class="n">Merge</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">Log</span><span class="p">)</span>
-            
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_extract_undos</span><span class="p">(</span><span class="n">create_new_if_needed</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Common</span><span class="o">.</span><span class="n">Undoing</span><span class="o">.</span><span class="n">IUndoPack</span><span class="p">:</span>
+        <span class="n">undos</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;undos&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">undos</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">create_new_if_needed</span><span class="p">:</span>
+            <span class="n">undos</span> <span class="o">=</span> <span class="n">Common</span><span class="o">.</span><span class="n">Undoing</span><span class="o">.</span><span class="n">UndoPack</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">undos</span>
+
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_extract_guid</span><span class="p">(</span><span class="n">identified</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="c1"># can be missing all together, a string, or a System.Guid.  If missing,</span>
         <span class="c1"># do nothing. The default that already exists in the identified object</span>
         <span class="c1"># can be kept.</span>
         <span class="n">guid</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;guid&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">guid</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">guid</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span>
                 <span class="n">guid</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="n">Guid</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span>
             <span class="n">identified</span><span class="o">.</span><span class="n">ResetUID</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span>
@@ -237,8 +244,7 @@
         <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Common</span><span class="o">.</span><span class="n">Logging</span><span class="o">.</span><span class="n">Log</span><span class="p">:</span>
         
         <span class="n">lst</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">into</span><span class="p">,</span> <span class="n">collectionGetterName</span><span class="p">)</span>
-        <span class="c1"># Don&#39;t use kwargs.get to avoid creation of the UndoPack if not needed.</span>
-        <span class="n">undos</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;undos&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;undos&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span> <span class="k">else</span> <span class="n">Common</span><span class="o">.</span><span class="n">Undoing</span><span class="o">.</span><span class="n">UndoPack</span><span class="p">()</span>   
+        <span class="n">undos</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">_extract_undos</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_action</span><span class="p">(</span>
             <span class="n">into</span><span class="p">,</span> <span class="n">cancelEvtName</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">lst</span><span class="p">()</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">,</span> <span class="n">a3</span><span class="p">,</span> <span class="n">undos</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span>
             <span class="p">)</span>
@@ -258,9 +264,8 @@
         <span class="n">into</span><span class="p">,</span> <span class="n">cancelEvtName</span><span class="p">,</span> <span class="n">collectionGetterName</span><span class="p">,</span> <span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
         <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Common</span><span class="o">.</span><span class="n">Logging</span><span class="o">.</span><span class="n">Log</span><span class="p">:</span>
         
-        <span class="n">lst</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">into</span><span class="p">,</span> <span class="n">collectionGetterName</span><span class="p">)</span>        
-        <span class="c1"># Don&#39;t use kwargs.get to avoid creation of the UndoPack if not needed.</span>
-        <span class="n">undos</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;undos&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;undos&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span> <span class="k">else</span> <span class="n">Common</span><span class="o">.</span><span class="n">Undoing</span><span class="o">.</span><span class="n">UndoPack</span><span class="p">()</span>  
+        <span class="n">lst</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">into</span><span class="p">,</span> <span class="n">collectionGetterName</span><span class="p">)</span>
+        <span class="n">undos</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">_extract_undos</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_action</span><span class="p">(</span>
             <span class="n">into</span><span class="p">,</span> <span class="n">cancelEvtName</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">lst</span><span class="p">()</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">,</span> <span class="n">undos</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span>
             <span class="p">)</span>
@@ -280,9 +285,8 @@
         <span class="n">into</span><span class="p">,</span> <span class="n">cancelEvtName</span><span class="p">,</span> <span class="n">collectionGetterName</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
         <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Common</span><span class="o">.</span><span class="n">Logging</span><span class="o">.</span><span class="n">Log</span><span class="p">:</span>
         
-        <span class="n">lst</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">into</span><span class="p">,</span> <span class="n">collectionGetterName</span><span class="p">)</span>        
-        <span class="c1"># Don&#39;t use kwargs.get to avoid creation of the UndoPack if not needed.</span>
-        <span class="n">undos</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;undos&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;undos&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span> <span class="k">else</span> <span class="n">Common</span><span class="o">.</span><span class="n">Undoing</span><span class="o">.</span><span class="n">UndoPack</span><span class="p">()</span>     
+        <span class="n">lst</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">into</span><span class="p">,</span> <span class="n">collectionGetterName</span><span class="p">)</span>
+        <span class="n">undos</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">_extract_undos</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_action</span><span class="p">(</span>
             <span class="n">into</span><span class="p">,</span> <span class="n">cancelEvtName</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">lst</span><span class="p">()</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">undos</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span>
             <span class="p">)</span>
@@ -303,9 +307,8 @@
         <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Common</span><span class="o">.</span><span class="n">Logging</span><span class="o">.</span><span class="n">Log</span><span class="p">:</span>
         
         <span class="n">prop</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;set_&quot;</span> <span class="o">+</span> <span class="n">propName</span><span class="p">)</span>
-        
-        <span class="c1"># Don&#39;t use kwargs.get to avoid creation of the UndoPack if not needed.</span>
-        <span class="n">undos</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;undos&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;undos&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span> <span class="k">else</span> <span class="n">Common</span><span class="o">.</span><span class="n">Undoing</span><span class="o">.</span><span class="n">UndoPack</span><span class="p">()</span>
+
+        <span class="n">undos</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">_extract_undos</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         
         <span class="k">if</span> <span class="n">custom_cancel_evt_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> 
             <span class="n">custom_cancel_evt_name</span> <span class="o">=</span> <span class="s2">&quot;Change&quot;</span> <span class="o">+</span> <span class="n">propName</span> <span class="o">+</span> <span class="s2">&quot;Canceled&quot;</span>
@@ -336,8 +339,7 @@
         
         <span class="n">prop</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;set_&quot;</span> <span class="o">+</span> <span class="n">propName</span><span class="p">)</span>
         
-        <span class="c1"># Don&#39;t use kwargs.get to avoid creation of the UndoPack if not needed.</span>
-        <span class="n">undos</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;undos&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;undos&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span> <span class="k">else</span> <span class="n">Common</span><span class="o">.</span><span class="n">Undoing</span><span class="o">.</span><span class="n">UndoPack</span><span class="p">()</span>
+        <span class="n">undos</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">_extract_undos</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         
         <span class="k">if</span> <span class="n">custom_cancel_evt_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> 
             <span class="n">custom_cancel_evt_name</span> <span class="o">=</span> <span class="s2">&quot;Change&quot;</span> <span class="o">+</span> <span class="n">propName</span> <span class="o">+</span> <span class="s2">&quot;Canceled&quot;</span>
