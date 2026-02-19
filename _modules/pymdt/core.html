@@ -3162,7 +3162,7 @@
     <span class="n">fc</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">build_fragility_curve</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="n">owner</span> <span class="o">=</span> <span class="n">pymdt</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_extract_owner</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">owner</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">details</span><span class="o">.</span><span class="n">_execute_2_arg_add_with_undo</span><span class="p">(</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_execute_2_arg_add_with_undo</span><span class="p">(</span>
             <span class="n">owner</span><span class="p">,</span> <span class="s2">&quot;AddFragilityCurveCanceled&quot;</span><span class="p">,</span> <span class="s2">&quot;get_FragilityCurves&quot;</span><span class="p">,</span> <span class="n">haz</span><span class="p">,</span> <span class="n">fc</span><span class="p">,</span>
             <span class="o">**</span><span class="n">kwargs</span>
             <span class="p">)</span>
