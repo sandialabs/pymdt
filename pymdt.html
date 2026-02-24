@@ -7305,14 +7305,18 @@ supplied name if it was already unique.</p>
 <dd><p>A simple helper function to print out the contents of a Log.</p>
 <section id="id203">
 <h4>Parameters<a class="headerlink" href="#id203" title="Link to this heading"></a></h4>
-<dl class="simple">
+<dl>
 <dt>log: Common.Logging.Log</dt><dd><p>The log to print using the print() function.</p>
 </dd>
 <dt>writeTags: bool</dt><dd><p>True if the tags (like E0001, W0032, etc.) should be written along with
 each entry in the log.</p>
 </dd>
 <dt>maxEntries: int</dt><dd><p>The maximum number of log entries to write.  if this value is -1 (the
-default), than all log entries are written.</p>
+default), than all log entries are written.  Any other negative values
+will result in an exception.</p>
+<p>If not all of the entries get written then the last text in the
+returned string will be an ellipsis (…) and an indication of how
+many more remain that were not written.</p>
 </dd>
 </dl>
 </section>

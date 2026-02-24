@@ -616,7 +616,12 @@
 <span class="sd">        each entry in the log.</span>
 <span class="sd">    maxEntries: int</span>
 <span class="sd">        The maximum number of log entries to write.  if this value is -1 (the</span>
-<span class="sd">        default), than all log entries are written.</span>
+<span class="sd">        default), than all log entries are written.  Any other negative values</span>
+<span class="sd">        will result in an exception.</span>
+
+<span class="sd">        If not all of the entries get written then the last text in the</span>
+<span class="sd">        returned string will be an ellipsis (...) and an indication of how</span>
+<span class="sd">        many more remain that were not written.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">log</span><span class="o">.</span><span class="n">ToString</span><span class="p">(</span><span class="n">writeTags</span><span class="p">,</span> <span class="n">maxEntries</span><span class="p">))</span></div>
 
