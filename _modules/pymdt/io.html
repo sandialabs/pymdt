@@ -219,7 +219,7 @@
 
 <div class="viewcode-block" id="ImportInputFile">
 <a class="viewcode-back" href="../../pymdt.html#pymdt.io.ImportInputFile">[docs]</a>
-<span class="k">def</span> <span class="nf">ImportInputFile</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">errLog</span><span class="p">:</span> <span class="n">Common</span><span class="o">.</span><span class="n">Logging</span><span class="o">.</span><span class="n">Log</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Common</span><span class="o">.</span><span class="n">Logging</span><span class="o">.</span><span class="n">Log</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">ImportInputFile</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">errLog</span><span class="p">:</span> <span class="n">Common</span><span class="o">.</span><span class="n">Logging</span><span class="o">.</span><span class="n">Log</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Common</span><span class="o">.</span><span class="n">Logging</span><span class="o">.</span><span class="n">Log</span><span class="p">:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot; Imports the file with the supplied name and loads MDT inputs from it.</span>
 <span class="sd">    </span>
 <span class="sd">    It is possible that multiple file types can be associated with the same file</span>
@@ -247,6 +247,15 @@
 <span class="sd">    errLog: Common.Logging.Log</span>
 <span class="sd">        An optional log into which to merge any messages resulting from the </span>
 <span class="sd">        import operation.</span>
+<span class="sd">    kwargs: dict</span>
+<span class="sd">        A dictionary of all the variable arguments provided to this function.</span>
+<span class="sd">        The arguments used by this method include:</span>
+<span class="sd">        </span>
+<span class="sd">        invert_bus_coords: bool</span>
+<span class="sd">            Whether or not to invert the coordinates read in for busses for the</span>
+<span class="sd">            purposes of display.  This prevents the common issue of having a</span>
+<span class="sd">            display that is mirrored about the y axis from what is expected.</span>
+<span class="sd">            The default is True.</span>
 <span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -259,8 +268,11 @@
     <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">file_name</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">fileFmt</span> <span class="o">=</span> <span class="nb">format</span> <span class="ow">or</span> <span class="n">IUF</span><span class="o">.</span><span class="n">FindFileFormat</span><span class="p">(</span><span class="n">SUF</span><span class="o">.</span><span class="n">INPUT_TYPE_TAG</span><span class="p">,</span> <span class="n">ext</span><span class="p">)</span>
     <span class="n">serializer</span> <span class="o">=</span> <span class="n">IUF</span><span class="o">.</span><span class="n">GetImporter</span><span class="p">(</span><span class="n">SUF</span><span class="o">.</span><span class="n">INPUT_TYPE_TAG</span><span class="p">,</span> <span class="n">fileFmt</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">pymdt</span><span class="o">.</span><span class="n">MDT_VERSION</span> <span class="o">&gt;</span> <span class="n">System</span><span class="o">.</span><span class="n">Version</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2699</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="n">invert</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;invert_bus_coords&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">serializer</span><span class="o">.</span><span class="n">InvertBusCoordinatesForDisplay</span> <span class="o">=</span> <span class="n">invert</span>
+
     <span class="n">slog</span> <span class="o">=</span> <span class="n">Common</span><span class="o">.</span><span class="n">Logging</span><span class="o">.</span><span class="n">Log</span><span class="p">()</span>
-    
     <span class="n">hdnlr</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">serializer</span><span class="p">,</span> <span class="s2">&quot;OnNeedUserInput&quot;</span><span class="p">)</span>        
     <span class="n">hdnlr</span> <span class="o">+=</span> <span class="n">details</span><span class="o">.</span><span class="n">_onNeedUserInput</span>
 

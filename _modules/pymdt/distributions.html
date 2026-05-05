@@ -44,6 +44,7 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../modules.html">pymdt</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../customization.html">customization</a></li>
 </ul>
 
         </div>
@@ -156,6 +157,28 @@
 <span class="sd">        The newly created and configured Fixed distribution.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">CD</span><span class="o">.</span><span class="n">Fixed</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MakeFixedCDF">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.distributions.MakeFixedCDF">[docs]</a>
+<span class="k">def</span> <span class="nf">MakeFixedCDF</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">FixedCDFDist</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Creates, configures, and returns a new instance of a Fixed CDF</span>
+<span class="sd">    distribution using the supplied parameters.  This distribution type can only</span>
+<span class="sd">    be used for the probability generator of a fragility curve.  It effectively</span>
+<span class="sd">    creates a means of determining failure based on comparison of a random</span>
+<span class="sd">    number in the 0-1 range to the fixed value (fails if rng() &lt; value).</span>
+<span class="sd">        </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    value: float</span>
+<span class="sd">        The fixed CDF value of the new Fixed CDF distribution.</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    MDT.FixedCDFDist:</span>
+<span class="sd">        The newly created and configured Fixed CDF distribution.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">MDT</span><span class="o">.</span><span class="n">FixedCDFDist</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="MakeLogNormal">

@@ -44,6 +44,7 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../modules.html">pymdt</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../customization.html">customization</a></li>
 </ul>
 
         </div>
@@ -146,6 +147,23 @@
 <span class="sd">    &quot;&quot;&quot;</span></div>
 
 
+<div class="viewcode-block" id="time_control_types">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.core.time_control_types">[docs]</a>
+<span class="k">class</span> <span class="nc">time_control_types</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; An enumeration of the types of fragility curve modes of operation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">Immediate</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">FragilityCurve</span><span class="o">.</span><span class="n">FailureModeEnum</span><span class="o">.</span><span class="n">Instantaneous</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; The failure will occur immediately subject to the probability generator.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">TimeAccumulating</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">FragilityCurve</span><span class="o">.</span><span class="n">FailureModeEnum</span><span class="o">.</span><span class="n">Instantaneous</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; The MTBF distribution will be used to get the amount of time that will</span>
+<span class="sd">    pass before a failure occurs.  If the highest possible double value is</span>
+<span class="sd">    returned, the unreliable asset will survive the DBT without failure.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+    
 <span class="k">class</span> <span class="nc">details</span><span class="p">:</span>
     
     <span class="n">StoredLoadProfiles</span> <span class="o">=</span> <span class="p">[]</span>
@@ -401,8 +419,20 @@
     <span class="k">def</span> <span class="nf">build_fragility_curve</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">FragilityCurve</span><span class="p">:</span>
         <span class="n">fc</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">FragilityCurve</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_extract_guid</span><span class="p">(</span><span class="n">fc</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        
+        <span class="n">tt</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;time_mode&quot;</span><span class="p">,</span> <span class="n">time_control_types</span><span class="o">.</span><span class="n">Immediate</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">tt</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">):</span> <span class="n">tt</span> <span class="o">=</span> <span class="n">tt</span><span class="o">.</span><span class="n">value</span>
+  
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
+            <span class="n">fc</span><span class="p">,</span> <span class="s2">&quot;FailureMode&quot;</span><span class="p">,</span> <span class="n">tt</span>
+            <span class="p">)</span>
+    
         <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
             <span class="n">fc</span><span class="p">,</span> <span class="s2">&quot;MTTR&quot;</span><span class="p">,</span> <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_extract_distribution</span><span class="p">(</span><span class="s2">&quot;mttr&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">),</span>
+            <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
+            <span class="n">fc</span><span class="p">,</span> <span class="s2">&quot;MTBF&quot;</span><span class="p">,</span> <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_extract_distribution</span><span class="p">(</span><span class="s2">&quot;mtbf&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">),</span>
             <span class="o">**</span><span class="n">kwargs</span>
             <span class="p">)</span>
         <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
@@ -418,7 +448,8 @@
         <span class="n">haz</span> <span class="o">=</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Hazard</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_extract_guid</span><span class="p">(</span><span class="n">haz</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
-            <span class="n">haz</span><span class="p">,</span> <span class="s2">&quot;IntensityGenerator&quot;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;intensity_generator&quot;</span><span class="p">),</span>
+            <span class="n">haz</span><span class="p">,</span> <span class="s2">&quot;IntensityGenerator&quot;</span><span class="p">,</span>
+            <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_extract_distribution</span><span class="p">(</span><span class="s2">&quot;intensity_generator&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">),</span>
             <span class="o">**</span><span class="n">kwargs</span>
             <span class="p">)</span>
         <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_property_set_with_undo</span><span class="p">(</span>
@@ -852,7 +883,231 @@
         <span class="n">ar</span><span class="o">.</span><span class="n">WriteFormatted</span><span class="p">(</span><span class="n">fmt</span><span class="p">,</span> <span class="n">fStr</span><span class="p">)</span>
         <span class="n">fStr</span><span class="o">.</span><span class="n">Close</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">stDat</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">generate_bus_entities</span><span class="p">(</span><span class="n">owner</span><span class="p">,</span> <span class="n">accessor</span><span class="p">):</span>
+        
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">owner</span><span class="p">,</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Site</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">mg</span> <span class="ow">in</span> <span class="n">owner</span><span class="o">.</span><span class="n">Microgrids</span><span class="p">:</span>
+                <span class="k">yield from</span> <span class="n">details</span><span class="o">.</span><span class="n">generate_bus_entities</span><span class="p">(</span><span class="n">mg</span><span class="p">,</span> <span class="n">accessor</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">owner</span><span class="p">,</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Microgrid</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">owner</span><span class="o">.</span><span class="n">Busses</span><span class="p">:</span>
+                <span class="k">yield from</span> <span class="n">details</span><span class="o">.</span><span class="n">generate_bus_entities</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">accessor</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">owner</span><span class="p">,</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Bus</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">accessor</span><span class="p">(</span><span class="n">owner</span><span class="p">):</span>
+                <span class="k">yield</span> <span class="n">e</span><span class="p">;</span>
+
+        <span class="k">return</span>
     
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">generate_mg_entities</span><span class="p">(</span><span class="n">owner</span><span class="p">,</span> <span class="n">accessor</span><span class="p">):</span>
+        
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">owner</span><span class="p">,</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Site</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">mg</span> <span class="ow">in</span> <span class="n">owner</span><span class="o">.</span><span class="n">Microgrids</span><span class="p">:</span>
+                <span class="k">yield from</span> <span class="n">details</span><span class="o">.</span><span class="n">generate_mg_entities</span><span class="p">(</span><span class="n">mg</span><span class="p">,</span> <span class="n">accessor</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">owner</span><span class="p">,</span> <span class="n">MDT</span><span class="o">.</span><span class="n">Microgrid</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">accessor</span><span class="p">(</span><span class="n">owner</span><span class="p">):</span>
+                <span class="k">yield</span> <span class="n">e</span><span class="p">;</span>
+
+        <span class="k">return</span>
+    
+<div class="viewcode-block" id="accessors">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.core.accessors">[docs]</a>
+<span class="k">class</span> <span class="nc">accessors</span><span class="p">:</span>
+    
+<div class="viewcode-block" id="accessors.PropaneTanks">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.core.accessors.PropaneTanks">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">PropaneTanks</span><span class="p">(</span><span class="n">owner</span><span class="p">):</span>
+        <span class="k">yield from</span> <span class="n">details</span><span class="o">.</span><span class="n">generate_mg_entities</span><span class="p">(</span>
+            <span class="n">owner</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">owner</span><span class="p">:</span> <span class="n">owner</span><span class="o">.</span><span class="n">PropaneTanks</span>
+            <span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="accessors.DieselTanks">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.core.accessors.DieselTanks">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">DieselTanks</span><span class="p">(</span><span class="n">owner</span><span class="p">):</span>
+        <span class="k">yield from</span> <span class="n">details</span><span class="o">.</span><span class="n">generate_mg_entities</span><span class="p">(</span>
+            <span class="n">owner</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">owner</span><span class="p">:</span> <span class="n">owner</span><span class="o">.</span><span class="n">DieselTanks</span>
+            <span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="accessors.DesignOptions">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.core.accessors.DesignOptions">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">DesignOptions</span><span class="p">(</span><span class="n">owner</span><span class="p">):</span>
+        <span class="k">yield from</span> <span class="n">details</span><span class="o">.</span><span class="n">generate_mg_entities</span><span class="p">(</span>
+            <span class="n">owner</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">owner</span><span class="p">:</span> <span class="n">owner</span><span class="o">.</span><span class="n">DesignOptions</span>
+            <span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="accessors.ThermalLoads">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.core.accessors.ThermalLoads">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">ThermalLoads</span><span class="p">(</span><span class="n">owner</span><span class="p">):</span>
+        <span class="k">yield from</span> <span class="n">details</span><span class="o">.</span><span class="n">generate_mg_entities</span><span class="p">(</span>
+            <span class="n">owner</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">owner</span><span class="p">:</span> <span class="n">owner</span><span class="o">.</span><span class="n">ThermalLoads</span>
+            <span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="accessors.NecessitationDependencies">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.core.accessors.NecessitationDependencies">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">NecessitationDependencies</span><span class="p">(</span><span class="n">owner</span><span class="p">):</span>
+        <span class="k">yield from</span> <span class="n">details</span><span class="o">.</span><span class="n">generate_mg_entities</span><span class="p">(</span>
+            <span class="n">owner</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">owner</span><span class="p">:</span> <span class="n">owner</span><span class="o">.</span><span class="n">NecessitationDependencies</span>
+            <span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="accessors.NodeGroups">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.core.accessors.NodeGroups">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">NodeGroups</span><span class="p">(</span><span class="n">owner</span><span class="p">):</span>
+        <span class="k">yield from</span> <span class="n">details</span><span class="o">.</span><span class="n">generate_mg_entities</span><span class="p">(</span>
+            <span class="n">owner</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">owner</span><span class="p">:</span> <span class="n">owner</span><span class="o">.</span><span class="n">NodeGroups</span>
+            <span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="accessors.Nodes">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.core.accessors.Nodes">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">Nodes</span><span class="p">(</span><span class="n">owner</span><span class="p">):</span>
+        <span class="k">yield from</span> <span class="n">details</span><span class="o">.</span><span class="n">generate_mg_entities</span><span class="p">(</span>
+            <span class="n">owner</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">owner</span><span class="p">:</span> <span class="n">owner</span><span class="o">.</span><span class="n">Nodes</span>
+            <span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="accessors.Busses">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.core.accessors.Busses">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">Busses</span><span class="p">(</span><span class="n">owner</span><span class="p">):</span>
+        <span class="k">yield from</span> <span class="n">details</span><span class="o">.</span><span class="n">generate_mg_entities</span><span class="p">(</span>
+            <span class="n">owner</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">owner</span><span class="p">:</span> <span class="n">owner</span><span class="o">.</span><span class="n">Busses</span>
+            <span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="accessors.Switches">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.core.accessors.Switches">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">Switches</span><span class="p">(</span><span class="n">owner</span><span class="p">):</span>
+        <span class="k">yield from</span> <span class="n">details</span><span class="o">.</span><span class="n">generate_mg_entities</span><span class="p">(</span>
+            <span class="n">owner</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">owner</span><span class="p">:</span> <span class="n">owner</span><span class="o">.</span><span class="n">Switches</span>
+            <span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="accessors.Transformers">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.core.accessors.Transformers">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">Transformers</span><span class="p">(</span><span class="n">owner</span><span class="p">):</span>
+        <span class="k">yield from</span> <span class="n">details</span><span class="o">.</span><span class="n">generate_mg_entities</span><span class="p">(</span>
+            <span class="n">owner</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">owner</span><span class="p">:</span> <span class="n">owner</span><span class="o">.</span><span class="n">Transformers</span>
+            <span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="accessors.Lines">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.core.accessors.Lines">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">Lines</span><span class="p">(</span><span class="n">owner</span><span class="p">):</span>
+        <span class="k">yield from</span> <span class="n">details</span><span class="o">.</span><span class="n">generate_mg_entities</span><span class="p">(</span>
+            <span class="n">owner</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">owner</span><span class="p">:</span> <span class="n">owner</span><span class="o">.</span><span class="n">Lines</span>
+            <span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="accessors.DieselGenerators">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.core.accessors.DieselGenerators">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">DieselGenerators</span><span class="p">(</span><span class="n">owner</span><span class="p">):</span>
+        <span class="k">yield from</span> <span class="n">details</span><span class="o">.</span><span class="n">generate_bus_entities</span><span class="p">(</span>
+            <span class="n">owner</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">owner</span><span class="p">:</span> <span class="n">owner</span><span class="o">.</span><span class="n">DieselGenerators</span>
+            <span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="accessors.NaturalGasGenerators">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.core.accessors.NaturalGasGenerators">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">NaturalGasGenerators</span><span class="p">(</span><span class="n">owner</span><span class="p">):</span>
+        <span class="k">yield from</span> <span class="n">details</span><span class="o">.</span><span class="n">generate_bus_entities</span><span class="p">(</span>
+            <span class="n">owner</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">owner</span><span class="p">:</span> <span class="n">owner</span><span class="o">.</span><span class="n">NaturalGasGenerators</span>
+            <span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="accessors.PropaneGenerators">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.core.accessors.PropaneGenerators">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">PropaneGenerators</span><span class="p">(</span><span class="n">owner</span><span class="p">):</span>
+        <span class="k">yield from</span> <span class="n">details</span><span class="o">.</span><span class="n">generate_bus_entities</span><span class="p">(</span>
+            <span class="n">owner</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">owner</span><span class="p">:</span> <span class="n">owner</span><span class="o">.</span><span class="n">PropaneGenerators</span>
+            <span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="accessors.SolarGenerators">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.core.accessors.SolarGenerators">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">SolarGenerators</span><span class="p">(</span><span class="n">owner</span><span class="p">):</span>
+        <span class="k">yield from</span> <span class="n">details</span><span class="o">.</span><span class="n">generate_bus_entities</span><span class="p">(</span>
+            <span class="n">owner</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">owner</span><span class="p">:</span> <span class="n">owner</span><span class="o">.</span><span class="n">SolarGenerators</span>
+            <span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="accessors.WindGenerators">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.core.accessors.WindGenerators">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">WindGenerators</span><span class="p">(</span><span class="n">owner</span><span class="p">):</span>
+        <span class="k">yield from</span> <span class="n">details</span><span class="o">.</span><span class="n">generate_bus_entities</span><span class="p">(</span>
+            <span class="n">owner</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">owner</span><span class="p">:</span> <span class="n">owner</span><span class="o">.</span><span class="n">WindGenerators</span>
+            <span class="p">)</span></div>
+
+        
+<div class="viewcode-block" id="accessors.HydroGenerators">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.core.accessors.HydroGenerators">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">HydroGenerators</span><span class="p">(</span><span class="n">owner</span><span class="p">):</span>
+        <span class="k">yield from</span> <span class="n">details</span><span class="o">.</span><span class="n">generate_bus_entities</span><span class="p">(</span>
+            <span class="n">owner</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">owner</span><span class="p">:</span> <span class="n">owner</span><span class="o">.</span><span class="n">HydroGenerators</span>
+            <span class="p">)</span></div>
+
+        
+<div class="viewcode-block" id="accessors.Batteries">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.core.accessors.Batteries">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">Batteries</span><span class="p">(</span><span class="n">owner</span><span class="p">):</span>
+        <span class="k">yield from</span> <span class="n">details</span><span class="o">.</span><span class="n">generate_bus_entities</span><span class="p">(</span>
+            <span class="n">owner</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">owner</span><span class="p">:</span> <span class="n">owner</span><span class="o">.</span><span class="n">Batteries</span>
+            <span class="p">)</span></div>
+
+        
+<div class="viewcode-block" id="accessors.LoadSections">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.core.accessors.LoadSections">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">LoadSections</span><span class="p">(</span><span class="n">owner</span><span class="p">):</span>
+        <span class="k">yield from</span> <span class="n">details</span><span class="o">.</span><span class="n">generate_bus_entities</span><span class="p">(</span>
+            <span class="n">owner</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">owner</span><span class="p">:</span> <span class="n">owner</span><span class="o">.</span><span class="n">LoadSections</span>
+            <span class="p">)</span></div>
+
+        
+<div class="viewcode-block" id="accessors.Inverters">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.core.accessors.Inverters">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">Inverters</span><span class="p">(</span><span class="n">owner</span><span class="p">):</span>
+        <span class="k">yield from</span> <span class="n">details</span><span class="o">.</span><span class="n">generate_bus_entities</span><span class="p">(</span>
+            <span class="n">owner</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">owner</span><span class="p">:</span> <span class="n">owner</span><span class="o">.</span><span class="n">Inverters</span>
+            <span class="p">)</span></div>
+
+        
+<div class="viewcode-block" id="accessors.UninterruptiblePowerSupplies">
+<a class="viewcode-back" href="../../pymdt.html#pymdt.core.accessors.UninterruptiblePowerSupplies">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">UninterruptiblePowerSupplies</span><span class="p">(</span><span class="n">owner</span><span class="p">):</span>
+        <span class="k">yield from</span> <span class="n">details</span><span class="o">.</span><span class="n">generate_bus_entities</span><span class="p">(</span>
+            <span class="n">owner</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">owner</span><span class="p">:</span> <span class="n">owner</span><span class="o">.</span><span class="n">UninterruptiblePowerSupplies</span>
+            <span class="p">)</span></div>
+</div>
+
+
 <span class="n">details</span><span class="o">.</span><span class="n">_load_all_stored_configs</span><span class="p">(</span>
     <span class="n">MDT</span><span class="o">.</span><span class="n">Driver</span><span class="o">.</span><span class="n">INSTANCE</span><span class="o">.</span><span class="n">MakeLoadDataDirectory</span><span class="p">(),</span> <span class="n">details</span><span class="o">.</span><span class="n">StoredLoadProfiles</span>
     <span class="p">)</span>
@@ -3128,9 +3383,26 @@
 <span class="sd">            The probability distribution describing the mean time to repair for</span>
 <span class="sd">            this fragility curve.  This could also be a float in which case a</span>
 <span class="sd">            fixed distribution will be used.</span>
+<span class="sd">        mtbf: Common.Distributions.IDistribution</span>
+<span class="sd">            The probability distribution describing the time to failure for</span>
+<span class="sd">            this fragility curve if its time_mode is TimeAccumulating.  This</span>
+<span class="sd">            could also be a float in which case a fixed distribution will be</span>
+<span class="sd">            used.  Typically, a custom distribution would be used that knows</span>
+<span class="sd">            the hazard, intensity, etc. and can generate the appropriate amount</span>
+<span class="sd">            of time.</span>
+<span class="sd">        time_mode:</span>
+<span class="sd">            The mode of accumulating time to determine the onset of failure for</span>
+<span class="sd">            this fragility curve.  The default mode is instantaneous in which</span>
+<span class="sd">            case the probability_generator is used and if failure is determined,</span>
+<span class="sd">            it occurs immediately.  The other is time accumulating which results</span>
+<span class="sd">            in the use of the MTTR to determine how much time will pass before</span>
+<span class="sd">            failure if at all. These should be provided as members of the</span>
+<span class="sd">            pymdt.core.time_control_types enumeration. The default is</span>
+<span class="sd">            Instantaneous.</span>
 <span class="sd">        probability_generator: Common.Distributions.IDistribution</span>
 <span class="sd">            The distribution that determines the likelihood of failure in terms</span>
-<span class="sd">            of the hazard intensity units for this fragility.</span>
+<span class="sd">            of the hazard intensity units for this fragility.  The value drawn</span>
+<span class="sd">            from this distribution will be a cumulative one (using the CDF).</span>
 <span class="sd">        owner:</span>
 <span class="sd">            An optional parameter to serve as the owner of the new fragility</span>
 <span class="sd">            curve. This is typically used if one does not want the fragility</span>

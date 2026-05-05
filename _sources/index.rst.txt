@@ -11,13 +11,14 @@ Welcome to Sandia's PyMDT Documentation!
    :caption: Contents:
 
    modules
+   customization
 
 Indices and tables
 ==================
 
 * :ref:`genindex`
 * :ref:`modindex`
-* :ref:`search`
+
 
 Visit our GitHub Repo
 =====================
