@@ -558,7 +558,7 @@ def PrintLog(
             buffered (False). Default is False.  This is passed directly to the
             python built-in print function.
         end: str
-            Specify what to print at the end. Default is '\n' (line feed).
+            Specify what to print at the end. Default is a newline (line feed).
             This is passed directly to the python built-in print function.
         file:
             An object with a write method into which to print the log.
