@@ -220,7 +220,21 @@
             <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span>
                 <span class="n">guid</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="n">Guid</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span>
             <span class="n">identified</span><span class="o">.</span><span class="n">ResetUID</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span>
-        
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_convert_weekday</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MDT</span><span class="o">.</span><span class="n">DayTypeEnum</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Convert a weekday value into an MDT.DayTypeEnum</span>
+
+<span class="sd">        If the value is already a DayTypeEnum it just returns it.</span>
+<span class="sd">        If the value is an integer it interprets 0 as Monday and 6 as</span>
+<span class="sd">        Sunday (standard python weekday numbering), and returns the</span>
+<span class="sd">        corresponding DayTypeEnum. Can be used with the weekday constants</span>
+<span class="sd">        found in the `calendar` module, such as `calendar.MONDAY`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">pymdt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">details</span><span class="o">.</span><span class="n">_is_integer</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">MDT</span><span class="o">.</span><span class="n">DayTypeEnum</span><span class="p">(((</span><span class="nb">int</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">7</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">val</span>
+
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_execute_loggable_action</span><span class="p">(</span>
         <span class="n">obj</span><span class="p">,</span> <span class="n">cancelEvtName</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
@@ -317,7 +331,7 @@
             <span class="n">obj</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">custom_cancel_evt_name</span><span class="p">),</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">prop</span><span class="p">(</span><span class="n">undos</span><span class="p">,</span> <span class="n">value</span><span class="p">),</span>
             <span class="o">**</span><span class="n">kwargs</span>
             <span class="p">)</span>
-    
+
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_execute_loggable_property_set</span><span class="p">(</span>
         <span class="n">obj</span><span class="p">,</span> <span class="n">propName</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">custom_cancel_evt_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
@@ -331,7 +345,7 @@
         <span class="k">return</span> <span class="n">details</span><span class="o">.</span><span class="n">_execute_loggable_action</span><span class="p">(</span>
             <span class="n">obj</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">custom_cancel_evt_name</span><span class="p">),</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">prop</span><span class="p">(</span><span class="n">value</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span>
             <span class="p">)</span>
-    
+
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_execute_loggable_indexed_property_set_with_undo</span><span class="p">(</span>
         <span class="n">obj</span><span class="p">,</span> <span class="n">propName</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">custom_cancel_evt_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
@@ -484,11 +498,12 @@
 <span class="sd">        find_context:</span>
 <span class="sd">            A descriptor of the find operation that is happening, typically a</span>
 <span class="sd">            description of the list being searched.  This is used if no matching</span>
-<span class="sd">            item is found to give a more meaningful error message.  If not</span>
-<span class="sd">            supplied, the context is an empty string.</span>
+<span class="sd">            item is found and the find_fail_behavior is throw to give a more</span>
+<span class="sd">            meaningful error message.  If not supplied, the context is an empty</span>
+<span class="sd">            string.</span>
 <span class="sd">        case_sensitive:</span>
 <span class="sd">            An indicator of whether the search should be case sensitive or not.</span>
-<span class="sd">            if not provided, the default is True for a case sensitive search.</span>
+<span class="sd">            If not provided, the default is True for a case sensitive search.</span>
 <span class="sd">        find_fail_behavior: find_fail_behavior</span>
 <span class="sd">            A member of the find_fail_behavior enumeration indicating what to do</span>
 <span class="sd">            if the search is unsuccessful.  The default is to ignore and return</span>
@@ -604,7 +619,12 @@
 
 <div class="viewcode-block" id="PrintLog">
 <a class="viewcode-back" href="../../pymdt.html#pymdt.utils.PrintLog">[docs]</a>
-<span class="k">def</span> <span class="nf">PrintLog</span><span class="p">(</span><span class="n">log</span><span class="p">:</span> <span class="n">Common</span><span class="o">.</span><span class="n">Logging</span><span class="o">.</span><span class="n">Log</span><span class="p">,</span> <span class="n">writeTags</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">maxEntries</span><span class="p">:</span> <span class="nb">int</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">PrintLog</span><span class="p">(</span>
+    <span class="n">log</span><span class="p">:</span> <span class="n">Common</span><span class="o">.</span><span class="n">Logging</span><span class="o">.</span><span class="n">Log</span><span class="p">,</span>
+    <span class="n">writeTags</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">maxEntries</span><span class="p">:</span> <span class="nb">int</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot; A simple helper function to print out the contents of a Log.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
@@ -622,8 +642,23 @@
 <span class="sd">        If not all of the entries get written then the last text in the</span>
 <span class="sd">        returned string will be an ellipsis (...) and an indication of how</span>
 <span class="sd">        many more remain that were not written.</span>
+<span class="sd">    kwargs: dict</span>
+<span class="sd">        A dictionary of all the variable arguments provided to this function.</span>
+<span class="sd">        The arguments used by this method include:</span>
+<span class="sd">        </span>
+<span class="sd">        flush: bool</span>
+<span class="sd">            An optional A Boolean, specifying if the output is flushed (True) or</span>
+<span class="sd">            buffered (False). Default is False.  This is passed directly to the</span>
+<span class="sd">            python built-in print function.</span>
+<span class="sd">        end: str</span>
+<span class="sd">            Specify what to print at the end. Default is a newline (line feed).</span>
+<span class="sd">            This is passed directly to the python built-in print function.</span>
+<span class="sd">        file:</span>
+<span class="sd">            An object with a write method into which to print the log.</span>
+<span class="sd">            Default is sys.stdout. This is passed directly to the python</span>
+<span class="sd">            built-in print function.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">log</span><span class="o">.</span><span class="n">ToString</span><span class="p">(</span><span class="n">writeTags</span><span class="p">,</span> <span class="n">maxEntries</span><span class="p">))</span></div>
+    <span class="nb">print</span><span class="p">(</span><span class="n">log</span><span class="o">.</span><span class="n">ToString</span><span class="p">(</span><span class="n">writeTags</span><span class="p">,</span> <span class="n">maxEntries</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 </pre></div>
 

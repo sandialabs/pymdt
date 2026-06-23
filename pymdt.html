@@ -107,15 +107,15 @@ are provided for each as are details of when you may want to use them.  Often
 it is not necessary to use any of them.</p>
 <p>These arguments should be defined near the top of your python script file and
 <strong>must be provided before importing anything from pymdt</strong>.</p>
-<div class="literal-block-wrapper docutils container" id="id203">
-<div class="code-block-caption"><span class="caption-text"><strong>INCORRECT</strong></span><a class="headerlink" href="#id203" title="Link to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id204">
+<div class="code-block-caption"><span class="caption-text"><strong>INCORRECT</strong></span><a class="headerlink" href="#id204" title="Link to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="kn">import</span> <span class="nn">pymdt</span>
     <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;MDT_VERSION=1.4.2520.0&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="literal-block-wrapper docutils container" id="id204">
-<div class="code-block-caption"><span class="caption-text"><strong>CORRECT</strong></span><a class="headerlink" href="#id204" title="Link to this code"></a></div>
+<div class="literal-block-wrapper docutils container" id="id205">
+<div class="code-block-caption"><span class="caption-text"><strong>CORRECT</strong></span><a class="headerlink" href="#id205" title="Link to this code"></a></div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;MDT_VERSION=1.4.2520.0&quot;</span><span class="p">)</span>
     <span class="kn">import</span> <span class="nn">pymdt</span>
 </pre></div>
@@ -7455,8 +7455,9 @@ supplied name if it was already unique.</p>
 <dt class="sig sig-object py" id="pymdt.utils.PrintLog">
 <span class="sig-prename descclassname"><span class="pre">pymdt.utils.</span></span><span class="sig-name descname"><span class="pre">PrintLog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">log</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Log</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">writeTags</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxEntries</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pymdt/utils.html#PrintLog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pymdt.utils.PrintLog" title="Link to this definition"></a></dt>
 <dd><p>A simple helper function to print out the contents of a Log.</p>
-<blockquote>
-<div><dl>
+<section id="id203">
+<h4>Parameters<a class="headerlink" href="#id203" title="Link to this heading"></a></h4>
+<dl>
 <dt>log: Common.Logging.Log</dt><dd><p>The log to print using the print() function.</p>
 </dd>
 <dt>writeTags: bool</dt><dd><p>True if the tags (like E0001, W0032, etc.) should be written along with
@@ -7476,17 +7477,9 @@ The arguments used by this method include:</p>
 buffered (False). Default is False.  This is passed directly to the
 python built-in print function.</p>
 </dd>
-<dt>end: str</dt><dd><p>Specify what to print at the end. Default is ‘</p>
+<dt>end: str</dt><dd><p>Specify what to print at the end. Default is a newline (line feed).
+This is passed directly to the python built-in print function.</p>
 </dd>
-</dl>
-</dd>
-</dl>
-</div></blockquote>
-<dl>
-<dt>‘ (line feed).</dt><dd><blockquote>
-<div><p>This is passed directly to the python built-in print function.</p>
-</div></blockquote>
-<dl class="simple">
 <dt>file:</dt><dd><p>An object with a write method into which to print the log.
 Default is sys.stdout. This is passed directly to the python
 built-in print function.</p>
@@ -7494,6 +7487,7 @@ built-in print function.</p>
 </dl>
 </dd>
 </dl>
+</section>
 </dd></dl>
 
 <dl class="py class">
