@@ -138,7 +138,21 @@ class details:
             if type(guid) is str:
                 guid = System.Guid(guid)
             identified.ResetUID(guid)
-        
+
+    @staticmethod
+    def _convert_weekday(val) -> MDT.DayTypeEnum:
+        """ Convert a weekday value into an MDT.DayTypeEnum
+
+        If the value is already a DayTypeEnum it just returns it.
+        If the value is an integer it interprets 0 as Monday and 6 as
+        Sunday (standard python weekday numbering), and returns the
+        corresponding DayTypeEnum. Can be used with the weekday constants
+        found in the `calendar` module, such as `calendar.MONDAY`.
+        """
+        if pymdt.utils.details._is_integer(val):
+            return MDT.DayTypeEnum(((int(val) + 1) % 7) + 1)
+        return val
+
     @staticmethod
     def _execute_loggable_action(
         obj, cancelEvtName, l, **kwargs
@@ -235,7 +249,7 @@ class details:
             obj, str(custom_cancel_evt_name), lambda: prop(undos, value),
             **kwargs
             )
-    
+
     @staticmethod
     def _execute_loggable_property_set(
         obj, propName, value, custom_cancel_evt_name=None, **kwargs
@@ -249,7 +263,7 @@ class details:
         return details._execute_loggable_action(
             obj, str(custom_cancel_evt_name), lambda: prop(value), **kwargs
             )
-    
+
     @staticmethod
     def _execute_loggable_indexed_property_set_with_undo(
         obj, propName, index, value, custom_cancel_evt_name=None, **kwargs
@@ -400,11 +414,12 @@ def FindEntityByName(all_ents, name: str, **kwargs):
         find_context:
             A descriptor of the find operation that is happening, typically a
             description of the list being searched.  This is used if no matching
-            item is found to give a more meaningful error message.  If not
-            supplied, the context is an empty string.
+            item is found and the find_fail_behavior is throw to give a more
+            meaningful error message.  If not supplied, the context is an empty
+            string.
         case_sensitive:
             An indicator of whether the search should be case sensitive or not.
-            if not provided, the default is True for a case sensitive search.
+            If not provided, the default is True for a case sensitive search.
         find_fail_behavior: find_fail_behavior
             A member of the find_fail_behavior enumeration indicating what to do
             if the search is unsuccessful.  The default is to ignore and return
@@ -511,7 +526,12 @@ def ExecutePropertySet(
         obj, propName, value, custom_cancel_evt_name, **kwargs
         )
 
-def PrintLog(log: Common.Logging.Log, writeTags: bool=False, maxEntries: int=-1):
+def PrintLog(
+    log: Common.Logging.Log,
+    writeTags: bool=False,
+    maxEntries: int=-1,
+    **kwargs
+    ):
     """ A simple helper function to print out the contents of a Log.
     
     Parameters
@@ -523,6 +543,26 @@ def PrintLog(log: Common.Logging.Log, writeTags: bool=False, maxEntries: int=-1)
         each entry in the log.
     maxEntries: int
         The maximum number of log entries to write.  if this value is -1 (the
-        default), than all log entries are written.
+        default), than all log entries are written.  Any other negative values
+        will result in an exception.
+
+        If not all of the entries get written then the last text in the
+        returned string will be an ellipsis (...) and an indication of how
+        many more remain that were not written.
+    kwargs: dict
+        A dictionary of all the variable arguments provided to this function.
+        The arguments used by this method include:
+        
+        flush: bool
+            An optional A Boolean, specifying if the output is flushed (True) or
+            buffered (False). Default is False.  This is passed directly to the
+            python built-in print function.
+        end: str
+            Specify what to print at the end. Default is '\n' (line feed).
+            This is passed directly to the python built-in print function.
+        file:
+            An object with a write method into which to print the log.
+            Default is sys.stdout. This is passed directly to the python
+            built-in print function.
     """
-    print(log.ToString(writeTags, maxEntries))
+    print(log.ToString(writeTags, maxEntries), **kwargs)

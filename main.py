@@ -584,7 +584,7 @@ def main():
     hvSpec = pymdt.utils.FindEntityByName(dgSpecs, "DG5000-12470V")
     lvSpec = pymdt.utils.FindEntityByName(dgSpecs, "DG5000-6000V")
 
-    dg5fc1 = pymdt.utils.MakeFragilityCurve(
+    dg5fc1 = pymdt.core.MakeFragilityCurve(
         None, "Fragility to Haz", None, mttr=168,
         probability_generator=MakeNormal(125, 10)
         )
@@ -944,4 +944,7 @@ def main():
     pymdt.core.RunMDTGUI("C:/temp/pythonrun.mof")
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as ex:
+        print(str(ex))

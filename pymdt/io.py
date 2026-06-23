@@ -4,13 +4,15 @@ import MDT
 import pymdt
 import pymdt.utils
 
+from enum import Enum
+
 import System
 import Common.Logging
 from Common.Serialization import SerializerUtils as SUF
 from Common.Serialization import ImporterUtils as IUF
 from System import Exception as SYSEX
 
-class ImportFormats:
+class ImportFormats(Enum):
     """A class used to organize the import file formats that can be used to read
        files from other applications.
     """
@@ -38,6 +40,36 @@ class ImportFormats:
 
 
 class details:
+    
+    @staticmethod
+    def _askYesNoQuestion(args):
+        msg = ""
+
+        for e in args.Messages:
+            msg = e.Message
+            break
+
+        yeses = ["y", "yes", "yup", "yas"]
+        nos = ["n", "no", "nope", "nar"]
+
+        while True:
+            try:
+                resp = input(msg + "(Y or N):")
+                respcf = resp.casefold()
+
+                if respcf not in yeses and respcf not in nos:
+                    raise ValueError(resp)
+                
+                choice = respcf in yeses
+
+                break
+            except ValueError:
+                print("Invalid input.  Please enter Y or N.")
+
+        if choice:
+            return Common.GUI.Util.GraphicalMessageManager.OperationResult.YES
+        else:
+            return Common.GUI.Util.GraphicalMessageManager.OperationResult.NO
     
     @staticmethod
     def _chooseReNCATSolution(args) -> str:
@@ -104,33 +136,12 @@ class details:
         return ret
 
     @staticmethod
-    def _askAboutReNCATMessages(args):
-        
-        msg = ""
+    def _askAboutReNCATMissions(args):        
+        return details._askYesNoQuestion(args)
 
-        for e in args.Messages:
-            msg = e.Message
-            break
-
-        yeses = ["y", "yes", "yup", "yas"]
-        nos = ["n", "no", "nope", "nar"]
-
-        while True:
-            try:
-                resp = input(msg + "(Y or N):")
-                respcf = resp.casefold()
-
-                if respcf not in yeses and respcf not in nos:
-                    raise ValueError
-                
-                choice = respcf in yeses
-
-                break
-            except ValueError:
-                print("Invalid input.  Please enter Y or N.")
-
-        return Common.GUI.Util.GraphicalMessageManager.OperationResult.YES \
-            if choice else Common.GUI.Util.GraphicalMessageManager.OperationResult.NO
+    @staticmethod
+    def _askAboutInstallSwitchMessages(args):
+        return details._askYesNoQuestion(args)
 
     @staticmethod
     def _onNeedUserInput(sender, args):
@@ -139,9 +150,29 @@ class details:
         elif args.Message == MDT.ReNCATResultsImporter.GEN_TYPE_MSG:
             args.Answer = details._chooseReNCATGeneratorTypes(args)
         elif args.Message == MDT.ReNCATResultsImporter.READ_MISSION_MSG:
-            args.Answer = details._askAboutReNCATMessages(args)
+            args.Response = details._askAboutReNCATMissions(args)
+        elif args.Message == MDT.OpenDSSImporter.INSTALL_SWITCH_MSG or \
+            args.Message == MDT.PandaPowerImporter.INSTALL_SWITCH_MSG:
+            args.Response = details._askAboutInstallSwitchMessages(args)
 
-def ImportInputFile(file_name, format=None, errLog: Common.Logging.Log=None) -> Common.Logging.Log:
+    class _DefaultUserInputHandler:
+
+        def __init__(self):
+            self._defAnswer = None
+            self._defResponse = None
+
+        def _onDefaultedUserInput(self, sender, args):
+
+            if(self._defAnswer is not None):
+                args.Answer = self._defAnswer.get(args.Message, None)
+
+            if(self._defResponse is not None):
+                args.Response = self._defResponse.get(
+                    args.Message,
+                    Common.GUI.Util.GraphicalMessageManager.OperationResult.NO
+                    )
+
+def ImportInputFile(file_name, format=None, errLog: Common.Logging.Log=None, **kwargs) -> Common.Logging.Log:
     r""" Imports the file with the supplied name and loads MDT inputs from it.
     
     It is possible that multiple file types can be associated with the same file
@@ -166,9 +197,51 @@ def ImportInputFile(file_name, format=None, errLog: Common.Logging.Log=None) -> 
         An optional identifier of the file format intended.  If provided, this
         will take precedence over the extension of the file name.  This should
         be one of the members of the ImportFormats class defined in this module.
+        If more than one format uses the same extension, .json for example, then
+        this argument is highly recommended.
     errLog: Common.Logging.Log
         An optional log into which to merge any messages resulting from the 
         import operation.
+    kwargs: dict
+        A dictionary of all the variable arguments provided to this function.
+        The arguments used by this method include:
+        
+        invert_bus_coords: bool
+            Whether or not to invert the coordinates read in for busses for the
+            purposes of display.  This prevents the common issue of having a
+            display that is mirrored about the y axis from what is expected.
+            The default is True.
+        default_response:
+            If provided, then the user will not be asked for input by the
+            importer and in any place that the response result is needed, this
+            map will be used to provide the answer.  The response to a given
+            question is one of the members of
+            Common.GUI.Util.GraphicalMessageManager.OperationResult.  This map
+            must use the questions as keys and the operation result as values.
+            The keys are strings and can be obtained from the specific
+            importers.
+          
+            This is an advanced feature that can in some cases,
+            require inside knowledge of the MDT object model.  Contact the
+            developers for help if needed.
+
+            Providing either this or the default_answer will prevent the
+            asking of any questions of the user by the importer so provide both
+            if needed.
+        default_answer:
+            If provided, then the user will not be asked for input by the
+            importer and in any place that the answer result is needed, this
+            map will be used to provide the answer.  The answer is any object
+            that satisfied the request of the specific importer.    This map
+            must use the questions as keys and the operation result as values.
+            
+            This is an advanced feature that can in some cases,
+            require inside knowledge of the MDT object model.  Contact the
+            developers for help if needed.
+
+            Providing either this or the default_response will prevent the
+            asking of any questions of the user by the importer so provide both
+            if needed.
     
     Returns
     -------
@@ -179,12 +252,24 @@ def ImportInputFile(file_name, format=None, errLog: Common.Logging.Log=None) -> 
         messages created during the import.
     """
     ext = os.path.splitext(file_name)[-1]
+    
+    if hasattr(format, "value"): format = format.value
     fileFmt = format or IUF.FindFileFormat(SUF.INPUT_TYPE_TAG, ext)
     serializer = IUF.GetImporter(SUF.INPUT_TYPE_TAG, fileFmt)
+    if pymdt.MDT_VERSION > System.Version(1, 4, 2699, 0):
+        invert = kwargs.get("invert_bus_coords", True)
+        serializer.InvertBusCoordinatesForDisplay = invert
+
     slog = Common.Logging.Log()
+    hdnlr = getattr(serializer, "OnNeedUserInput")
     
-    hdnlr = getattr(serializer, "OnNeedUserInput")        
-    hdnlr += details._onNeedUserInput
+    if "default_response" in kwargs or  "default_answer" in kwargs:
+        h = details._DefaultUserInputHandler()
+        h._defAnswer = kwargs.get("default_answer", None)
+        h._defResponse = kwargs.get("default_response", None)
+        hdnlr += h._onDefaultedUserInput
+    else:
+        hdnlr += details._onNeedUserInput
 
     try:
         slog = serializer.Import(file_name)
@@ -232,12 +317,11 @@ def ReadInputFile(file_name, errLog: Common.Logging.Log=None, **kwargs) -> Commo
     fileFmt = SUF.FindFileFormat(SUF.SAVE_INPUT_TYPE_TAG, ext)
     serializer = SUF.GetSerializer(SUF.SAVE_INPUT_TYPE_TAG, fileFmt, file_name)
     serializer.MakeBackups = kwargs.get("make_backup", False)
-    binder = MDT.PRM.CustomSerializationBinder()
     if errLog is None: errLog = Common.Logging.Log()
     
     try:
         return serializer.Load(
-            SUF.INPUT_TYPE_TAG, MDT.Driver.INSTANCE, binder, errLog
+            SUF.INPUT_TYPE_TAG, MDT.Driver.INSTANCE, errLog
             )
     except SYSEX as e:
         errLog.AddEntry(Common.Logging.LogCategories.Error, str(e))

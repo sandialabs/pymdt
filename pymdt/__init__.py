@@ -4,7 +4,7 @@ import subprocess
 import clr
 import System
 
-MDT_VERSION = System.Version(1, 4, 2597, 0)
+MDT_VERSION = System.Version(1, 4, 2776, 0)
 MDT_BIN_DIR=None
 MDT_DATA_DIR=None
 MDT_SPEC_DB_DIR=None
@@ -25,9 +25,11 @@ for px in sys.argv:
                 
 if MDT_BIN_DIR is None:    
     if "__PYMDT_DOC_BUILD__" in os.environ:
+        doc_dir = System.Environment.GetFolderPath(
+            System.Environment.SpecialFolder.MyDocuments
+            )
         MDT_BIN_DIR = os.path.join(
-            "C:\\", "Users", "jpeddy", "Documents", "dev", "MDT", "trunk",
-            "MDT-GUI", "bin", "x64", "Release"
+            doc_dir, "dev", "MDT", "trunk", "MDT-GUI", "bin", "x64", "Release"
             )
     else:
         MDT_BIN_DIR = os.path.join(
@@ -61,6 +63,19 @@ MDT_DATA_VER_DIR = os.path.join(MDT_DATA_DIR, MDT_VERSION.ToString())
 import MDT
 import Common
 
+def _GetFullMessage(e, depth=0) -> str:
+    dstr = ' ' * depth
+    msg = dstr + str(e).replace("\n", dstr)
+
+    if hasattr(e, "StackTrace") and e.StackTrace is not None:
+        strDstr = ' ' * (depth+1)
+        msg += strDstr + str(e.StackTrace).replace("\n", strDstr)
+
+    if hasattr(e, "InnerException") and e.InnerException is not None:
+        msg += "\n" + _GetFullMessage(e.InnerException, depth+1)
+
+    return msg
+
 # This log is the default log used by a pymdt app when another log has not
 # been provided to methods that make input changes that may be rejected.  It
 # is recommended that this log be viewed frequently during the input phase
@@ -90,12 +105,14 @@ try:
 except System.Exception as e:
     raise Exception(
         "Caught a system exception while trying to initialize the MDT " + \
-        "Specifications Database and/or Driver reading " + str(e) + "."
+        "Specifications Database and/or Driver reading: " + \
+        _GetFullMessage(e) + "."
         )
 except BaseException as e:
     raise Exception(
         "Caught a python exception while trying to initialize the MDT " + \
-        "Specifications Database and/or Driver reading " + str(e) + "."
+        "Specifications Database and/or Driver reading " + \
+        _GetFullMessage(e) + "."
         )
 except:
     raise Exception(

@@ -7,7 +7,6 @@ import pymdt.specs
 from enum import Enum
 
 import System
-from System import Exception as SYSEX
 
 import MDT
 import Common
@@ -194,7 +193,7 @@ class details:
         rpd.SetPeriodAndInterval(
             period, per_units, interval, int_units, undos
             )
-        
+
     @staticmethod
     def _extract_tier(ldwt, **kwargs) -> MDT.LoadTier:
         t = kwargs.get("tier")
@@ -336,7 +335,8 @@ class details:
         haz = MDT.Hazard(name)
         pymdt.utils.details._extract_guid(haz, **kwargs)
         pymdt.utils.details._execute_loggable_property_set_with_undo(
-            haz, "IntensityGenerator", kwargs.get("intensity_generator"),
+            haz, "IntensityGenerator",
+            pymdt.utils.details._extract_distribution("intensity_generator", **kwargs),
             **kwargs
             )
         pymdt.utils.details._execute_loggable_property_set_with_undo(
@@ -770,7 +770,165 @@ class details:
         ar.WriteFormatted(fmt, fStr)
         fStr.Close()
         return stDat
+
+    @staticmethod
+    def generate_bus_entities(owner, accessor):
+        
+        if isinstance(owner, MDT.Site):
+            for mg in owner.Microgrids:
+                yield from details.generate_bus_entities(mg, accessor)
+
+        if isinstance(owner, MDT.Microgrid):
+            for b in owner.Busses:
+                yield from details.generate_bus_entities(b, accessor)
+
+        if isinstance(owner, MDT.Bus):
+            for e in accessor(owner):
+                yield e;
+
+        return
     
+    @staticmethod
+    def generate_mg_entities(owner, accessor):
+        
+        if isinstance(owner, MDT.Site):
+            for mg in owner.Microgrids:
+                yield from details.generate_mg_entities(mg, accessor)
+
+        if isinstance(owner, MDT.Microgrid):
+            for e in accessor(owner):
+                yield e;
+
+        return
+    
+class accessors:
+    
+    @staticmethod
+    def PropaneTanks(owner):
+        yield from details.generate_mg_entities(
+            owner, lambda owner: owner.PropaneTanks
+            )
+    
+    @staticmethod
+    def DieselTanks(owner):
+        yield from details.generate_mg_entities(
+            owner, lambda owner: owner.DieselTanks
+            )
+    
+    @staticmethod
+    def DesignOptions(owner):
+        yield from details.generate_mg_entities(
+            owner, lambda owner: owner.DesignOptions
+            )
+    
+    @staticmethod
+    def ThermalLoads(owner):
+        yield from details.generate_mg_entities(
+            owner, lambda owner: owner.ThermalLoads
+            )
+    
+    @staticmethod
+    def NecessitationDependencies(owner):
+        yield from details.generate_mg_entities(
+            owner, lambda owner: owner.NecessitationDependencies
+            )
+    
+    @staticmethod
+    def NodeGroups(owner):
+        yield from details.generate_mg_entities(
+            owner, lambda owner: owner.NodeGroups
+            )
+    
+    @staticmethod
+    def Nodes(owner):
+        yield from details.generate_mg_entities(
+            owner, lambda owner: owner.Nodes
+            )
+    
+    @staticmethod
+    def Busses(owner):
+        yield from details.generate_mg_entities(
+            owner, lambda owner: owner.Busses
+            )
+    
+    @staticmethod
+    def Switches(owner):
+        yield from details.generate_mg_entities(
+            owner, lambda owner: owner.Switches
+            )
+    
+    @staticmethod
+    def Transformers(owner):
+        yield from details.generate_mg_entities(
+            owner, lambda owner: owner.Transformers
+            )
+    
+    @staticmethod
+    def Lines(owner):
+        yield from details.generate_mg_entities(
+            owner, lambda owner: owner.Lines
+            )
+    
+    @staticmethod
+    def DieselGenerators(owner):
+        yield from details.generate_bus_entities(
+            owner, lambda owner: owner.DieselGenerators
+            )
+    
+    @staticmethod
+    def NaturalGasGenerators(owner):
+        yield from details.generate_bus_entities(
+            owner, lambda owner: owner.NaturalGasGenerators
+            )
+    
+    @staticmethod
+    def PropaneGenerators(owner):
+        yield from details.generate_bus_entities(
+            owner, lambda owner: owner.PropaneGenerators
+            )
+    
+    @staticmethod
+    def SolarGenerators(owner):
+        yield from details.generate_bus_entities(
+            owner, lambda owner: owner.SolarGenerators
+            )
+    
+    @staticmethod
+    def WindGenerators(owner):
+        yield from details.generate_bus_entities(
+            owner, lambda owner: owner.WindGenerators
+            )
+        
+    @staticmethod
+    def HydroGenerators(owner):
+        yield from details.generate_bus_entities(
+            owner, lambda owner: owner.HydroGenerators
+            )
+        
+    @staticmethod
+    def Batteries(owner):
+        yield from details.generate_bus_entities(
+            owner, lambda owner: owner.Batteries
+            )
+        
+    @staticmethod
+    def LoadSections(owner):
+        yield from details.generate_bus_entities(
+            owner, lambda owner: owner.LoadSections
+            )
+        
+    @staticmethod
+    def Inverters(owner):
+        yield from details.generate_bus_entities(
+            owner, lambda owner: owner.Inverters
+            )
+        
+    @staticmethod
+    def UninterruptiblePowerSupplies(owner):
+        yield from details.generate_bus_entities(
+            owner, lambda owner: owner.UninterruptiblePowerSupplies
+            )
+
 details._load_all_stored_configs(
     MDT.Driver.INSTANCE.MakeLoadDataDirectory(), details.StoredLoadProfiles
     )
@@ -2947,7 +3105,8 @@ def MakeFragilityCurve(
             fixed distribution will be used.
         probability_generator: Common.Distributions.IDistribution
             The distribution that determines the likelihood of failure in terms
-            of the hazard intensity units for this fragility.
+            of the hazard intensity units for this fragility.  The value drawn
+            from this distribution will be a cumulative one (using the CDF).
         owner:
             An optional parameter to serve as the owner of the new fragility
             curve. This is typically used if one does not want the fragility
